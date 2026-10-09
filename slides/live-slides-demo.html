@@ -484,8 +484,18 @@ ul.dots li::marker{ color: var(--ink); }
 .vs li{ font-size:1.15rem; line-height:1.5; margin:.35rem 0; }
 .cta{ margin-top:1rem; font-size:1rem; color: var(--ink-2); }
 </style>
+<style>
+.profile-link{ position:fixed; top:10px; left:10px; z-index:30; display:inline-flex; align-items:center; gap:.45rem; padding:.3rem .75rem .3rem .35rem; border-radius:999px; background:#16243A; color:#F4EFE6; font:600 .78rem/1 'IBM Plex Sans', sans-serif; text-decoration:none; box-shadow:0 4px 14px rgba(0,0,0,.18); opacity:.9; transition:opacity .2s, transform .2s; }
+.profile-link:hover, .profile-link:focus-visible{ opacity:1; transform:translateY(-1px); outline:2px solid #E0B158; outline-offset:2px; }
+.profile-link .pl-ic{ width:1.45rem; height:1.45rem; border-radius:50%; background:#E0B158; color:#16243A; display:grid; place-items:center; font-weight:700; font-size:.7rem; }
+body.on-dark .profile-link{ background:#E0B158; color:#16243A; }
+body.on-dark .profile-link .pl-ic{ background:#16243A; color:#E0B158; }
+.slide{ padding-top: max(var(--top-pad), 54px); }
+@media print{ .profile-link{ display:none; } }
+</style>
 </head>
 <body>
+<a class="profile-link" href="https://ramizassaf.github.io/cv/" target="_blank" rel="noopener" title="Dr. Ramiz Assaf: full profile"><span class="pl-ic">RA</span>Dr. Ramiz Assaf · Profile</a>
 <div class="deck" id="deck">
 <div class="slide active title-slide dark" data-slide="0" data-sec="Live slides" data-title="Your students memorized the answer" data-secstart="1">
 
