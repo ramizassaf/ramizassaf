@@ -168,6 +168,25 @@ section.alt { background: var(--bg-2); }
 .proj-links { display: flex; gap: 14px; margin-top: 14px; font-size: .9rem; font-weight: 600; }
 .proj-links a { text-decoration: none; }
 
+/* Games */
+.game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 18px; }
+.game { display: flex; flex-direction: column; padding: 0; overflow: hidden; transition: transform .2s, border-color .2s; }
+.game:hover { transform: translateY(-4px); border-color: var(--accent); }
+.game-top { padding: 22px 24px 18px; color: #fff; position: relative; }
+.game-top .gi { font-size: 1.9rem; line-height: 1; }
+.game-top h3 { margin: 10px 0 2px; font-size: 1.15rem; }
+.game-top .course { font-size: .84rem; opacity: .85; }
+.g1 .game-top { background: linear-gradient(135deg, #0b3d22, #107c41); }
+.g2 .game-top { background: linear-gradient(135deg, #16324f, #2b7a8c); }
+.g3 .game-top { background: linear-gradient(135deg, #0e2f5a, #7449c4); }
+.game-body { padding: 18px 24px 22px; display: flex; flex-direction: column; flex: 1; }
+.game-body p { color: var(--muted); font-size: .93rem; margin: 0 0 12px; }
+.mech { list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 6px; font-size: .88rem; flex: 1; }
+.mech li { display: flex; gap: 8px; }
+.mech li::before { content: "✦"; color: var(--accent); }
+.game .btn { justify-content: center; }
+.game-note { color: var(--muted); font-size: .88rem; margin-top: 18px; }
+
 /* Labs */
 .lab { margin-bottom: 24px; }
 .lab-grid { display: grid; grid-template-columns: 320px 1fr; gap: 24px; }
@@ -260,6 +279,7 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
       <a href="#experience" data-i18n="nav_exp">Experience</a>
       <a href="#supervision" data-i18n="nav_sup">Supervision</a>
       <a href="#projects" data-i18n="nav_proj">Projects</a>
+      <a href="#games" data-i18n="nav_games">Games</a>
       <a href="#labs" data-i18n="nav_labs">Live demos</a>
       <a href="#skills" data-i18n="nav_skills">Skills</a>
       <a href="#contact" data-i18n="nav_contact">Contact</a>
@@ -425,10 +445,62 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
   </div>
 </section>
 
-<section class="block alt" id="labs">
+<section class="block alt" id="games">
   <div class="container">
     <div class="sec-head reveal">
-      <div class="kicker">05 / live demos</div>
+      <div class="kicker">05 / gamification</div>
+      <h2 data-i18n="games_h">Gamified learning labs</h2>
+      <p data-i18n="games_p">Browser games I designed for my courses. Students earn XP, unlock levels, and get instant feedback, with fresh numbers on every attempt.</p>
+    </div>
+    <div class="game-grid">
+      <article class="card game g1 reveal">
+        <div class="game-top"><div class="gi">fx</div><h3>Excel Skill Tree</h3><div class="course" data-i18n="g1_c">Data analytics training</div></div>
+        <div class="game-body">
+          <p data-i18n="g1_d">A skill tree that takes learners from VLOOKUP to dynamic arrays and dates. 9 modules cover 54 Excel functions on live worksheets.</p>
+          <ul class="mech">
+            <li data-i18n="g1_m1">Locked nodes open as lessons are learned</li>
+            <li data-i18n="g1_m2">XP, streak bonuses, and ranks from Intern to Lead Analyst</li>
+            <li data-i18n="g1_m3">Lifelines: remove 2 answers or get a hint</li>
+            <li data-i18n="g1_m4">Certification at 80%, distinction at 100%</li>
+          </ul>
+          <a class="btn primary" href="games/excel-skill-tree.html" target="_blank" rel="noopener" data-i18n="play">Play ↗</a>
+        </div>
+      </article>
+      <article class="card game g2 reveal">
+        <div class="game-top"><div class="gi">⏱</div><h3>Labor Analysis Lab</h3><div class="course" data-i18n="g2_c">Industrial engineering, chapter 2</div></div>
+        <div class="game-body">
+          <p data-i18n="g2_d">Work sampling, wage plans, and fringe costs, set in Palestinian workplaces from a Nablus knafeh bakery to a Hebron stone factory.</p>
+          <ul class="mech">
+            <li data-i18n="g2_m1">10 levels with fading guidance, from worked steps to none</li>
+            <li data-i18n="g2_m2">Stars, XP, and streaks, with new numbers every attempt</li>
+            <li data-i18n="g2_m3">Feedback that names the exact mistake</li>
+            <li data-i18n="g2_m4">Arabic glossary, built-in calculator, and formula sheet</li>
+          </ul>
+          <a class="btn primary" href="games/labor-analysis-lab.html" target="_blank" rel="noopener" data-i18n="play">Play ↗</a>
+        </div>
+      </article>
+      <article class="card game g3 reveal">
+        <div class="game-top"><div class="gi">$</div><h3>Financial Decisions Lab</h3><div class="course" data-i18n="g3_c">MSc Engineering Management</div></div>
+        <div class="game-body">
+          <p data-i18n="g3_d">Five classroom games on engineering economics and financial statements, each built around a randomly generated company.</p>
+          <ul class="mech">
+            <li data-i18n="g3_m1">Drag-and-drop balance sheet builder and cash flow sort</li>
+            <li data-i18n="g3_m2">Profit ladder and ratio analysis against industry benchmarks</li>
+            <li data-i18n="g3_m3">Class points, streaks, countdown timer, and sound effects</li>
+            <li data-i18n="g3_m4">Easy mode with hints, plus an Arabic glossary</li>
+          </ul>
+          <a class="btn primary" href="games/financial-decisions-lab.html" target="_blank" rel="noopener" data-i18n="play">Play ↗</a>
+        </div>
+      </article>
+    </div>
+    <p class="game-note reveal" data-i18n="games_note">Each game is one HTML file. Progress stays in the player's browser.</p>
+  </div>
+</section>
+
+<section class="block" id="labs">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div class="kicker">06 / live demos</div>
       <h2 data-i18n="labs_h">Try my work, right here</h2>
       <p data-i18n="labs_p">Two of my projects running live in your browser. Change the inputs and watch the results update.</p>
     </div>
@@ -480,10 +552,10 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
   </div>
 </section>
 
-<section class="block" id="skills">
+<section class="block alt" id="skills">
   <div class="container">
     <div class="sec-head reveal">
-      <div class="kicker">06 / skills</div>
+      <div class="kicker">07 / skills</div>
       <h2 data-i18n="skills_h">Skills</h2>
     </div>
     <div class="skill-grid">
@@ -495,10 +567,10 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
   </div>
 </section>
 
-<section class="block alt" id="contact">
+<section class="block" id="contact">
   <div class="container">
     <div class="sec-head reveal">
-      <div class="kicker">07 / contact</div>
+      <div class="kicker">08 / contact</div>
       <h2 data-i18n="contact_h">Let's work together</h2>
       <p data-i18n="contact_p">Send a message about training, research, thesis supervision, or collaboration.</p>
     </div>
@@ -560,6 +632,14 @@ const AR = {
   approx: "التقريب الخطي", error: "الخطأ",
   nav_sup: "الإشراف", sup_h: "الإشراف على الرسائل", sup_p: "رسائل أشرفت أو شاركت في الإشراف عليها في جامعة النجاح الوطنية، في تبني الذكاء الاصطناعي والعمليات والجودة والاستدامة.",
   ss1: "رسالة بإشرافي", ss2: "عن الذكاء الاصطناعي وتعلم الآلة", ss3: "أشرف منذ عام",
+  nav_games: "الألعاب", games_h: "مختبرات تعلّم بأسلوب الألعاب", games_p: "ألعاب تعليمية صممتها لمساقاتي تعمل في المتصفح. يجمع الطلاب نقاط الخبرة ويفتحون المستويات ويحصلون على تغذية راجعة فورية، بأرقام جديدة في كل محاولة.",
+  play: "العب ↗", games_note: "كل لعبة ملف HTML واحد. يُحفظ التقدم في متصفح اللاعب فقط.",
+  g1_c: "تدريب تحليل البيانات", g1_d: "شجرة مهارات تنقل المتعلم من VLOOKUP إلى المصفوفات الديناميكية والتواريخ. 9 وحدات تغطي 54 دالة في Excel على أوراق عمل حية.",
+  g1_m1: "عقد مقفلة تُفتح مع إتمام الدروس", g1_m2: "نقاط خبرة ومكافآت تتابع ورتب من متدرب إلى قائد محللين", g1_m3: "وسائل مساعدة: حذف إجابتين أو طلب تلميح", g1_m4: "شهادة عند 80% وتميّز عند 100%",
+  g2_c: "الهندسة الصناعية، الفصل الثاني", g2_d: "معاينة العمل وخطط الأجور وتكاليف المزايا، في بيئات عمل فلسطينية من مخبز كنافة في نابلس إلى مصنع حجر في الخليل.",
+  g2_m1: "10 مستويات بتوجيه متدرّج من خطوات محلولة إلى دون توجيه", g2_m2: "نجوم ونقاط خبرة وتتابع، بأرقام جديدة في كل محاولة", g2_m3: "تغذية راجعة تحدد الخطأ بدقة", g2_m4: "مسرد عربي وآلة حاسبة مدمجة وورقة قوانين",
+  g3_c: "ماجستير الإدارة الهندسية", g3_d: "خمس ألعاب صفية في الاقتصاد الهندسي والقوائم المالية، لكل منها شركة تُولَّد عشوائياً.",
+  g3_m1: "بناء الميزانية العمومية بالسحب والإفلات وتصنيف التدفقات النقدية", g3_m2: "سلّم الربح وتحليل النسب مقارنة بمتوسط الصناعة", g3_m3: "نقاط للصف وتتابع ومؤقت تنازلي ومؤثرات صوتية", g3_m4: "وضع سهل مع تلميحات، ومسرد عربي",
   skills_h: "المهارات", sk1: "علم البيانات والتحليلات", sk2: "الإحصاء", sk3: "الهندسة الصناعية", sk4: "التدريس والقيادة",
   contact_h: "لنعمل معاً", contact_p: "أرسل رسالة بخصوص التدريب أو البحث أو الإشراف على الرسائل أو التعاون.",
   c_name: "الاسم", c_email: "البريد الإلكتروني", c_msg: "الرسالة", c_send: "إرسال",

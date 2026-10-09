@@ -1,0 +1,791 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Excel Skill Tree</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#07140d;--bg2:#0b1d13;--panel:#0f2419;--panel2:#132d20;--line:#23483a;
+--text:#e4f2e9;--muted:#93b3a1;--dim:#5d6e64;
+--xl:#107C41;--xl-d:#185C37;--xl-m:#21A366;--xl-l:#33C481;--glow:#6ee7a8;
+--bad:#e0605a;--bad-bg:#3a1818;--good-bg:#0f3a24;
+--display:"Cinzel",Georgia,serif;
+--sans:"IBM Plex Sans","Segoe UI",Arial,sans-serif;
+--mono:"IBM Plex Mono",Consolas,monospace;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;color:var(--text);font-family:var(--sans);line-height:1.5;min-height:100vh;
+background-color:var(--bg);
+background-image:radial-gradient(ellipse at 50% 0%,rgba(33,163,102,.16),transparent 60%),linear-gradient(rgba(51,196,129,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(51,196,129,.035) 1px,transparent 1px);
+background-size:100% 100%,64px 22px,64px 22px}
+.wrap{width:min(1100px,94%);margin:auto}
+code{font-family:var(--mono)}
+
+/* Header */
+.top{background:rgba(8,22,14,.92);border-bottom:2px solid var(--xl);position:sticky;top:0;z-index:20;backdrop-filter:blur(6px)}
+.topgrid{display:flex;align-items:center;gap:16px;padding:12px 0;flex-wrap:wrap}
+.logo{width:44px;height:44px;background:var(--xl);color:#fff;display:grid;place-items:center;font:italic 600 19px var(--mono);border-radius:4px;flex-shrink:0;box-shadow:0 0 18px rgba(33,163,102,.45)}
+.title h1{margin:0;font:700 22px var(--display);letter-spacing:.04em;color:#f1faf4}
+.title p{margin:0;color:var(--muted);font-size:13px}
+.topright{margin-left:auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+#identity{text-align:right;min-width:240px;font-size:13px}
+.rank{display:inline-block;background:var(--xl);color:#fff;font-weight:600;padding:2px 10px;border-radius:3px}
+.chip{display:inline-block;margin-left:6px;font:600 12px var(--mono);border:1px solid var(--line);padding:2px 8px;border-radius:3px;color:var(--glow)}
+.progress-label{display:block;color:var(--muted);font-size:12px;margin-top:5px}
+.pbar{height:4px;background:#173526;border-radius:3px;margin-top:4px;overflow:hidden}
+.pbar i{display:block;height:100%;background:linear-gradient(90deg,var(--xl),var(--glow));transition:width .6s ease}
+.ghost{font:inherit;font-size:13px;cursor:pointer;background:transparent;color:#cfe6d8;border:1px solid var(--line);border-radius:4px;padding:7px 11px}
+.ghost:hover{border-color:var(--xl-l);color:#fff}
+.ghost.danger{border-color:var(--bad);color:#ffc9c4}
+
+/* Tree page */
+.continue{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin:22px 0 4px;padding:16px 20px;background:linear-gradient(90deg,rgba(16,124,65,.28),rgba(15,36,25,.6));border:1px solid var(--line);border-left:4px solid var(--xl-l);border-radius:6px}
+.continue .ct{flex:1;min-width:220px}
+.continue .ct span{display:block;font-size:13px;color:var(--muted)}
+.continue .ct strong{font:700 18px var(--display);letter-spacing:.02em}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:14px 0 0}
+.legend i{display:inline-block;width:11px;height:11px;transform:rotate(45deg);margin-right:7px;border:2px solid;vertical-align:-1px}
+.lg-l{border-color:#34463c;background:#101c16}.lg-o{border-color:var(--xl-l);background:#0f2c1d}.lg-d{border-color:#9ef0c4;background:var(--xl)}
+.treewrap{overflow-x:auto;margin:6px 0 40px;-webkit-overflow-scrolling:touch}
+#tree{display:block;width:100%;min-width:760px;height:auto}
+.edge{fill:none;stroke:#1c3026;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.edge.open{stroke:#2b8a58;stroke-dasharray:7 7}
+.edge.lit{stroke:var(--xl-m);filter:drop-shadow(0 0 4px rgba(33,163,102,.7))}
+.banner line{stroke:#2a5a40;stroke-width:1.5}
+.banner rect{fill:var(--bg)}
+.banner text{font:700 15px var(--display);letter-spacing:.24em;fill:var(--glow);text-anchor:middle;dominant-baseline:central}
+.node{cursor:pointer;outline:none}
+.node.locked{cursor:not-allowed}
+.core{transform-box:fill-box;transform-origin:center;transition:transform .15s ease}
+.node:hover .core,.node:focus-visible .core{transform:scale(1.09)}
+.shape{fill:#101c16;stroke:#34463c;stroke-width:2.5}
+.inner{fill:none;stroke:#23332b;stroke-width:1.5}
+.node.open .shape{fill:#0f2c1d;stroke:var(--xl-l)}
+.node.open .inner{stroke:#1f6a45}
+.node.done .shape{fill:var(--xl);stroke:#9ef0c4}
+.node.done .inner{stroke:#6fdca1}
+.node.done .core{filter:drop-shadow(0 0 8px rgba(51,196,129,.55))}
+.node.next .core{animation:pulse 2.2s ease-in-out infinite}
+.node:focus-visible .shape{stroke:#fff}
+@keyframes pulse{0%,100%{filter:drop-shadow(0 0 2px rgba(51,196,129,.35))}50%{filter:drop-shadow(0 0 16px rgba(110,231,168,.95))}}
+.node.shake .core{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-4px)}40%,80%{transform:translateX(4px)}}
+.glyph{fill:#e4f2e9;font:600 15px var(--mono);text-anchor:middle;dominant-baseline:central}
+.hub .glyph{font:700 17px var(--mono)}
+.icon{fill:none;stroke:#e4f2e9;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.node.locked .icon{stroke:var(--dim)}
+.node.done .icon.fillable{fill:#e4f2e9;stroke:#e4f2e9}
+.lbl{fill:#b9d3c4;font:500 12.5px var(--sans);text-anchor:middle}
+.node.locked .lbl{fill:var(--dim)}
+.node.done .lbl{fill:#eaf7ef}
+.rk{font:600 11px var(--mono);fill:#5f7f6d;text-anchor:middle}
+.node.done .rk,.node.open .rk{fill:var(--glow)}
+.side{text-anchor:start}.side.left{text-anchor:end}
+.hubname{font:700 21px var(--display);fill:#eef8f2;letter-spacing:.02em}
+.node.locked .hubname{fill:#6c7f73}
+.hubsub{font:400 12.5px var(--sans);fill:var(--muted)}
+.trunkname{font:700 15px var(--display);fill:#d8ecdf}
+.node.locked .trunkname{fill:#6c7f73}
+
+/* Tooltip */
+#tip{position:fixed;z-index:50;width:270px;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .12s,transform .12s;background:#0a1911;border:1px solid #2f6b4b;border-top:3px solid var(--xl-l);border-radius:4px;padding:12px 14px;box-shadow:0 10px 30px rgba(0,0,0,.6)}
+#tip.show{opacity:1;transform:none}
+#tip h4{margin:0 0 2px;font:700 15px var(--display);color:#f1faf4}
+#tip .ty{font-size:12px;color:var(--muted);margin-bottom:8px}
+#tip p{margin:0 0 8px;font-size:13px;color:#cfe3d7}
+#tip .state{font-size:12.5px;font-weight:600;padding-top:8px;border-top:1px solid var(--line)}
+#tip .state.locked{color:#d9a35f}#tip .state.open{color:var(--glow)}#tip .state.done{color:#9ef0c4}
+
+/* Activity */
+.actbar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:20px 0 12px}
+.acttitle span{display:block;font-size:12px;color:var(--muted)}
+.acttitle strong{font:700 20px var(--display)}
+.stages{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:4px}
+.stage{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--panel);border-radius:20px;padding:7px 14px;color:#b9d3c4;font-size:13px;display:inline-flex;align-items:center;gap:6px}
+.stage:hover:not(:disabled){border-color:var(--xl-l)}
+.stage.active{background:var(--xl);border-color:var(--xl);color:#fff}
+.stage.done:not(.active){border-color:#2b8a58}
+.stage:disabled{cursor:not-allowed;color:var(--dim);background:#0b1812}
+.stage svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.2}
+.card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:6px;padding:26px;margin:14px 0 40px}
+.eyebrow{font-size:13px;color:var(--muted);font-weight:500;margin-bottom:6px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.card h2{margin:0 0 12px;font:700 22px var(--display);letter-spacing:.02em}
+.card h3{font-size:16px;font-weight:600;margin:0 0 10px}
+.body{max-width:62ch;color:#d6e9dd}
+.tag{font-size:12px;font-weight:600;padding:2px 8px;border-radius:3px;background:#0b1d13;color:var(--glow);border:1px solid var(--line)}
+.streak{font-size:12px;font-weight:600;color:var(--glow)}
+.fbar{display:flex;border:1px solid #c6c6c6;border-radius:3px;overflow:hidden;margin:14px 0 6px;background:#fff}
+.fbar .fx{background:#f3f3f3;color:#555;font:italic 600 14px var(--mono);padding:9px 12px;border-right:1px solid #c6c6c6;flex-shrink:0}
+.fbar code{padding:9px 12px;font-weight:600;font-size:14px;color:#1e1e1e;overflow-x:auto;white-space:nowrap}
+.returns{font-size:14px;color:var(--muted)}
+.returns b{color:var(--glow);font-family:var(--mono)}
+.btn{font:inherit;cursor:pointer;border:1px solid var(--xl-m);background:var(--xl);color:#fff;font-weight:600;border-radius:4px;padding:11px 18px;margin-top:14px;transition:.15s}
+.btn:hover{background:var(--xl-m);box-shadow:0 0 14px rgba(33,163,102,.5)}
+.btn.secondary{background:transparent;color:#cfe6d8;border-color:var(--line)}
+.btn.secondary:hover{border-color:var(--xl-l);box-shadow:none}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+.panel-h{font-size:14px;font-weight:600;margin:0 0 10px;color:var(--muted)}
+.sheetwrap{overflow-x:auto;border-radius:3px}
+.sheet{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums;background:#fff;color:#1e1e1e}
+.sheet td,.sheet th{border:1px solid #d4d4d4;padding:7px 9px;white-space:nowrap}
+.col,.row,.corner{background:#ececec!important;color:#555!important;text-align:center!important;font-weight:600}
+.row,.corner{width:34px}
+.head{background:var(--xl);color:#fff;font-weight:600}
+.sheet tbody tr:nth-child(odd) td:not(.row):not(.head){background:#e2efda}
+.cellnote{display:inline-flex;margin-top:12px;font-size:13px;border:1px solid #c6c6c6;border-radius:3px;overflow:hidden}
+.cellref{background:#ececec;color:#555;font-weight:600;padding:6px 10px;font-family:var(--mono);border-right:1px solid #c6c6c6}
+.cellval{background:#fff;padding:6px 12px;font-family:var(--mono);font-weight:600;color:#1e1e1e}
+.celllbl{background:#e2efda;color:#185C37;padding:6px 12px}
+.sheetnote{font-size:13px;color:var(--muted);margin-top:10px}
+.answers{display:grid;gap:8px}
+.answer{font:inherit;cursor:pointer;text-align:left;border:1px solid #2a5a40;background:#0b1d13;border-radius:4px;padding:11px 13px;color:var(--text);transition:.12s;overflow-wrap:anywhere}
+.answer:hover{border-color:var(--xl-l)}
+.answer.chosen{background:#123524;border:2px solid var(--glow);padding:10px 12px}
+.answer.gone{display:none}
+.answer.correct,.inp.correct{background:var(--good-bg);border:2px solid var(--xl-l);color:#c8f5dc}
+.answer.wrong,.inp.wrong{background:var(--bad-bg);border:2px solid var(--bad);color:#ffd2ce}
+.answer.correct,.answer.wrong{padding:10px 12px}
+.answer:disabled{cursor:default}
+.inp{width:100%;font:500 15px var(--mono);padding:11px 13px;border:1px solid #2a5a40;border-radius:4px;color:var(--text);background:#0b1d13}
+.inp:focus{border-color:var(--glow);outline:none}
+.qtext{overflow-wrap:anywhere}
+.lifelines{display:flex;flex-wrap:wrap;gap:9px;margin:14px 0 0}
+.life{font:inherit;cursor:pointer;border:1px solid #2b8a58;background:#0f2c1d;color:#cfe6d8;border-radius:4px;padding:8px 12px;font-size:13px;font-weight:500}
+.life:disabled{opacity:.4;cursor:default}
+.memo{margin-top:14px;padding:12px 15px;background:#0b1d13;border-left:4px solid var(--xl-m);border-radius:4px;font-size:14px}
+.memo.ok{background:var(--good-bg);border-color:var(--xl-l)}
+.memo.warn{background:var(--bad-bg);border-color:var(--bad)}
+.memo code{font-size:13px;background:rgba(0,0,0,.3);padding:1px 5px;border-radius:3px}
+.help{margin-top:12px;padding:11px 15px;background:#0b1d13;border-left:4px solid var(--glow);border-radius:4px;font-size:14px}
+.score{font-weight:700;color:var(--glow);font-size:16px}
+.qblock{margin:22px 0;padding-top:18px;border-top:1px solid var(--line)}
+.review{margin-top:16px}
+.review .item{padding:12px 0;border-top:1px solid var(--line)}
+.review .item p{margin:4px 0;font-size:14px}
+.stats{display:flex;gap:26px;flex-wrap:wrap;margin:6px 0 4px}
+.stat b{display:block;font:600 24px var(--mono);color:var(--glow)}
+.stat span{font-size:13px;color:var(--muted)}
+.kbd{font-size:12px;color:var(--muted);margin-top:14px}
+.ref{width:100%;border-collapse:collapse;font-size:14px}
+.ref th{text-align:left;background:var(--xl);color:#fff;padding:8px 10px;font-weight:600}
+.ref td{border-bottom:1px solid var(--line);padding:8px 10px;vertical-align:top}
+.ref td:first-child{font:600 13px var(--mono);color:var(--glow);white-space:nowrap}
+.ref td.syn{font:500 13px var(--mono);color:#b9d3c4}
+.ref .grp td{background:#0b1d13;font:700 14px var(--display);color:#eef8f2}
+.ref tr.lockedrow td{opacity:.45}
+.hard{text-decoration:underline dotted 2px var(--xl-l);text-underline-offset:3px;position:relative;cursor:help}
+.hard:hover::after,.hard:focus::after{content:attr(data-ar);position:absolute;left:0;bottom:125%;z-index:5;background:#fff;color:#185C37;padding:5px 9px;border-radius:4px;white-space:nowrap;font-family:var(--sans);font-weight:600}
+.small{font-size:13px;color:var(--muted)}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;z-index:60;background:#0a1911;border:1px solid var(--xl-l);border-left:4px solid var(--glow);color:var(--text);padding:12px 18px;border-radius:4px;font-size:14px;max-width:min(520px,92vw);box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 20px rgba(33,163,102,.35);transition:opacity .25s,transform .25s;pointer-events:none}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#toast b{font-family:var(--display);color:var(--glow);display:block;font-size:13px;letter-spacing:.08em}
+:focus-visible{outline:2px solid var(--glow);outline-offset:2px}
+@media(max-width:820px){.grid{grid-template-columns:1fr}.topright{margin-left:0;width:100%}#identity{text-align:left}.top{position:static}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style></head>
+<body>
+<header class="top"><div class="wrap topgrid">
+<div class="logo">fx</div>
+<div class="title"><h1>Excel Skill Tree</h1><p id="subtitle"></p></div>
+<div class="topright"><div id="identity"></div><button class="ghost" onclick="toTree()">Skill tree</button><button class="ghost" onclick="openRef()">Function reference</button><button class="ghost" id="resetBtn" onclick="resetProgress()">Reset</button></div>
+</div></header>
+<main class="wrap">
+<div id="actbar"></div>
+<div id="stages" class="stages"></div>
+<section id="screen"></section>
+</main>
+<div id="tip" role="tooltip"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+/* ===== Settings ===== */
+const PASS=0.8;        // assessment pass mark
+const PRACTICE_N=5;    // questions per practice round
+const ASSESS_N=8;      // questions per assessment
+const KEY='excel-skill-tree-v3';
+
+/* ===== Helpers ===== */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const g=(w,ar)=>`<span class="hard" tabindex="0" data-ar="${ar}">${w}</span>`;
+const M=(q,c,e)=>({t:'m',q,c,e});             // multiple choice, c[0] is correct
+const T=(q,a,e)=>({t:'t',q,a:[].concat(a),e}); // type the result
+const F=(q,a,e)=>({t:'f',q,a:[].concat(a),e}); // write the formula, a[0] is the model answer
+const L=(t,b,f,r)=>({t,b,f,r});
+function shuffled(a){const c=a.slice();for(let i=c.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[c[i],c[j]]=[c[j],c[i]]}return c}
+
+
+/* ===== Worksheets ===== */
+const TABLES={
+lookup:{cols:['Code','Product','Price','Stock'],rows:[['P101','Notebook',4.5,36],['P102','Pen',1.25,80],['P103','Backpack',24,14],['P104','Calculator',18.75,22],['P105','Headphones',32.5,9]],fmt:(v,j)=>j===2?v.toFixed(2):v,note:'f2'},
+sales:{cols:['Region','Product','Channel','Sales','Rating'],rows:[['East','Notebook','Online',1200,4.4],['West','Pen','Store',650,3.9],['East','Backpack','Store',1800,4.7],['North','Notebook','Online',950,4.1],['East','Pen','Online',700,3.8],['West','Backpack','Online',2100,4.8]]},
+staff:{cols:['Emp ID','Full name','Department','City'],rows:[['EMP-0412','Sara Haddad','Finance','Nablus'],['EMP-0587','Omar Khalil','Operations','Ramallah'],['EMP-0633','Lina Saleh','Quality','Hebron'],['EMP-0791','Yousef Nasser','Finance','Jenin'],['EMP-0850','Dana Odeh','Logistics','Nablus']]},
+dates:{cols:['Order','Order date','Due date'],rows:[['SO-01','02-Mar-2026','06-Mar-2026'],['SO-02','31-Jan-2026','28-Feb-2026'],['SO-03','15-Mar-2026','15-Apr-2026'],['SO-04','05-Mar-2026','12-Mar-2026']],note:'dates'}
+};
+
+/* ===== Modules ===== */
+const LEVELS=[
+{id:1,name:'VLOOKUP',desc:'Classic lookup',track:'Lookup',table:'lookup',
+lessons:[
+L(`What VLOOKUP does`,`VLOOKUP ${g('searches','يبحث')} the first column of a table. When it finds the lookup value, VLOOKUP returns a value from the same row.`),
+L(`Arguments`,`=VLOOKUP(lookup_value, table_array, col_index_num, [range_lookup]). The column index counts from the left edge of the table range. Use FALSE for an ${g('exact match','تطابق تام')}.`,`=VLOOKUP(lookup_value,table_array,col_index_num,FALSE)`),
+L(`Worked example`,`F2 holds P103. The formula searches column A, finds P103 in row 4, and returns column 3 of the table, the Price.`,`=VLOOKUP(F2,A2:D6,3,FALSE)`,`24.00`),
+L(`Common mistakes`,`The lookup value must sit in the first column of the table range. A code missing from the table returns #N/A. Leaving out FALSE switches to approximate match, which returns wrong rows on unsorted data. Inserting a column inside the table shifts the column index.`)],
+practice:[
+M(`Which formula returns the Price for P104?`,[`=VLOOKUP("P104",A2:D6,3,FALSE)`,`=VLOOKUP("P104",A2:D6,4,FALSE)`,`=VLOOKUP("P104",B2:D6,2,FALSE)`,`=VLOOKUP("P104",A2:D6,3,TRUE)`],`Price is column 3 of A2:D6. FALSE forces an exact match on the code.`),
+M(`Which formula returns the Stock for P102?`,[`=VLOOKUP("P102",A2:D6,4,FALSE)`,`=VLOOKUP("P102",A2:D6,3,FALSE)`,`=VLOOKUP("P102",B2:D6,3,FALSE)`,`=VLOOKUP("P102",A2:C6,4,FALSE)`],`Stock is column 4 of A2:D6. A2:C6 has 3 columns, so index 4 returns #REF!.`),
+M(`Which field does =VLOOKUP(F2,A2:D6,2,FALSE) return?`,[`Product`,`Price`,`Stock`,`Code`],`Column 2 of A2:D6 is column B, Product.`),
+M(`Which argument requests an exact match?`,[`FALSE`,`TRUE`,`2`,`A2:D6`],`FALSE (or 0) in the 4th argument forces an exact match.`),
+M(`Which table range covers Code through Stock?`,[`A2:D6`,`B2:D6`,`A2:C6`,`A1:D1`],`Codes start in column A and Stock ends in column D. Rows 2 to 6 hold the data.`),
+M(`The return field is column C of A:D. Which column index do you use?`,[`3`,`2`,`4`,`1`],`Count from the first column of the range. A is 1, B is 2, C is 3.`),
+T(`Type the result of =VLOOKUP("P105",A2:D6,4,FALSE)`,`9`,`P105 is Headphones. Column 4 is Stock, which holds 9.`),
+T(`F2 holds P103. Type the result of =VLOOKUP(F2,A2:D6,2,FALSE)`,`Backpack`,`P103 sits in row 4. Column 2 of row 4 is Backpack.`),
+M(`What does =VLOOKUP("P999",A2:D6,2,FALSE) return?`,[`#N/A`,`0`,`A blank cell`,`Headphones`],`P999 does not exist in column A. An exact-match lookup with no match returns #N/A.`),
+F(`Write a VLOOKUP returning the Stock for the code in F2. Use table A2:D6 and exact match.`,[`=VLOOKUP(F2,A2:D6,4,FALSE)`,`=VLOOKUP(F2,A2:D6,4,0)`],`Stock is the 4th column of A2:D6. FALSE or 0 forces an exact match.`)],
+assess:[
+M(`Which formula returns the Stock for F2?`,[`=VLOOKUP(F2,A2:D6,4,FALSE)`,`=VLOOKUP(F2,A2:D6,3,FALSE)`,`=VLOOKUP(F2,B2:D6,4,FALSE)`],`Stock is column 4 of A2:D6. B2:D6 drops the Code column, so the lookup fails.`),
+M(`What does FALSE request in VLOOKUP?`,[`Exact match`,`Approximate match`,`A blank result`],`FALSE forces an exact match. TRUE or an empty 4th argument gives approximate match.`),
+M(`Why does inserting a column inside A:D break =VLOOKUP(F2,A2:D6,3,FALSE)?`,[`The fixed index 3 now points to a different field`,`FALSE turns into TRUE`,`The lookup value changes`],`The column index is a typed number. A new column shifts the fields, while the number stays 3.`),
+M(`Can VLOOKUP return a value from a column left of its lookup column?`,[`No. VLOOKUP returns columns to the right of the first column only`,`Yes, always`,`Only for numbers`],`VLOOKUP searches the first column of the range and counts right. Use XLOOKUP or INDEX + MATCH to look left.`),
+M(`A2:D6 has four columns. Which index returns column C?`,[`3`,`2`,`4`],`A is 1, B is 2, C is 3.`),
+T(`Type the result of =VLOOKUP("P101",A2:D6,3,FALSE)`,`4.5`,`P101 is Notebook. Column 3 is Price, 4.50.`),
+M(`Why does =VLOOKUP("P103",B2:D6,1,FALSE) return #N/A?`,[`The range starts at column B, so the formula searches Product names, not codes`,`Index 1 is not allowed`,`P103 is out of stock`],`VLOOKUP searches the first column of the range. B2:D6 starts at Product, and no product is named P103.`),
+M(`Which F2 value makes =VLOOKUP(F2,A2:D6,4,FALSE) return 80?`,[`P102`,`P101`,`P104`],`Stock 80 belongs to P102, Pen.`),
+T(`Type the result of =VLOOKUP("P104",A2:D6,4,FALSE)`,`22`,`P104 is Calculator with 22 units in Stock.`),
+F(`Write a VLOOKUP returning the Product name for the code in F2. Use table A2:D6 and exact match.`,[`=VLOOKUP(F2,A2:D6,2,FALSE)`,`=VLOOKUP(F2,A2:D6,2,0)`],`Product is column 2 of A2:D6.`)]},
+
+{id:2,name:'XLOOKUP',desc:'Modern lookup',track:'Lookup',table:'lookup',
+lessons:[
+L(`What XLOOKUP does`,`XLOOKUP searches one range and ${g('retrieves','يسترجع')} the ${g('matching','المطابق')} value from a separate return range. No column index.`),
+L(`Arguments`,`=XLOOKUP(lookup_value, lookup_array, return_array, [if_not_found], [match_mode]). The lookup ${g('array','مصفوفة / نطاق')} and the return array need the same number of rows.`,`=XLOOKUP(lookup_value,lookup_array,return_array,"Not found")`),
+L(`Worked example`,`F2 holds P103. XLOOKUP searches A2:A6 and returns the Price from C2:C6.`,`=XLOOKUP(F2,A2:A6,C2:C6,"Not found")`,`24.00`),
+L(`Look left`,`The return range sits anywhere. Here XLOOKUP searches Product names and returns the Code from column A, to the left.`,`=XLOOKUP("Pen",B2:B6,A2:A6)`,`P102`),
+L(`Match mode`,`The 5th argument controls matching. 0 is exact, the default. 1 returns the exact value or the next larger. -1 returns the exact value or the next smaller. Leave the 4th argument empty with two commas.`,`=XLOOKUP(20,C2:C6,B2:B6,,1)`,`Backpack`)],
+practice:[
+M(`Which formula returns the Stock for P105?`,[`=XLOOKUP("P105",A2:A6,D2:D6,"Not found")`,`=XLOOKUP("P105",D2:D6,A2:A6)`,`=XLOOKUP("P105",A2:A6,C2:C6)`,`=XLOOKUP(D2:D6,A2:A6,"P105")`],`Search the codes in A2:A6 and return from Stock in D2:D6.`),
+M(`Which formula returns the Product for P103?`,[`=XLOOKUP("P103",A2:A6,B2:B6)`,`=XLOOKUP("P103",B2:B6,A2:A6)`,`=XLOOKUP(B2:B6,A2:A6,"P103")`,`=XLOOKUP("P103",A2:A6,D2:D6)`],`Codes live in A2:A6. Product names live in B2:B6.`),
+M(`In XLOOKUP, which range holds the values being searched?`,[`Lookup array`,`Return array`,`If-not-found argument`,`Column index`],`The lookup array is searched. The return array supplies the answer.`),
+M(`Which formula shows Missing when P999 is absent?`,[`=XLOOKUP("P999",A2:A6,C2:C6,"Missing")`,`=XLOOKUP("Missing",A2:A6,C2:C6)`,`=XLOOKUP("P999",C2:C6,A2:A6)`,`=XLOOKUP(A2:A6,"P999","Missing")`],`The 4th argument sets the message for a missing value.`),
+M(`Can XLOOKUP return values from a column left of the lookup range?`,[`Yes`,`No`,`Only for numbers`,`Only with TRUE`],`The return array is independent of the lookup array, so any direction works.`),
+M(`Which return range holds Price?`,[`C2:C6`,`A2:A6`,`B2:B6`,`D2:D6`],`Price sits in column C.`),
+T(`Type the result of =XLOOKUP("Pen",B2:B6,A2:A6)`,`P102`,`Pen sits in row 3. Column A of row 3 holds P102.`),
+T(`Type the result of =XLOOKUP("P101",A2:A6,D2:D6)`,`36`,`P101 is Notebook with 36 in Stock.`),
+M(`What does =XLOOKUP("P999",A2:A6,B2:B6) return?`,[`#N/A`,`0`,`Not found`,`A blank cell`],`With no 4th argument, a missing value returns #N/A.`),
+F(`Write an XLOOKUP returning the Price for F2. Show "Not found" when the code is missing.`,[`=XLOOKUP(F2,A2:A6,C2:C6,"Not found")`],`Search A2:A6, return C2:C6, and put the message in the 4th argument.`)],
+assess:[
+M(`Which formula returns the Product for F2?`,[`=XLOOKUP(F2,A2:A6,B2:B6)`,`=XLOOKUP(A2:A6,F2,B2:B6)`,`=XLOOKUP(F2,B2:B6,A2:A6)`],`Lookup value first, then the range to search, then the range to return.`),
+M(`Which argument supplies the answer range?`,[`Return array`,`Lookup value`,`If-not-found text`],`The 3rd argument, the return array, holds the values XLOOKUP returns.`),
+M(`Which formula shows Missing when no code exists?`,[`=XLOOKUP(F2,A2:A6,C2:C6,"Missing")`,`=XLOOKUP(F2,C2:C6,A2:A6)`,`=XLOOKUP("Missing",A2:A6,C2:C6)`],`The 4th argument holds the not-found message.`),
+M(`Why does XLOOKUP survive inserted columns better than VLOOKUP?`,[`XLOOKUP references the return range directly`,`XLOOKUP freezes columns`,`XLOOKUP sorts automatically`],`No column number to go stale. The return range moves with the sheet.`),
+T(`Type the result of =XLOOKUP("Calculator",B2:B6,C2:C6)`,`18.75`,`Calculator costs 18.75.`),
+T(`Type the result of =XLOOKUP("P104",A2:A6,B2:B6,"Missing")`,`Calculator`,`P104 exists, so the message never shows. The Product is Calculator.`),
+M(`What does =XLOOKUP(F2,A2:A6,C2:C5) return?`,[`#VALUE! because the ranges differ in size`,`24`,`#N/A`],`A2:A6 has 5 rows. C2:C5 has 4. XLOOKUP needs matching sizes.`),
+T(`Type the result of =XLOOKUP(20,C2:C6,B2:B6,,1)`,`Backpack`,`Match mode 1 returns the exact value or the next larger. No price equals 20. The next larger price is 24, Backpack.`),
+T(`Type the result of =XLOOKUP(20,C2:C6,B2:B6,,-1)`,`Calculator`,`Match mode -1 returns the next smaller value. 18.75 is the largest price below 20.`),
+F(`Write an XLOOKUP returning the Code for the product "Headphones".`,[`=XLOOKUP("Headphones",B2:B6,A2:A6)`],`Search Product names in B2:B6 and return from A2:A6.`)]},
+
+{id:3,name:'INDEX + MATCH',desc:'Flexible lookup',track:'Lookup',table:'lookup',
+lessons:[
+L(`How they work`,`MATCH finds a ${g('position','موضع')}. INDEX returns the value at a position. Together they look up in any direction.`),
+L(`MATCH`,`=MATCH(lookup_value, lookup_array, [match_type]). Use 0 for an exact match. MATCH returns a number, not a value.`,`=MATCH("P103",A2:A6,0)`,`3`),
+L(`INDEX`,`=INDEX(array, row_num, [column_num]). INDEX counts rows inside the range, not sheet rows.`,`=INDEX(B2:B6,2)`,`Pen`),
+L(`Worked example`,`MATCH finds P103 at position 3. INDEX returns position 3 of C2:C6.`,`=INDEX(C2:C6,MATCH(F2,A2:A6,0))`,`24.00`),
+L(`Two-way lookup`,`A second MATCH picks the column by header name. The formula survives column moves.`,`=INDEX(A2:D6,MATCH("P105",A2:A6,0),MATCH("Stock",A1:D1,0))`,`9`),
+L(`Common mistake`,`The INDEX range and the MATCH range must start on the same row. An offset of one row returns the neighbouring record with no error message.`)],
+practice:[
+M(`Which formula returns the Price for P103?`,[`=INDEX(C2:C6,MATCH("P103",A2:A6,0))`,`=INDEX(A2:A6,MATCH("P103",C2:C6,0))`,`=INDEX(D2:D6,MATCH("P103",A2:A6,0))`,`=MATCH(C2:C6,INDEX("P103",A2:A6),0)`],`MATCH finds the row among the codes. INDEX returns from the Price column.`),
+M(`What does =MATCH("P104",A2:A6,0) return?`,[`4`,`P104`,`5`,`A5`],`P104 is the 4th item in A2:A6. MATCH returns positions, not addresses.`),
+M(`Which part finds the position in INDEX + MATCH?`,[`MATCH`,`INDEX`,`FALSE`,`SUM`],`MATCH returns the position. INDEX uses the position.`),
+M(`What does 0 request in MATCH?`,[`Exact match`,`Approximate match`,`First row`,`Blank result`],`match_type 0 means exact match.`),
+M(`Which INDEX range returns Stock?`,[`D2:D6`,`C2:C6`,`A2:A6`,`B2:B6`],`Stock sits in column D.`),
+M(`Which formula returns the Product for P101?`,[`=INDEX(B2:B6,MATCH("P101",A2:A6,0))`,`=INDEX(A2:A6,MATCH("P101",B2:B6,0))`,`=INDEX(C2:C6,MATCH("P101",A2:A6,0))`,`=MATCH(B2:B6,"P101",0)`],`Match the code in A2:A6, return from B2:B6.`),
+T(`Type the result of =INDEX(B2:B6,2)`,`Pen`,`Position 2 of B2:B6 is B3, Pen.`),
+T(`Type the result of =MATCH("Backpack",B2:B6,0)`,`3`,`Backpack is the 3rd product in the list.`),
+T(`Type the result of =INDEX(A2:D6,4,2)`,`Calculator`,`Row 4 of the range is P104. Column 2 is Product.`),
+F(`Write an INDEX + MATCH returning the Stock for the code in F2.`,[`=INDEX(D2:D6,MATCH(F2,A2:A6,0))`],`INDEX the Stock column. MATCH the code in A2:A6 with 0 for exact match.`)],
+assess:[
+M(`P103 is third in A2:A6. What does MATCH return?`,[`3`,`P103`,`A4`],`MATCH returns the position inside the range.`),
+M(`Which formula returns the Price for P103?`,[`=INDEX(C2:C6,MATCH("P103",A2:A6,0))`,`=INDEX(A2:A6,MATCH("P103",C2:C6,0))`,`=MATCH(C2:C6,INDEX("P103",A2:A6),0)`],`INDEX the Price column. MATCH inside the Code column.`),
+M(`What does INDEX do?`,[`Returns the value at a position`,`Counts matches`,`Sorts a range`],`INDEX takes a range and a position and returns the value there.`),
+M(`Why must the INDEX and MATCH ranges align?`,[`The MATCH position must point to the same row in the INDEX range`,`INDEX only accepts column A`,`MATCH returns addresses`],`Both ranges start on row 2, so position 3 means the same record in both.`),
+T(`Type the result of =MATCH("Stock",A1:D1,0)`,`4`,`Stock is the 4th header in A1:D1.`),
+T(`Type the result of =INDEX(A2:D6,MATCH("P105",A2:A6,0),MATCH("Stock",A1:D1,0))`,`9`,`Row position 5, column position 4. Headphones Stock is 9.`),
+T(`Type the result of =INDEX(C2:C6,MATCH("Pen",B2:B6,0))`,`1.25`,`Pen is position 2. Position 2 of the Price column is 1.25.`),
+M(`What does =INDEX(C2:C6,MATCH("P103",A3:A7,0)) return?`,[`1.25, the Pen price, because the ranges are offset by one row`,`24, the Backpack price`,`#N/A`],`Inside A3:A7, P103 sits at position 2. Position 2 of C2:C6 is 1.25. No error warns you.`),
+T(`Type the result of =INDEX(A2:D6,2,4)`,`80`,`Row 2 of the range is P102. Column 4 is Stock, 80.`),
+F(`Write an INDEX + MATCH returning the Code for "Headphones".`,[`=INDEX(A2:A6,MATCH("Headphones",B2:B6,0))`],`MATCH the name in B2:B6, then INDEX the Code column to the left.`)]},
+
+{id:4,name:'Conditional Functions',desc:'SUMIF, SUMIFS, AVERAGEIF, COUNTIF',track:'Summarize',table:'sales',
+lessons:[
+L(`SUMIF`,`SUMIF adds values meeting one ${g('criterion','معيار / شرط')}. =SUMIF(range, criteria, [sum_range]).`,`=SUMIF(A2:A7,"East",D2:D7)`,`3700`),
+L(`SUMIFS`,`SUMIFS adds values meeting several ${g('criteria','معايير / شروط')}. The sum range comes first.`,`=SUMIFS(D2:D7,A2:A7,"East",C2:C7,"Online")`,`1900`),
+L(`AVERAGEIF`,`AVERAGEIF returns the ${g('average','المتوسط')} of cells meeting one condition.`,`=AVERAGEIF(A2:A7,"East",E2:E7)`,`4.3`),
+L(`COUNTIF`,`COUNTIF counts cells meeting one criterion.`,`=COUNTIF(B2:B7,"Notebook")`,`2`),
+L(`Criteria operators`,`Put comparison operators inside quotes: ">1000", "<=4", "<>East" for not equal. Wildcards: * matches any run of characters, ? matches one character. Criteria ignore upper and lower case.`,`=COUNTIF(D2:D7,">1000")`,`3`)],
+practice:[
+M(`Which formula adds Sales for East and Online rows?`,[`=SUMIFS(D2:D7,A2:A7,"East",C2:C7,"Online")`,`=SUMIF(A2:A7,"East",D2:D7)`,`=COUNTIF(A2:A7,"East")`,`=AVERAGEIF(A2:A7,"East",D2:D7)`],`SUMIFS takes the sum range first, then pairs of criteria range and criteria.`),
+M(`Which formula totals all East sales?`,[`=SUMIF(A2:A7,"East",D2:D7)`,`=SUMIFS(A2:A7,"East",D2:D7)`,`=COUNTIF(A2:A7,"East")`,`=AVERAGEIF(A2:A7,"East",D2:D7)`],`SUMIF(range, criteria, sum_range). Column A holds regions, column D holds sales.`),
+M(`Which formula finds the average rating for East?`,[`=AVERAGEIF(A2:A7,"East",E2:E7)`,`=SUMIF(A2:A7,"East",E2:E7)`,`=COUNTIF(A2:A7,"East")`,`=AVERAGEIF(E2:E7,"East",A2:A7)`],`Average column E for rows where column A is East.`),
+M(`Which formula counts Notebook records?`,[`=COUNTIF(B2:B7,"Notebook")`,`=SUMIF(B2:B7,"Notebook")`,`=COUNTIF(A2:A7,"Notebook")`,`=AVERAGEIF(B2:B7,"Notebook")`],`Products live in column B. COUNTIF needs no sum range.`),
+M(`Which formula counts Sales greater than 1000?`,[`=COUNTIF(D2:D7,">1000")`,`=SUMIF(D2:D7,">1000")`,`=COUNTIF(A2:A7,">1000")`,`=AVERAGEIF(D2:D7,">1000")`],`Operators go inside quotes. Three sales exceed 1000: 1200, 1800, 2100.`),
+M(`Which function sums with several conditions?`,[`SUMIFS`,`SUMIF`,`COUNTIF`,`AVERAGEIF`],`SUMIFS accepts many pairs of criteria range and criteria.`),
+M(`Which formula totals West sales?`,[`=SUMIF(A2:A7,"West",D2:D7)`,`=COUNTIF(A2:A7,"West")`,`=AVERAGEIF(A2:A7,"West",D2:D7)`,`=SUMIFS(A2:A7,"West",D2:D7)`],`SUMIF on region West, summing column D.`),
+T(`Type the result of =SUMIF(A2:A7,"East",D2:D7)`,`3700`,`East rows: 1200 + 1800 + 700 = 3700.`),
+T(`Type the result of =COUNTIF(C2:C7,"Online")`,`4`,`Rows 2, 5, 6, and 7 are Online.`),
+T(`Type the result of =SUMIF(C2:C7,"Store",D2:D7)`,`2450`,`Store rows: 650 + 1800 = 2450.`),
+T(`Type the result of =AVERAGEIF(A2:A7,"West",D2:D7)`,`1375`,`West sales: (650 + 2100) / 2 = 1375.`),
+F(`Write a formula totaling Sales for the product Notebook.`,[`=SUMIF(B2:B7,"Notebook",D2:D7)`,`=SUMIFS(D2:D7,B2:B7,"Notebook")`],`Test column B for Notebook and add column D. The result is 2150.`)],
+assess:[
+M(`Which formula totals East sales?`,[`=SUMIF(A2:A7,"East",D2:D7)`,`=COUNTIF(A2:A7,"East")`,`=AVERAGEIF(A2:A7,"East",D2:D7)`],`SUMIF adds the sum range for matching rows.`),
+M(`Which formula totals East and Online sales?`,[`=SUMIFS(D2:D7,A2:A7,"East",C2:C7,"Online")`,`=SUMIF(D2:D7,A2:A7,"East",C2:C7,"Online")`,`=COUNTIF(A2:A7,"East")`],`Two conditions need SUMIFS, with the sum range first.`),
+M(`Which formula finds the average East rating?`,[`=AVERAGEIF(A2:A7,"East",E2:E7)`,`=SUMIF(A2:A7,"East",E2:E7)`,`=COUNTIF(E2:E7,"East")`],`AVERAGEIF(range, criteria, average_range).`),
+M(`SUMIFS differs from SUMIF because SUMIFS accepts`,[`Multiple conditions`,`Only text`,`Only one range`],`SUMIFS takes many criteria pairs.`),
+M(`In SUMIF(range,criteria,sum_range), which range holds the values to add?`,[`sum_range`,`criteria`,`range`],`range is tested, sum_range is added.`),
+T(`Type the result of =COUNTIF(B2:B7,"Notebook")`,`2`,`Rows 2 and 5 hold Notebook.`),
+T(`Type the result of =SUMIFS(D2:D7,A2:A7,"East",C2:C7,"Online")`,`1900`,`East and Online: 1200 + 700 = 1900.`),
+T(`Type the result of =COUNTIF(A2:A7,"<>East")`,`3`,`<> means not equal. Two West rows and one North row.`),
+T(`Type the result of =AVERAGEIF(A2:A7,"East",E2:E7)`,`4.3`,`(4.4 + 4.7 + 3.8) / 3 = 4.3.`),
+T(`Type the result of =SUMIF(D2:D7,">1000")`,`5100`,`With no sum range, SUMIF adds the tested cells: 1200 + 1800 + 2100.`),
+M(`Which products match the criteria "Note*"?`,[`Every product starting with Note`,`Only a product named Note*`,`Every product ending with Note`],`* stands for any run of characters after Note.`),
+F(`Write a formula counting the rows with Rating of 4.5 or higher.`,[`=COUNTIF(E2:E7,">=4.5")`],`Put the operator inside quotes. Two rows qualify: 4.7 and 4.8.`)]},
+
+{id:5,name:'Multi-criteria Stats',desc:'COUNTIFS, AVERAGEIFS, MAXIFS, MINIFS, SUMPRODUCT',track:'Summarize',table:'sales',
+lessons:[
+L(`COUNTIFS`,`COUNTIFS counts rows meeting every condition. Add pairs of criteria range and criteria.`,`=COUNTIFS(A2:A7,"East",C2:C7,"Online")`,`2`),
+L(`AVERAGEIFS`,`AVERAGEIFS puts the average range first, then the criteria pairs.`,`=AVERAGEIFS(D2:D7,A2:A7,"East",C2:C7,"Online")`,`950`),
+L(`MAXIFS and MINIFS`,`MAXIFS returns the ${g('maximum','الحد الأعلى')} and MINIFS the ${g('minimum','الحد الأدنى')} of rows meeting the criteria. Both return 0 when no row matches.`,`=MAXIFS(D2:D7,A2:A7,"East")`,`1800`),
+L(`SUMPRODUCT`,`SUMPRODUCT multiplies arrays and adds the results. A comparison such as (A2:A7="East") gives TRUE and FALSE, which multiply as 1 and 0.`,`=SUMPRODUCT((A2:A7="East")*D2:D7)`,`3700`),
+L(`Argument order trap`,`SUMIF and AVERAGEIF put the result range last. SUMIFS, AVERAGEIFS, MAXIFS, and MINIFS put the result range first. COUNTIFS has no result range.`)],
+practice:[
+T(`Type the result of =COUNTIFS(A2:A7,"East",C2:C7,"Online")`,`2`,`Rows 2 and 6 are East and Online.`),
+T(`Type the result of =AVERAGEIFS(D2:D7,A2:A7,"East",C2:C7,"Online")`,`950`,`(1200 + 700) / 2 = 950.`),
+T(`Type the result of =MAXIFS(D2:D7,A2:A7,"East")`,`1800`,`East sales are 1200, 1800, 700. The largest is 1800.`),
+T(`Type the result of =MINIFS(D2:D7,C2:C7,"Online")`,`700`,`Online sales are 1200, 950, 700, 2100. The smallest is 700.`),
+T(`Type the result of =MAXIFS(E2:E7,A2:A7,"West")`,`4.8`,`West ratings are 3.9 and 4.8.`),
+T(`Type the result of =COUNTIFS(D2:D7,">=1000",E2:E7,">=4.5")`,`2`,`Rows 4 (1800, 4.7) and 7 (2100, 4.8). Row 2 fails the rating test.`),
+M(`Which function places the result range first?`,[`AVERAGEIFS`,`SUMIF`,`AVERAGEIF`,`COUNTIF`],`All the plural IFS functions with a result range put the range first.`),
+M(`Which formula returns the lowest West sale?`,[`=MINIFS(D2:D7,A2:A7,"West")`,`=MAXIFS(D2:D7,A2:A7,"West")`,`=MINIFS(A2:A7,"West",D2:D7)`,`=MIN(A2:A7,"West")`],`MINIFS(min_range, criteria_range, criteria). The answer is 650.`),
+T(`Type the result of =SUMPRODUCT((A2:A7="East")*D2:D7)`,`3700`,`East rows multiply by 1, others by 0. 1200 + 1800 + 700.`),
+F(`Write a COUNTIFS counting East rows with Sales greater than 1000.`,[`=COUNTIFS(A2:A7,"East",D2:D7,">1000")`,`=COUNTIFS(D2:D7,">1000",A2:A7,"East")`],`Two criteria pairs. The result is 2.`)],
+assess:[
+T(`Type the result of =AVERAGEIFS(E2:E7,C2:C7,"Online")`,`4.275`,`(4.4 + 4.1 + 3.8 + 4.8) / 4 = 4.275.`),
+T(`Type the result of =SUMIFS(D2:D7,B2:B7,"Backpack",C2:C7,"Online")`,`2100`,`One Backpack row is Online: row 7.`),
+T(`Type the result of =COUNTIFS(A2:A7,"East",D2:D7,">1000")`,`2`,`East rows above 1000: 1200 and 1800.`),
+T(`Type the result of =MINIFS(D2:D7,A2:A7,"West")`,`650`,`West sales are 650 and 2100.`),
+T(`Type the result of =MAXIFS(D2:D7,C2:C7,"Store")`,`1800`,`Store sales are 650 and 1800.`),
+T(`Type the result of =SUMPRODUCT((C2:C7="Online")*(E2:E7>=4.4))`,`2`,`Online ratings: 4.4, 4.1, 3.8, 4.8. Two reach 4.4.`),
+M(`What does =MAXIFS(D2:D7,A2:A7,"South") return?`,[`0`,`#N/A`,`#DIV/0!`],`MAXIFS and MINIFS return 0 when no row matches.`),
+M(`Which returns #DIV/0! when no row matches?`,[`AVERAGEIFS`,`COUNTIFS`,`SUMIFS`],`An average of zero rows divides by zero. Counts and sums return 0.`),
+M(`In SUMPRODUCT((A2:A7="East")*D2:D7), what does (A2:A7="East") produce?`,[`An array of TRUE and FALSE values, used as 1 and 0`,`The word East`,`The row number of the first East`],`Each cell becomes TRUE or FALSE. Multiplication turns them into 1 and 0.`),
+F(`Write a MAXIFS returning the highest Rating among Online rows.`,[`=MAXIFS(E2:E7,C2:C7,"Online")`],`max_range first, then the criteria pair. The result is 4.8.`)]},
+
+{id:6,name:'Logic',desc:'IF, AND, OR, NOT, IFS, IFERROR',track:'Logic and text',table:'sales',
+lessons:[
+L(`IF`,`IF runs a ${g('logical test','اختبار منطقي')} and returns one value when TRUE, another when FALSE. =IF(logical_test, value_if_true, value_if_false).`,`=IF(D2>1000,"High","Low")`,`High`),
+L(`AND, OR, NOT`,`AND needs every test TRUE. OR needs one TRUE test. NOT flips TRUE and FALSE.`,`=IF(AND(A2="East",C2="Online"),"Target","Other")`,`Target`),
+L(`Nested IF`,`Put one IF inside another for three or more outcomes. Test the strictest condition first. This ${g('nested','متداخل')} IF grades ratings.`,`=IF(E2>=4.5,"Top",IF(E2>=4,"Good","Low"))`,`Good`),
+L(`IFS`,`IFS checks tests in order and returns the value of the first TRUE test. End with TRUE as a catch-all, or unmatched rows return #N/A.`,`=IFS(D2>=2000,"A",D2>=1000,"B",TRUE,"C")`,`B`),
+L(`IFERROR`,`IFERROR returns a replacement when a formula produces an ${g('error','خطأ')}. Here MATCH fails because no South region exists.`,`=IFERROR(MATCH("South",A2:A7,0),"No South")`,`No South`)],
+practice:[
+T(`Type the result of =IF(D3>1000,"High","Low")`,`Low`,`D3 is 650, not above 1000.`),
+T(`Type the result of =IF(AND(A4="East",C4="Online"),"Target","Other")`,`Other`,`Row 4 is East but Store. AND needs both tests TRUE.`),
+T(`Type the result of =IF(OR(A3="West",E3>4.5),"Review","OK")`,`Review`,`A3 is West. One TRUE test satisfies OR.`),
+T(`Type the result of =IF(OR(A5="West",E5>4.5),"Review","OK")`,`OK`,`Row 5 is North with rating 4.1. Both tests are FALSE.`),
+T(`Type the result of =IF(E6>=4.5,"Top",IF(E6>=4,"Good","Low"))`,`Low`,`E6 is 3.8, below both thresholds.`),
+T(`Type the result of =IFS(D7>=2000,"A",D7>=1000,"B",TRUE,"C")`,`A`,`D7 is 2100, so the first test is TRUE.`),
+T(`Type the result of =IFERROR(MATCH("South",A2:A7,0),"No South")`,`No South`,`MATCH returns #N/A, so IFERROR shows the replacement.`),
+T(`Type the result of =NOT(A2="East")`,`FALSE`,`A2="East" is TRUE. NOT flips the value to FALSE.`),
+M(`Why add TRUE as the last test in IFS?`,[`To catch every row no earlier test matched`,`To make IFS faster`,`To force uppercase text`,`To return TRUE in every row`],`Without a catch-all, rows failing every test return #N/A.`),
+F(`Write an IF for row 2 returning "Pass" when E2 is at least 4, otherwise "Fail".`,[`=IF(E2>=4,"Pass","Fail")`,`=IF(E2<4,"Fail","Pass")`],`>= means at least. E2 is 4.4, so the result is Pass.`)],
+assess:[
+T(`Type the result of =IF(E4>=4.5,"Top",IF(E4>=4,"Good","Low"))`,`Top`,`E4 is 4.7. The first test is TRUE.`),
+T(`Type the result of =IFS(D3>=2000,"A",D3>=1000,"B",TRUE,"C")`,`C`,`D3 is 650. Only the TRUE catch-all applies.`),
+T(`Type the result of =IF(AND(D5>900,E5>4),"Yes","No")`,`Yes`,`D5 is 950 and E5 is 4.1. Both tests are TRUE.`),
+T(`Type the result of =IF(OR(A6="North",D6>1000),1,0)`,`0`,`A6 is East and D6 is 700. Both tests are FALSE.`),
+T(`Type the result of =IFERROR(1200/0,"Check")`,`Check`,`Division by zero returns #DIV/0!, so IFERROR shows Check.`),
+T(`Type the result of =IFERROR(MATCH("West",A2:A7,0),"None")`,`2`,`West first appears at position 2. No error, so IFERROR passes the result through.`),
+M(`A2 holds East. What does =IF(A2="east","Yes","No") return?`,[`Yes, because text comparison ignores case`,`No, because the case differs`,`#VALUE!`],`The = operator in Excel ignores upper and lower case.`),
+M(`How many rows would =IFS(D2>=2000,"A",D2>=1000,"B",TRUE,"C") label B when filled down to row 7?`,[`2`,`3`,`1`],`Sales from 1000 up to 1999: 1200 and 1800.`),
+M(`Which formula flags rows NOT sold Online?`,[`=IF(NOT(C2="Online"),"Flag","")`,`=IF(C2="Online","Flag","")`,`=NOT(IF(C2,"Online"))`],`NOT flips the test, so Store rows get the flag.`),
+F(`Write an IFS returning "A" when D2 is at least 2000, "B" when at least 1000, otherwise "C".`,[`=IFS(D2>=2000,"A",D2>=1000,"B",TRUE,"C")`,`=IF(D2>=2000,"A",IF(D2>=1000,"B","C"))`],`Test from highest threshold down and finish with TRUE. A nested IF also works.`)]},
+
+{id:7,name:'Text Functions',desc:'LEFT, MID, FIND, TRIM, TEXTJOIN',track:'Logic and text',table:'staff',
+lessons:[
+L(`LEFT, RIGHT, MID`,`${g('Extract','استخراج')} characters from text. LEFT takes from the start, RIGHT from the end, MID from a start position for a set length.`,`=MID(A2,5,4)`,`0412`),
+L(`LEN, FIND, SEARCH`,`LEN counts characters. FIND returns the position of text and is ${g('case-sensitive','حساس لحالة الأحرف')}. SEARCH does the same while ignoring case.`,`=FIND(" ",B2)`,`5`),
+L(`Split a full name`,`Combine LEFT with FIND to cut at the space. Microsoft 365 users write =TEXTBEFORE(B2," ") for the same result.`,`=LEFT(B2,FIND(" ",B2)-1)`,`Sara`),
+L(`Clean and change case`,`TRIM removes extra spaces. UPPER, LOWER, and PROPER change case. SUBSTITUTE swaps one piece of text for another.`,`=SUBSTITUTE(A2,"EMP","E")`,`E-0412`),
+L(`Join text`,`Use & or CONCAT to join text. TEXTJOIN adds a ${g('delimiter','فاصل')} between items and skips empty cells when the 2nd argument is TRUE.`,`=TEXTJOIN(", ",TRUE,D2:D4)`,`Nablus, Ramallah, Hebron`),
+L(`TEXT and VALUE`,`TEXT formats a number as text. VALUE turns numeric text back into a number you can calculate with.`,`=VALUE(RIGHT(A2,4))`,`412`)],
+practice:[
+T(`Type the result of =LEFT(A2,3)`,`EMP`,`The first 3 characters of EMP-0412.`),
+T(`Type the result of =RIGHT(A3,4)`,`0587`,`The last 4 characters of EMP-0587.`),
+T(`Type the result of =LEN(A2)`,`8`,`E, M, P, hyphen, and 4 digits: 8 characters.`),
+T(`Type the result of =FIND(" ",B3)`,`5`,`Omar has 4 letters, so the space is character 5.`),
+T(`Type the result of =LEFT(B4,FIND(" ",B4)-1)`,`Lina`,`The space sits at position 5. LEFT takes 4 characters.`),
+M(`What does =UPPER(C5) return?`,[`LOGISTICS`,`Logistics`,`logistics`,`L`],`UPPER converts every letter to capitals.`),
+T(`Type the result of =C2&" - "&D2`,`Finance - Nablus`,`& joins the department, the separator, and the city.`),
+T(`Type the result of =SUBSTITUTE(A2,"EMP","E")`,`E-0412`,`SUBSTITUTE replaces EMP with E.`),
+M(`What does =PROPER("omar khalil") return?`,[`Omar Khalil`,`OMAR KHALIL`,`Omar khalil`,`omar Khalil`],`PROPER capitalizes the first letter of each word.`),
+F(`Write a formula returning the last 4 digits of the ID in A2.`,[`=RIGHT(A2,4)`,`=MID(A2,5,4)`],`RIGHT(A2,4) takes the last 4 characters. MID(A2,5,4) also works.`)],
+assess:[
+T(`Type the result of =MID(B2,FIND(" ",B2)+1,100)`,`Haddad`,`MID starts after the space and takes up to 100 characters, which covers the rest of the name.`),
+T(`Type the result of =LEN(TRIM("  Sara   Haddad "))`,`11`,`TRIM leaves "Sara Haddad", which has 11 characters.`),
+T(`Type the result of =TEXTJOIN(", ",TRUE,D2:D4)`,[`Nablus, Ramallah, Hebron`,`Nablus,Ramallah,Hebron`],`The cities in D2:D4 joined with comma and space.`),
+T(`Type the result of =VALUE(RIGHT(A2,4))`,`412`,`RIGHT returns the text 0412. VALUE converts it to the number 412.`),
+T(`Type the result of =MID(A5,5,4)`,`0791`,`Characters 5 to 8 of EMP-0791.`),
+M(`What does =TEXT(1250.5,"#,##0.00") return?`,[`1,250.50`,`1250.5`,`1,250.5`],`The format adds a thousands separator and two decimals.`),
+M(`What does =FIND("f",C2) return when C2 holds Finance?`,[`#VALUE!, because FIND is case-sensitive`,`1`,`0`],`Finance has an uppercase F. FIND finds no lowercase f. SEARCH("f",C2) returns 1.`),
+T(`Type the result of =CONCAT(C4,"/",D4)`,`Finance/Jenin`,`CONCAT joins Finance, a slash, and Jenin.`),
+M(`Which function removes extra spaces from text?`,[`TRIM`,`CLEAN`,`SUBSTITUTE`],`TRIM removes leading and trailing spaces and reduces inner runs to one space.`),
+F(`Write a formula extracting the first name from B2.`,[`=LEFT(B2,FIND(" ",B2)-1)`,`=LEFT(B2,SEARCH(" ",B2)-1)`,`=TEXTBEFORE(B2," ")`],`Take the characters before the space. The result is Sara.`)]},
+
+{id:8,name:'Dynamic Arrays',desc:'UNIQUE, FILTER, SORT, SORTBY',track:'Modern Excel',table:'sales',
+lessons:[
+L(`Spill`,`A dynamic array formula returns many values from one cell. The results ${g('spill','تنسكب')} into the cells below. A blocked cell gives #SPILL!. Needs Excel 2021 or Microsoft 365.`),
+L(`UNIQUE`,`UNIQUE lists each distinct value once, in order of first appearance.`,`=UNIQUE(A2:A7)`,`East, West, North`),
+L(`FILTER`,`FILTER returns the values meeting a condition. Multiply conditions for AND. Add conditions for OR. The 3rd argument sets the message for no results.`,`=FILTER(D2:D7,(A2:A7="East")*(C2:C7="Online"),"None")`,`1200, 700`),
+L(`SORT and SORTBY`,`SORT orders a range. Use -1 for largest first. SORTBY orders one range by the values of another.`,`=SORTBY(B2:B7,D2:D7,-1)`,`Backpack, Backpack, Notebook, Notebook, Pen, Pen`),
+L(`Combine functions`,`Wrap dynamic arrays inside other functions. TAKE keeps the first rows of a result (Microsoft 365).`,`=SUM(TAKE(SORT(D2:D7,,-1),3))`,`5100`)],
+practice:[
+T(`Type the result of =COUNTA(UNIQUE(A2:A7))`,`3`,`Distinct regions: East, West, North.`),
+T(`Type the result of =COUNTA(UNIQUE(B2:B7))`,`3`,`Distinct products: Notebook, Pen, Backpack.`),
+T(`Type the result of =SUM(FILTER(D2:D7,C2:C7="Online"))`,`4950`,`Online sales: 1200 + 950 + 700 + 2100.`),
+M(`What is the first value of =SORT(D2:D7)?`,[`650`,`2100`,`1200`,`700`],`SORT defaults to smallest first.`),
+M(`What does =FILTER(A2:E7,A2:A7="South","None") return?`,[`None`,`#CALC!`,`A blank cell`,`#N/A`],`No South rows exist, so FILTER returns the 3rd argument.`),
+M(`What causes a #SPILL! error?`,[`Cells in the spill range are not empty`,`The formula has no criteria`,`The data is unsorted`,`The range is too short`],`Clear the cells below the formula and the result spills.`),
+T(`Type the result of =INDEX(SORT(D2:D7,,-1),3)`,`1200`,`Largest first: 2100, 1800, 1200. The 3rd value is 1200.`),
+T(`Type the result of =ROWS(FILTER(D2:D7,D2:D7>1000))`,`3`,`Three sales exceed 1000.`),
+M(`What does =FILTER(D2:D7,(A2:A7="East")*(C2:C7="Online")) return?`,[`1200 and 700`,`1200, 1800, and 700`,`3700`,`1200 and 950`],`Multiplication means AND. Rows 2 and 6 pass both tests.`),
+F(`Write a FILTER returning the Sales for West rows.`,[`=FILTER(D2:D7,A2:A7="West")`],`Return column D where column A equals West. The result is 650 and 2100.`)],
+assess:[
+T(`Type the result of =SUM(FILTER(D2:D7,(A2:A7="East")+(A2:A7="West")))`,`6450`,`Addition means OR. East 3700 plus West 2750.`),
+T(`Type the result of =COUNTA(UNIQUE(C2:C7))`,`2`,`Two channels: Online and Store.`),
+T(`Type the result of =INDEX(SORTBY(A2:A7,D2:D7,1),1)`,`West`,`Smallest sale first. 650 belongs to a West row.`),
+T(`Type the result of =INDEX(SORT(E2:E7,,-1),1)`,`4.8`,`The highest rating is 4.8.`),
+T(`Type the result of =SUM(TAKE(SORT(D2:D7,,-1),2))`,`3900`,`Top two sales: 2100 + 1800.`),
+T(`Type the result of =AVERAGE(FILTER(E2:E7,B2:B7="Backpack"))`,`4.75`,`Backpack ratings: (4.7 + 4.8) / 2.`),
+M(`In FILTER conditions, what does the + sign between two tests mean?`,[`OR`,`AND`,`NOT`],`A row passes when either test is TRUE.`),
+M(`In which order does =UNIQUE(A2:A7) list the regions?`,[`East, West, North`,`East, North, West`,`North, East, West`],`UNIQUE keeps the order of first appearance. It does not sort.`),
+M(`What does =SEQUENCE(3) return?`,[`1, 2, 3 in a vertical list`,`3`,`3, 2, 1 in a row`],`SEQUENCE(rows) returns counting numbers down a column.`),
+F(`Write a formula listing the Products sorted by Sales, highest first.`,[`=SORTBY(B2:B7,D2:D7,-1)`],`SORTBY orders column B by column D. -1 means descending.`)]},
+
+{id:9,name:'Dates',desc:'EOMONTH, NETWORKDAYS, WORKDAY, DATEDIF',track:'Modern Excel',table:'dates',
+lessons:[
+L(`Dates are numbers`,`Excel stores every date as a ${g('serial number','رقم تسلسلي')}: days counted from 1 January 1900. Subtract two dates to get the days between them.`,`=C2-B2`,`4`),
+L(`Build and split dates`,`DATE(year, month, day) builds a date. YEAR, MONTH, and DAY pull the parts out.`,`=MONTH(B4)`,`3`),
+L(`Month arithmetic`,`EOMONTH returns the last day of a month, shifted by a number of months. EDATE moves a date by whole months and clips to the month end.`,`=EOMONTH(B3,1)`,`28-Feb-2026`),
+L(`Working days`,`NETWORKDAYS counts ${g('working days','أيام العمل')} with a Saturday and Sunday weekend. NETWORKDAYS.INTL sets another weekend: code 7 means Friday and Saturday, the local work week. WORKDAY adds working days to a date.`,`=NETWORKDAYS.INTL(B2,C2,7)`,`4`),
+L(`WEEKDAY, TEXT, TODAY, DATEDIF`,`WEEKDAY returns 1 for Sunday through 7 for Saturday. TEXT(date,"dddd") shows the day name. TODAY() returns the current date and updates daily. DATEDIF counts whole years ("y"), months ("m"), or days ("d").`,`=DATEDIF(B4,C4,"m")`,`1`)],
+practice:[
+T(`Type the result of =C2-B2`,`4`,`6 March minus 2 March is 4 days.`),
+T(`Type the result of =C4-B4`,`31`,`15 March to 15 April spans 31 days, because March has 31 days.`),
+T(`Type the result of =MONTH(B4)`,`3`,`15 March is month 3.`),
+T(`Type the result of =YEAR(C3)`,`2026`,`28 February 2026.`),
+T(`Type the result of =DAY(C3)`,`28`,`The day part of 28 February.`),
+T(`Type the result of =NETWORKDAYS(B2,C2)`,`5`,`2 March 2026 is a Monday. Monday through Friday gives 5 days.`),
+T(`Type the result of =WEEKDAY(B2)`,`2`,`2 March 2026 is a Monday. Sunday is 1, Monday is 2.`),
+M(`What does =EOMONTH(B2,0) return?`,[`31-Mar-2026`,`30-Mar-2026`,`02-Mar-2026`,`30-Apr-2026`],`Month offset 0 keeps March. March ends on the 31st.`),
+M(`What does =EDATE(B4,1) return?`,[`15-May-2026`,`15-Apr-2026`,`30-Apr-2026`,`16-Apr-2026`],`EDATE adds one month to 15 March.`),
+F(`Write a formula returning the days between the order date and due date in row 3.`,[`=C3-B3`,`=DAYS(C3,B3)`],`Subtract the dates. The result is 28.`)],
+assess:[
+T(`Type the result of =NETWORKDAYS.INTL(B2,C2,7)`,`4`,`Code 7 skips Friday and Saturday. Monday to Friday 6 March counts Monday through Thursday.`),
+M(`What does =WORKDAY(C2,1) return?`,[`09-Mar-2026`,`07-Mar-2026`,`08-Mar-2026`],`6 March is a Friday. The next working day skips the weekend to Monday 9 March.`),
+M(`What does =EOMONTH(B3,1) return?`,[`28-Feb-2026`,`31-Mar-2026`,`29-Feb-2026`],`One month after January ends on 28 February. 2026 is not a leap year.`),
+M(`What does =EDATE(B3,1) return?`,[`28-Feb-2026`,`03-Mar-2026`,`31-Feb-2026`],`31 February does not exist, so EDATE clips to the month end.`),
+T(`Type the result of =DATEDIF(DATE(2020,5,10),B4,"y")`,`5`,`10 May 2020 to 15 March 2026. The 6th anniversary falls in May 2026, so 5 whole years.`),
+T(`Type the result of =DATEDIF(B4,C4,"m")`,`1`,`15 March to 15 April is one whole month.`),
+M(`What does =TEXT(B2,"dddd") return?`,[`Monday`,`Mon`,`2`],`dddd gives the full day name.`),
+T(`Type the result of =C3-B3`,`28`,`31 January to 28 February is 28 days.`),
+T(`Type the result of =NETWORKDAYS(B5,C5)`,`6`,`Thursday 5 March to Thursday 12 March. Skip Saturday 7 and Sunday 8: 6 working days.`),
+M(`Which function returns the current date and updates every day?`,[`TODAY`,`DATE`,`NOW with no refresh`],`TODAY() takes no arguments and recalculates when the file opens.`),
+F(`Write a formula returning the last day of the month for the date in B2.`,[`=EOMONTH(B2,0)`],`Month offset 0 keeps the same month. The result is 31-Mar-2026.`)]}
+];
+
+/* ===== Function reference ===== */
+const REF=[
+[1,'VLOOKUP','VLOOKUP(value, table, col_index, FALSE)','Find a value in the first column and return a column to its right'],
+[2,'XLOOKUP','XLOOKUP(value, lookup_array, return_array, [not_found], [match_mode])','Look up in any direction with a not-found message'],
+[3,'MATCH','MATCH(value, range, 0)','Return the position of a value'],
+[3,'INDEX','INDEX(range, row, [col])','Return the value at a position'],
+[4,'SUMIF','SUMIF(range, criteria, [sum_range])','Add values meeting one condition'],
+[4,'SUMIFS','SUMIFS(sum_range, range1, crit1, ...)','Add values meeting several conditions'],
+[4,'AVERAGEIF','AVERAGEIF(range, criteria, [avg_range])','Average values meeting one condition'],
+[4,'COUNTIF','COUNTIF(range, criteria)','Count cells meeting one condition'],
+[5,'COUNTIFS','COUNTIFS(range1, crit1, ...)','Count rows meeting several conditions'],
+[5,'AVERAGEIFS','AVERAGEIFS(avg_range, range1, crit1, ...)','Average with several conditions'],
+[5,'MAXIFS','MAXIFS(max_range, range1, crit1, ...)','Largest value meeting conditions'],
+[5,'MINIFS','MINIFS(min_range, range1, crit1, ...)','Smallest value meeting conditions'],
+[5,'SUMPRODUCT','SUMPRODUCT(array1, [array2], ...)','Multiply arrays and add the products'],
+[6,'IF','IF(test, if_true, if_false)','Return one of two values'],
+[6,'AND / OR','AND(test1, test2, ...) / OR(...)','Combine logical tests'],
+[6,'NOT','NOT(test)','Reverse TRUE and FALSE'],
+[6,'IFS','IFS(test1, value1, ..., TRUE, default)','Return the value of the first TRUE test'],
+[6,'IFERROR','IFERROR(formula, value_if_error)','Replace errors with a value'],
+[7,'LEFT / RIGHT','LEFT(text, n) / RIGHT(text, n)','Characters from the start or end'],
+[7,'MID','MID(text, start, n)','Characters from the middle'],
+[7,'LEN','LEN(text)','Count characters'],
+[7,'FIND / SEARCH','FIND(find, text) / SEARCH(find, text)','Position of text, case-sensitive or not'],
+[7,'TRIM','TRIM(text)','Remove extra spaces'],
+[7,'UPPER / LOWER / PROPER','UPPER(text)','Change letter case'],
+[7,'SUBSTITUTE','SUBSTITUTE(text, old, new)','Replace text'],
+[7,'CONCAT / &','CONCAT(text1, text2, ...)','Join text'],
+[7,'TEXTJOIN','TEXTJOIN(delimiter, ignore_empty, range)','Join text with a separator'],
+[7,'TEXT','TEXT(value, format)','Format a number or date as text'],
+[7,'VALUE','VALUE(text)','Convert numeric text to a number'],
+[7,'TEXTBEFORE','TEXTBEFORE(text, delimiter)','Text before a separator (365)'],
+[8,'UNIQUE','UNIQUE(range)','Distinct values'],
+[8,'FILTER','FILTER(range, include, [if_empty])','Rows meeting conditions'],
+[8,'SORT','SORT(range, [index], [order])','Sort a range'],
+[8,'SORTBY','SORTBY(range, by_range, [order])','Sort by another range'],
+[8,'SEQUENCE','SEQUENCE(rows, [cols], [start], [step])','Generate a number list'],
+[8,'TAKE','TAKE(range, rows)','Keep the first rows (365)'],
+[9,'DATE','DATE(year, month, day)','Build a date'],
+[9,'YEAR / MONTH / DAY','YEAR(date)','Pull a date part'],
+[9,'TODAY','TODAY()','Current date'],
+[9,'EOMONTH','EOMONTH(date, months)','Last day of a month'],
+[9,'EDATE','EDATE(date, months)','Shift a date by months'],
+[9,'NETWORKDAYS','NETWORKDAYS(start, end, [holidays])','Working days, Sat and Sun weekend'],
+[9,'NETWORKDAYS.INTL','NETWORKDAYS.INTL(start, end, weekend)','Working days, custom weekend'],
+[9,'WORKDAY','WORKDAY(start, days)','Date after n working days'],
+[9,'WEEKDAY','WEEKDAY(date)','Day number, Sunday = 1'],
+[9,'DATEDIF','DATEDIF(start, end, "y"|"m"|"d")','Whole years, months, or days between dates'],
+[9,'DAYS','DAYS(end, start)','Days between dates']];
+
+const FN_COUNT=REF.reduce((n,r)=>n+r[1].split(' / ').filter(x=>x!=='&').length,0);
+
+/* ===== Answer checking ===== */
+function clean(s){return String(s).replace(/[\u201C\u201D\u201E]/g,'"').replace(/[\u2018\u2019]/g,"'")}
+function normVal(s){return clean(s).trim().replace(/^=/,'').replace(/^"(.*)"$/,'$1').replace(/\s+/g,' ').toLowerCase()}
+function numOf(s){const t=String(s).trim().replace(/,/g,'');return t!==''&&!isNaN(t)?Number(t):null}
+function normF(s){return clean(s).toUpperCase().replace(/\$/g,'').replace(/;/g,',').replace(/\s+/g,'').replace(/^=/,'')}
+function isCorrect(q,a){
+  if(q.t==='m')return a===q.correct;
+  if(q.t==='t'){const ni=normVal(a),n=numOf(ni);return q.a.some(x=>{const na=normVal(x),m=numOf(na);return(n!==null&&m!==null)?Math.abs(n-m)<1e-9:ni===na})}
+  return q.a.some(x=>normF(x)===normF(a));
+}
+function prep(q){if(q.t!=='m')return {...q};const ch=shuffled(q.c.map((text,i)=>({text,ok:i===0})));return {...q,choices:ch,correct:ch.findIndex(x=>x.ok)}}
+const TYPE={m:'Multiple choice',t:'Type the result',f:'Write the formula'};
+function answerText(q,a){if(a===undefined||a===null||a==='')return '(blank)';return q.t==='m'?q.choices[a].text:a}
+function modelText(q){return q.t==='m'?q.choices[q.correct].text:q.a[0]}
+
+
+
+const CODES={1:'VL',2:'XL',3:'IM',4:'ΣIF',5:'IFS',6:'IF',7:'Aa',8:'{ }',9:'DT'};
+
+/* ===== Progress ===== */
+let S={cert:{},xp:0,done:{},prac:{}};
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.cert){S=Object.assign({cert:{},xp:0,done:{},prac:{}},s);return}}catch(e){}
+ try{const o=JSON.parse(localStorage.getItem('excel-skills-office-v2'));if(o&&o.cert){S.xp=o.xp||0;LEVELS.forEach(l=>{const c=o.cert[l.id];if(c&&c.passed){S.cert[l.id]=c;l.lessons.forEach((_,i)=>S.done[l.id+'-'+i]=true);S.prac[l.id]={rounds:1,best:0}}});save()}}catch(e){}}
+
+/* ===== Unlock rules ===== */
+const Lv=n=>LEVELS.find(l=>l.id===n);
+const passed=n=>!!(S.cert[n]&&S.cert[n].passed);
+const modOpen=n=>n===1||passed(n-1);
+const lDone=(n,i)=>!!S.done[n+'-'+i];
+const lOpen=(n,i)=>modOpen(n)&&(i===0||lDone(n,i-1));
+const allLessons=n=>Lv(n).lessons.every((_,i)=>lDone(n,i));
+const pOpen=n=>modOpen(n)&&allLessons(n);
+const pDone=n=>!!(S.prac[n]&&S.prac[n].rounds>0);
+const aOpen=n=>pOpen(n)&&pDone(n);
+function nodeState(n,k){
+ if(k==='hub')return !modOpen(n)?'locked':passed(n)?'done':'open';
+ if(k==='P')return pDone(n)?'done':pOpen(n)?'open':'locked';
+ if(k==='A')return passed(n)?'done':aOpen(n)?'open':'locked';
+ const i=+k.slice(1);return lDone(n,i)?'done':lOpen(n,i)?'open':'locked'}
+function nodeRank(n,k){
+ if(k==='P'){const p=S.prac[n];if(!p||!p.rounds)return[0,3];return[p.best>=1?3:p.best>=0.6?2:1,3]}
+ if(k==='A'){const c=S.cert[n];return[c&&c.passed?(c.perfect?2:1):0,2]}
+ if(k==='hub'){let a=0,b=0;moduleKeys(n).forEach(x=>{const r=nodeRank(n,x);a+=r[0];b+=r[1]});return[a,b]}
+ return[lDone(n,+k.slice(1))?1:0,1]}
+const moduleKeys=n=>[...Lv(n).lessons.map((_,i)=>'L'+i),'P','A'];
+function skillPoints(){let a=0,b=0;LEVELS.forEach(l=>{const r=nodeRank(l.id,'hub');a+=r[0];b+=r[1]});return[a,b]}
+function nextNode(){for(const l of LEVELS)for(const k of moduleKeys(l.id))if(nodeState(l.id,k)==='open')return{n:l.id,k};return null}
+function nodeName(n,k){if(k==='hub')return `Level ${n}: ${Lv(n).name}`;if(k==='P')return 'Practice';if(k==='A')return 'Assessment';return Lv(n).lessons[+k.slice(1)].t}
+function requirement(n,k){
+ if(!modOpen(n))return `Locked. Pass the Level ${n-1} assessment to unlock.`;
+ if(k==='P')return `Locked. Learn all ${Lv(n).lessons.length} lessons of this module first.`;
+ if(k==='A')return allLessons(n)?`Locked. Finish one practice round first.`:`Locked. Learn every lesson, then finish one practice round.`;
+ const i=+k.slice(1);return `Locked. Learn "${Lv(n).lessons[i-1].t}" first.`}
+
+/* ===== Ranks ===== */
+const RANKS=[[0,'Intern'],[1,'Trainee'],[3,'Junior Analyst'],[5,'Analyst'],[7,'Senior Analyst'],[9,'Lead Analyst']];
+const certCount=()=>LEVELS.filter(l=>passed(l.id)).length;
+function rankOf(c){let r=RANKS[0][1];RANKS.forEach(([n,name])=>{if(c>=n)r=name});return r}
+function nextRank(c){const nx=RANKS.find(([n])=>n>c);return nx?`${nx[0]-c} more module${nx[0]-c>1?'s':''} to ${nx[1]}`:'Top role reached'}
+
+/* ===== State ===== */
+let level=1,view='tree',stage=0,P=null,A=null;
+const cur=()=>Lv(level);
+
+/* ===== Toast ===== */
+let toastT;
+function toast(title,msg){const t=$('toast');t.innerHTML=`<b>${title}</b>${msg}`;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),3800)}
+
+/* ===== Header ===== */
+function renderHeader(){const c=certCount(),[a,b]=skillPoints();$('subtitle').textContent=`${LEVELS.length} modules, ${FN_COUNT} functions`;
+$('identity').innerHTML=`<span class="rank">${rankOf(c)}</span><span class="chip">${S.xp} XP</span><span class="chip">${a}/${b} skill points</span><span class="progress-label">${c} of ${LEVELS.length} modules certified. ${nextRank(c)}.</span><div class="pbar"><i style="width:${a/b*100}%"></i></div>`}
+
+function render(){renderHeader();hideTip();
+ if(view==='tree'){$('actbar').innerHTML='';$('stages').innerHTML='';renderTree();return}
+ if(view==='ref'){$('actbar').innerHTML='';$('stages').innerHTML='';renderRef();return}
+ renderActBar();({lesson:renderLesson,practice:renderPractice,practiceDone:renderPracticeDone,assess:renderAssess})[view]()}
+
+/* ===== Skill tree ===== */
+const LOCK=(x,y)=>`<g class="icon" transform="translate(${x},${y})"><rect x="-7" y="-2" width="14" height="11" rx="2"/><path d="M-4.5 -2v-3.5a4.5 4.5 0 0 1 9 0v3.5"/></g>`;
+const CHECK=(x,y)=>`<path class="icon" d="M${x-8} ${y} l5 5.5 l11 -12" stroke-width="3"/>`;
+const TARGET=(x,y)=>`<g class="icon" transform="translate(${x},${y})"><circle r="10"/><circle r="4.5"/><path d="M0 -15v5M0 10v5M-15 0h5M10 0h5"/></g>`;
+const SHIELD=(x,y,f)=>`<path class="icon ${f?'fillable':''}" transform="translate(${x},${y})" d="M0 -12 L10 -8 V0 C10 7 5 11 0 13 C-5 11 -10 7 -10 0 V-8 Z"/>`;
+function poly(x,y,r,sides,rot){const p=[];for(let i=0;i<sides;i++){const a=rot+i*2*Math.PI/sides;p.push((x+r*Math.cos(a)).toFixed(1)+','+(y+r*Math.sin(a)).toFixed(1))}return p.join(' ')}
+function wrap(t,max=17){const out=[];let c='';t.split(' ').forEach(w=>{if(c&&(c+' '+w).length>max){out.push(c);c=w}else c=c?c+' '+w:w});if(c)out.push(c);return out}
+function edgeCls(sa,sb){if(sa==='done'&&sb==='done')return 'lit';if(sa!=='locked'&&sb==='open')return 'open';if(sa==='done'&&sb!=='locked')return 'lit';return ''}
+function nodeAttrs(n,k,st,next){return `class="node ${k==='hub'?'hub':k==='P'?'prac':k==='A'?'assess':'lesson'} ${st}${next?' next':''}" data-n="${n}" data-k="${k}" tabindex="0" role="button" aria-label="${esc(nodeName(n,k))}, ${st==='locked'?'locked':st==='done'?'learned':'available'}" onclick="nodeClick(${n},'${k}',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();nodeClick(${n},'${k}',this)}" onmouseenter="showTip(this)" onmouseleave="hideTip()" onfocus="showTip(this)" onblur="hideTip()"`}
+
+function renderTree(){const nx=nextNode(),isNext=(n,k)=>nx&&nx.n===n&&nx.k===k;
+let y=16,edges='',nodes='',banners='',prevTrack=null,prevA=null,prevAS=null;
+LEVELS.forEach(l=>{const n=l.id;
+ if(l.track!==prevTrack){const by=y+30;banners+=`<g class="banner"><line x1="110" x2="400" y1="${by}" y2="${by}"/><line x1="600" x2="890" y1="${by}" y2="${by}"/><rect x="405" y="${by-14}" width="190" height="28" rx="3"/><text x="500" y="${by}">${esc(l.track)}</text></g>`;prevTrack=l.track;y+=62}
+ const hub={x:500,y:y+52},hs=nodeState(n,'hub');
+ if(prevA)edges+=`<path class="edge ${edgeCls(prevAS,hs)}" d="M500 ${prevA.y} V${hub.y}"/>`;
+ const k=l.lessons.length,sp=Math.min(170,760/(k-1)),x0=500-sp*(k-1)/2,rowY=y+190;
+ const pts=l.lessons.map((_,i)=>{const t=k>1?(i-(k-1)/2)/((k-1)/2):0;return{x:x0+i*sp,y:rowY+24*(1-t*t)}});
+ const Pn={x:500,y:y+405},An={x:500,y:y+515};
+ const st=pts.map((_,i)=>nodeState(n,'L'+i)),ps=nodeState(n,'P'),as=nodeState(n,'A');
+ edges+=`<path class="edge ${edgeCls(hs==='locked'?'locked':'done',st[0])}" d="M${hub.x} ${hub.y} Q${pts[0].x} ${hub.y+20} ${pts[0].x} ${pts[0].y}"/>`;
+ for(let i=1;i<k;i++)edges+=`<path class="edge ${edgeCls(st[i-1],st[i])}" d="M${pts[i-1].x} ${pts[i-1].y} L${pts[i].x} ${pts[i].y}"/>`;
+ const last=pts[k-1],rx=Math.min(975,last.x+100);
+ edges+=`<path class="edge ${edgeCls(st[k-1],ps)}" d="M${last.x} ${last.y} H${rx-22} Q${rx} ${last.y} ${rx} ${last.y+22} V${Pn.y-22} Q${rx} ${Pn.y} ${rx-22} ${Pn.y} H${Pn.x}"/>`;
+ edges+=`<path class="edge ${edgeCls(ps,as)}" d="M500 ${Pn.y} V${An.y}"/>`;
+ // hub
+ const [ha,hb]=nodeRank(n,'hub');
+ nodes+=`<g ${nodeAttrs(n,'hub',hs,false)}><g class="core"><polygon class="shape" points="${poly(hub.x,hub.y,46,8,Math.PI/8)}"/><polygon class="inner" points="${poly(hub.x,hub.y,37,8,Math.PI/8)}"/>${hs==='locked'?LOCK(hub.x,hub.y):`<text class="glyph" x="${hub.x}" y="${hub.y}">${esc(CODES[n])}</text>`}</g><text class="hubname side" x="${hub.x+64}" y="${hub.y-6}">${esc(l.name)}</text><text class="hubsub side" x="${hub.x+64}" y="${hub.y+15}">Level ${n}. ${esc(l.desc)}. ${ha}/${hb} points</text></g>`;
+ // lessons
+ pts.forEach((p,i)=>{const s=st[i],lines=wrap(l.lessons[i].t);const glyph=s==='locked'?LOCK(p.x,p.y):s==='done'?CHECK(p.x,p.y):`<text class="glyph" x="${p.x}" y="${p.y}">${i+1}</text>`;
+  nodes+=`<g ${nodeAttrs(n,'L'+i,s,isNext(n,'L'+i))}><g class="core"><rect class="shape" x="${p.x-21}" y="${p.y-21}" width="42" height="42" rx="4" transform="rotate(45 ${p.x} ${p.y})"/><rect class="inner" x="${p.x-14}" y="${p.y-14}" width="28" height="28" rx="2" transform="rotate(45 ${p.x} ${p.y})"/>${glyph}</g>${lines.map((ln,j)=>`<text class="lbl" x="${p.x}" y="${p.y+50+j*15}">${esc(ln)}</text>`).join('')}<text class="rk" x="${p.x}" y="${p.y+54+lines.length*15}">${lDone(n,i)?1:0}/1</text></g>`});
+ // practice
+ const [pa,pb]=nodeRank(n,'P');
+ nodes+=`<g ${nodeAttrs(n,'P',ps,isNext(n,'P'))}><g class="core"><circle class="shape" cx="${Pn.x}" cy="${Pn.y}" r="32"/><circle class="inner" cx="${Pn.x}" cy="${Pn.y}" r="24"/>${ps==='locked'?LOCK(Pn.x,Pn.y):TARGET(Pn.x,Pn.y)}</g><text class="trunkname side left" x="${Pn.x-50}" y="${Pn.y-4}">Practice</text><text class="rk side left" x="${Pn.x-50}" y="${Pn.y+15}">${pa}/${pb}</text></g>`;
+ // assessment
+ const [aa,ab]=nodeRank(n,'A');
+ nodes+=`<g ${nodeAttrs(n,'A',as,isNext(n,'A'))}><g class="core"><polygon class="shape" points="${poly(An.x,An.y,42,6,-Math.PI/2)}"/><polygon class="inner" points="${poly(An.x,An.y,33,6,-Math.PI/2)}"/>${as==='locked'?LOCK(An.x,An.y):SHIELD(An.x,An.y,as==='done')}</g><text class="trunkname side left" x="${An.x-58}" y="${An.y-4}">Assessment</text><text class="rk side left" x="${An.x-58}" y="${An.y+15}">${aa}/${ab}${S.cert[n]&&S.cert[n].perfect?' distinction':''}</text></g>`;
+ prevA=An;prevAS=as;y+=580});
+const H=y-40;
+const [a,b]=skillPoints();
+const cont=nx?`<div class="ct"><span>Next skill, Level ${nx.n}: ${esc(Lv(nx.n).name)}</span><strong>${esc(nodeName(nx.n,nx.k))}</strong></div><button class="btn" style="margin:0" onclick="nodeClick(${nx.n},'${nx.k}')">Continue training</button>`:`<div class="ct"><span>${a}/${b} skill points</span><strong>Every skill mastered</strong></div>`;
+$('screen').innerHTML=`<div class="continue">${cont}</div><div class="legend"><span><i class="lg-l"></i>Locked</span><span><i class="lg-o"></i>Available</span><span><i class="lg-d"></i>Learned</span><span>Complete each node to unlock the next one.</span></div><div class="treewrap"><svg id="tree" viewBox="0 0 1000 ${H}" xmlns="http://www.w3.org/2000/svg">${edges}${banners}${nodes}</svg></div>`;centerTreeX(null)}
+
+function centerTreeX(el){const tw=document.querySelector('.treewrap');if(!tw||tw.scrollWidth<=tw.clientWidth)return;if(!el){tw.scrollLeft=(tw.scrollWidth-tw.clientWidth)/2;return}const r=el.querySelector('.core').getBoundingClientRect(),t=tw.getBoundingClientRect();tw.scrollLeft+=r.left+r.width/2-(t.left+t.width/2)}
+function scrollToNext(){const el=document.querySelector('.node.next')||document.querySelector('.node.hub.open');centerTreeX(el);if(!el)return;const r=el.getBoundingClientRect();const top=window.scrollY+r.top-window.innerHeight/2+r.height/2;window.scrollTo({top:Math.max(0,top),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})}
+function toTree(scroll=true){view='tree';render();if(scroll)scrollToNext()}
+
+function nodeClick(n,k,el){const st=nodeState(n,k);
+ if(st==='locked'){if(el){el.classList.remove('shake');void el.getBoundingClientRect();el.classList.add('shake');showTip(el)}else toast('Locked',requirement(n,k));return}
+ hideTip();level=n;
+ if(k==='hub'){const i=Lv(n).lessons.findIndex((_,j)=>!lDone(n,j));return openLesson(n,i<0?0:i)}
+ if(k==='P')return startPractice();
+ if(k==='A')return startAssess();
+ openLesson(n,+k.slice(1))}
+
+/* ===== Tooltip ===== */
+function showTip(el){const n=+el.dataset.n,k=el.dataset.k,st=nodeState(n,k),[r,m]=nodeRank(n,k),l=Lv(n);let type,desc;
+ if(k==='hub'){type=`Module core. ${l.track}`;desc=l.desc+'.'}
+ else if(k==='P'){type=`Level ${n} practice`;desc=`${PRACTICE_N} random questions with instant feedback. Rank 2 at 60% or more, rank 3 at 100%.`}
+ else if(k==='A'){type=`Level ${n} assessment`;desc=`${ASSESS_N} questions. Pass at ${Math.round(PASS*100)}% to unlock Level ${n+1<=LEVELS.length?n+1:n}. Rank 2 for a perfect score.`}
+ else{const i=+k.slice(1),b=l.lessons[i].b.replace(/<[^>]+>/g,'');type=`Level ${n} lesson ${i+1} of ${l.lessons.length}`;desc=b.length>130?b.slice(0,127).replace(/\s\S*$/,'')+'...':b}
+ const stateTxt=st==='locked'?requirement(n,k):st==='done'?(k==='A'?'Certified. Click to retake.':k==='hub'?'Module certified.':'Learned. Click to review.'):'Available. Click to start.';
+ const t=$('tip');t.innerHTML=`<h4>${esc(nodeName(n,k))}</h4><div class="ty">${esc(type)}. Rank ${r}/${m}</div><p>${esc(desc)}</p><div class="state ${st}">${esc(stateTxt)}</div>`;
+ const rc=el.querySelector('.core').getBoundingClientRect(),tw=270,th=t.offsetHeight||150;
+ let left=rc.right+14;if(left+tw>window.innerWidth-8)left=rc.left-tw-14;if(left<8)left=8;
+ let top=rc.top+rc.height/2-th/2;top=Math.max(8,Math.min(top,window.innerHeight-th-8));
+ t.style.left=left+'px';t.style.top=top+'px';t.classList.add('show')}
+function hideTip(){const t=$('tip');if(t)t.classList.remove('show')}
+window.addEventListener('scroll',hideTip,{passive:true});
+
+/* ===== Activity chrome ===== */
+function sheet(){const Tb=TABLES[cur().table],letters='ABCDEFGH';let h=`<div class="sheetwrap"><table class="sheet"><thead><tr><th class="corner"></th>${Tb.cols.map((_,i)=>`<th class="col">${letters[i]}</th>`).join('')}</tr></thead><tbody><tr><td class="row">1</td>${Tb.cols.map(x=>`<td class="head">${x}</td>`).join('')}</tr>${Tb.rows.map((r,i)=>`<tr><td class="row">${i+2}</td>${r.map((v,j)=>`<td>${Tb.fmt?Tb.fmt(v,j):v}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+if(Tb.note==='f2')h+=`<div class="cellnote"><span class="cellref">F2</span><span class="cellval">P103</span><span class="celllbl">lookup value</span></div>`;
+if(Tb.note==='dates')h+=`<div class="sheetnote">Columns B and C hold real Excel dates. 2 March 2026 is a Monday.</div>`;
+return `<h3 class="panel-h">Reference worksheet</h3>${h}`}
+function fbar(f,r){return `<div class="fbar"><span class="fx">fx</span><code>${esc(f)}</code></div>${r!=null?`<div class="returns">Returns <b>${esc(r)}</b></div>`:''}`}
+const LOCKSVG='<svg viewBox="-9 -9 18 18"><rect x="-6" y="-1" width="12" height="9" rx="1.5"/><path d="M-3.5 -1v-3a3.5 3.5 0 0 1 7 0v3"/></svg>';
+const CHECKSVG='<svg viewBox="-9 -9 18 18"><path d="M-6 0l4 4 8-9"/></svg>';
+function renderActBar(){const l=cur(),n=l.id;
+$('actbar').innerHTML=`<div class="actbar"><button class="ghost" onclick="toTree()">Back to skill tree</button><div class="acttitle"><span>Level ${n}. ${esc(l.track)}</span><strong>${esc(l.name)}</strong></div></div>`;
+const tab=(label,active,st,onclick)=>`<button class="stage ${active?'active':''} ${st==='done'?'done':''}" ${st==='locked'?'disabled title="Locked"':''} onclick="${onclick}">${st==='locked'?LOCKSVG:st==='done'?CHECKSVG:''}${label}</button>`;
+$('stages').innerHTML=l.lessons.map((p,i)=>tab(`${i+1}. ${esc(p.t)}`,view==='lesson'&&stage===i,nodeState(n,'L'+i),`openLesson(${n},${i})`)).join('')+tab('Practice',view==='practice'||view==='practiceDone',nodeState(n,'P'),'startPractice()')+tab('Assessment',view==='assess',nodeState(n,'A'),'startAssess()')}
+
+/* ===== Lessons ===== */
+function openLesson(n,i){if(!lOpen(n,i)){toast('Locked',requirement(n,'L'+i));return}level=n;view='lesson';stage=i;render();window.scrollTo({top:0})}
+function renderLesson(){const l=cur(),p=l.lessons[stage],last=stage===l.lessons.length-1,done=lDone(l.id,stage);
+const label=done?(last?'Go to practice':'Next lesson'):(last?'Learn skill and unlock practice':'Learn skill');
+$('screen').innerHTML=`<div class="card"><div class="grid"><div><div class="eyebrow">Level ${l.id} / Lesson ${stage+1} of ${l.lessons.length} <span class="tag">${done?'Learned':'Rank 0/1'}</span></div><h2>${p.t}</h2><p class="body">${p.b}</p>${p.f?fbar(p.f,p.r):''}<div class="btns">${stage>0?`<button class="btn secondary" onclick="openLesson(${l.id},${stage-1})">Back</button>`:''}<button class="btn" onclick="learn()">${label}</button></div></div><div>${sheet()}</div></div></div>`}
+function learn(){const l=cur(),n=l.id,i=stage,first=!lDone(n,i);S.done[n+'-'+i]=true;if(first){S.xp+=5;save()}
+ if(i<l.lessons.length-1){if(first)toast('Skill learned',`${l.lessons[i].t}. Unlocked: ${l.lessons[i+1].t}. +5 XP`);openLesson(n,i+1)}
+ else{if(first)toast('Skill learned',`All ${l.lessons.length} lessons done. Practice unlocked. +5 XP`);startPractice()}}
+
+/* ===== Practice ===== */
+function startPractice(){if(!pOpen(level)){toast('Locked',requirement(level,'P'));return}view='practice';P={set:shuffled(cur().practice).slice(0,PRACTICE_N).map(prep),i:0,ans:[],ok:[],checked:[],removed:[],hint:[],msg:'',streak:0,bestStreak:0,xp:0,usedRemove:false,usedHint:false};render();window.scrollTo({top:0})}
+function renderPractice(){const l=cur(),q=P.set[P.i],done=P.checked[P.i],a=P.ans[P.i],rm=P.removed[P.i]||[];let body;
+if(q.t==='m'){body=`<div class="answers">${q.choices.map((c,i)=>{let cls='answer';if(rm.includes(i))cls+=' gone';if(done){if(i===q.correct)cls+=' correct';else if(a===i)cls+=' wrong'}else if(a===i)cls+=' chosen';return `<button class="${cls}" ${done?'disabled':''} onclick="pickP(${i})">${String.fromCharCode(65+i)}. ${esc(c.text)}</button>`}).join('')}</div>`}
+else body=`<input id="pin" class="inp ${done?(P.ok[P.i]?'correct':'wrong'):''}" ${done?'disabled':''} value="${esc(a||'')}" placeholder="${q.t==='f'?'=':'Type the result'}" oninput="P.ans[P.i]=this.value" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Your answer">`;
+const fb=done?`<div class="memo ${P.ok[P.i]?'ok':'warn'}"><b>${P.ok[P.i]?'Correct.':'Not quite.'}</b> ${!P.ok[P.i]?`Answer: <code>${esc(modelText(q))}</code>. `:''}${esc(q.e)}</div>`:P.msg;
+const life=done?'':`<div class="lifelines">${q.t==='m'?`<button class="life" onclick="removeTwo()" ${P.usedRemove?'disabled':''}>Remove 2 answers</button>`:''}<button class="life" onclick="hint()" ${P.usedHint?'disabled':''}>Get a hint</button></div>`;
+const last=P.i===P.set.length-1;
+$('screen').innerHTML=`<div class="card"><div class="eyebrow">Level ${l.id} / Practice / Question ${P.i+1} of ${P.set.length} <span class="tag">${TYPE[q.t]}</span>${P.streak>=2?`<span class="streak">Streak ${P.streak}</span>`:''}</div><div class="grid"><div>${sheet()}</div><div><h3 class="qtext">${esc(q.q)}</h3>${body}${life}${P.hint[P.i]?`<div class="help">${P.hint[P.i]}</div>`:''}${fb}<button class="btn" onclick="practiceAction()">${!done?'Check answer':last?'See results':'Next question'}</button><div class="kbd">Keys: 1 to 4 pick an answer. Enter checks and moves on.</div></div></div></div>`;
+if(q.t!=='m'&&!done){const el=$('pin');el.focus();el.setSelectionRange(el.value.length,el.value.length)}}
+function pickP(i){if(P.checked[P.i])return;P.ans[P.i]=i;P.msg='';renderPractice()}
+function removeTwo(){const q=P.set[P.i];const wrong=q.choices.map((_,i)=>i).filter(i=>i!==q.correct&&i!==P.ans[P.i]);P.removed[P.i]=shuffled(wrong).slice(0,Math.min(2,q.choices.length-2));P.usedRemove=true;renderPractice()}
+function hint(){const q=P.set[P.i];if(q.t==='m'){const wrong=q.choices.map((_,i)=>i).filter(i=>i!==q.correct&&!(P.removed[P.i]||[]).includes(i));const p=Math.random()<.9||!wrong.length?q.correct:wrong[Math.floor(Math.random()*wrong.length)];P.hint[P.i]=`Hint: review answer <b>${String.fromCharCode(65+p)}</b>. Correct 90% of the time.`}
+else if(q.t==='f'){const fn=q.a[0].replace(/^=/,'').split('(')[0];P.hint[P.i]=`Hint: start with <code>=${esc(fn)}(</code>`}
+else{const a=q.a[0];P.hint[P.i]=numOf(a)!==null?`Hint: the result is a number with ${String(a).replace(/[^0-9]/g,'').length} digits.`:`Hint: the result is text starting with <b>${esc(a[0])}</b>.`}
+P.usedHint=true;renderPractice()}
+function practiceAction(){const q=P.set[P.i];if(!P.checked[P.i]){const a=P.ans[P.i];if(a===undefined||String(a).trim()===''){P.msg='<div class="memo warn">Choose or type an answer first.</div>';renderPractice();return}P.msg='';const ok=isCorrect(q,a);P.checked[P.i]=true;P.ok[P.i]=ok;if(ok){P.streak++;P.bestStreak=Math.max(P.bestStreak,P.streak);const xp=10+(P.streak>=3?5:0);P.xp+=xp;S.xp+=xp;save();renderHeader()}else P.streak=0;renderPractice()}
+else if(P.i<P.set.length-1){P.i++;renderPractice()}else finishPractice()}
+function finishPractice(){const n=level,pct=P.ok.filter(Boolean).length/P.set.length,first=!pDone(n),before=nodeRank(n,'P')[0];
+S.prac[n]={rounds:((S.prac[n]&&S.prac[n].rounds)||0)+1,best:Math.max((S.prac[n]&&S.prac[n].best)||0,pct)};save();
+const after=nodeRank(n,'P')[0];if(first)toast('Practice complete','Assessment unlocked.');else if(after>before)toast('Rank up',`Practice rank ${after}/3.`);
+view='practiceDone';render()}
+function renderPracticeDone(){const l=cur(),n=P.set.length,c=P.ok.filter(Boolean).length,missed=P.set.map((q,i)=>({q,i})).filter(x=>!P.ok[x.i]),[r]=nodeRank(l.id,'P');
+$('screen').innerHTML=`<div class="card"><div class="eyebrow">Level ${l.id} / Practice complete <span class="tag">Practice rank ${r}/3</span></div><h2>Practice score: ${c} of ${n}</h2><div class="stats"><div class="stat"><b>${Math.round(c/n*100)}%</b><span>Accuracy</span></div><div class="stat"><b>${P.bestStreak}</b><span>Best streak</span></div><div class="stat"><b>+${P.xp}</b><span>XP earned</span></div></div><div class="memo ${c===n?'ok':''}">${c===n?'All answers correct. The assessment is open.':'The assessment is open. Review the missed questions below, or run another round to raise your practice rank.'}</div>${missed.length?`<div class="review"><h3>Missed questions</h3>${missed.map(({q,i})=>`<div class="item"><p><b>${esc(q.q)}</b></p><p>Your answer: <code>${esc(answerText(q,P.ans[i]))}</code></p><p>Correct: <code>${esc(modelText(q))}</code></p><p class="small">${esc(q.e)}</p></div>`).join('')}</div>`:''}<div class="btns"><button class="btn" onclick="startAssess()">Go to assessment</button><button class="btn secondary" onclick="startPractice()">New practice round</button><button class="btn secondary" onclick="toTree()">Back to skill tree</button></div></div>`}
+
+/* ===== Assessment ===== */
+function startAssess(){if(!aOpen(level)){toast('Locked',requirement(level,'A'));return}view='assess';A={set:shuffled(cur().assess).slice(0,ASSESS_N).map(prep),ans:{},submitted:false,result:null,msg:''};render();window.scrollTo({top:0})}
+function renderAssess(){const l=cur(),sub=A.submitted,n=A.set.length;
+const qs=A.set.map((q,i)=>{let body;const a=A.ans[i];
+if(q.t==='m'){body=`<div class="answers">${q.choices.map((c,j)=>{let cls='answer';if(sub){if(j===q.correct)cls+=' correct';else if(a===j)cls+=' wrong'}else if(a===j)cls+=' chosen';return `<button class="${cls}" data-q="${i}" data-a="${j}" ${sub?'disabled':''} onclick="pickA(${i},${j})">${String.fromCharCode(65+j)}. ${esc(c.text)}</button>`}).join('')}</div>`}
+else{const ok=sub&&isCorrect(q,a);body=`<input class="inp ${sub?(ok?'correct':'wrong'):''}" ${sub?'disabled':''} value="${esc(a||'')}" placeholder="${q.t==='f'?'=':'Type the result'}" oninput="A.ans[${i}]=this.value" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Answer ${i+1}">`}
+const ex=sub?`<div class="memo ${isCorrect(q,a)?'ok':'warn'}">${isCorrect(q,a)?'<b>Correct.</b> ':`<b>Answer:</b> <code>${esc(modelText(q))}</code>. `}${esc(q.e)}</div>`:'';
+return `<div class="qblock"><div class="eyebrow">Question ${i+1} <span class="tag">${TYPE[q.t]}</span></div><h3 class="qtext">${esc(q.q)}</h3>${body}${ex}</div>`}).join('');
+$('screen').innerHTML=`<div class="card"><div class="eyebrow">Level ${l.id} / Assessment</div><h2>${esc(l.name)} assessment</h2><div class="grid"><div>${sheet()}</div><div><p>Answer all ${n} questions. Pass mark ${Math.round(PASS*100)}% certifies the module${l.id<LEVELS.length?` and unlocks Level ${l.id+1}`:''}. A perfect score earns a distinction.</p><p class="small">Each attempt draws a new set of questions and shuffles the choices.</p><div class="score">${sub?`Score ${A.result.c} of ${n} (${Math.round(A.result.pct*100)}%)`:'Not submitted'}</div></div></div>${qs}${sub?'':'<button class="btn" onclick="submitA()">Submit assessment</button>'}<div id="result">${A.msg}${sub?resultHtml():''}</div></div>`}
+function pickA(i,j){if(A.submitted)return;A.ans[i]=j;document.querySelectorAll(`[data-q="${i}"]`).forEach(b=>b.classList.toggle('chosen',+b.dataset.a===j))}
+function submitA(){const n=A.set.length,blank=A.set.filter((q,i)=>A.ans[i]===undefined||String(A.ans[i]).trim()==='').length;
+if(blank){A.msg=`<div class="memo warn">Answer all ${n} questions before submitting. ${blank} remaining.</div>`;$('result').innerHTML=A.msg;return}
+A.msg='';const c=A.set.filter((q,i)=>isCorrect(q,A.ans[i])).length,pct=c/n;const prev=S.cert[level]||{},before=rankOf(certCount());
+const firstPass=pct>=PASS&&!prev.passed,firstPerfect=pct===1&&!prev.perfect;
+S.cert[level]={best:Math.max(prev.best||0,pct),passed:!!prev.passed||pct>=PASS,perfect:!!prev.perfect||pct===1};
+const xp=(firstPass?50:0)+(firstPerfect?50:0);S.xp+=xp;save();
+const after=rankOf(certCount());A.submitted=true;A.result={c,pct,xp,firstPass,promoted:after!==before?after:null};
+const nextL=Lv(level+1);if(firstPass)toast('Module certified',nextL?`Level ${nextL.id}: ${nextL.name} unlocked.`:'Every module certified.');
+render();$('result').scrollIntoView({behavior:'smooth',block:'center'})}
+function resultHtml(){const r=A.result,n=A.set.length,nextL=Lv(level+1);
+if(r.pct>=PASS)return `<div class="memo ok"><b>Assessment passed.</b> ${r.pct===1?'Perfect score: distinction awarded. ':''}${r.xp?`+${r.xp} XP. `:''}${r.promoted?`Promoted to <b>${r.promoted}</b>. `:''}${nextL?`Level ${nextL.id}, ${esc(nextL.name)}, is now unlocked on the skill tree.`:'Every module certified.'}</div><div class="btns"><button class="btn" onclick="toTree()">Return to skill tree</button>${nextL?`<button class="btn secondary" onclick="openLesson(${nextL.id},0)">Start Level ${nextL.id}</button>`:''}${r.pct<1?'<button class="btn secondary" onclick="startAssess()">Retry for distinction</button>':''}</div>`;
+return `<div class="memo warn"><b>Score ${r.c} of ${n}.</b> Pass mark is ${Math.round(PASS*100)}%. Correct answers are marked in green with explanations.</div><div class="btns"><button class="btn" onclick="startAssess()">Retry with new questions</button><button class="btn secondary" onclick="startPractice()">Practice first</button></div>`}
+
+/* ===== Function reference ===== */
+function openRef(){view='ref';render();window.scrollTo({top:0})}
+function renderRef(){let rows='';LEVELS.forEach(l=>{const open=modOpen(l.id);rows+=`<tr class="grp"><td colspan="3">Level ${l.id}: ${esc(l.name)}${open?'':' (locked)'}</td></tr>`+REF.filter(r=>r[0]===l.id).map(r=>`<tr class="${open?'':'lockedrow'}"><td>${r[1]}</td><td class="syn">${esc(r[2])}</td><td>${r[3]}</td></tr>`).join('')});
+$('screen').innerHTML=`<div class="card" style="margin-top:22px"><h2>Function reference</h2><p class="small">${FN_COUNT} functions across ${LEVELS.length} modules. Square brackets mark optional arguments. Locked modules appear dimmed.</p><div class="sheetwrap"><table class="ref"><thead><tr><th>Function</th><th>Syntax</th><th>Purpose</th></tr></thead><tbody>${rows}</tbody></table></div></div>`}
+
+/* ===== Reset ===== */
+let resetArmed=false;
+function resetProgress(){const b=$('resetBtn');if(!resetArmed){resetArmed=true;b.textContent='Click again to reset';b.classList.add('danger');setTimeout(()=>{resetArmed=false;b.textContent='Reset';b.classList.remove('danger')},3000);return}
+S={cert:{},xp:0,done:{},prac:{}};save();resetArmed=false;b.textContent='Reset';b.classList.remove('danger');toTree()}
+
+/* ===== Keyboard ===== */
+document.addEventListener('keydown',e=>{if(view!=='practice'||!P)return;const q=P.set[P.i];
+if(e.key==='Enter'){if(e.target.tagName==='BUTTON')return;e.preventDefault();practiceAction();return}
+if(e.target.tagName==='INPUT'||e.ctrlKey||e.metaKey||e.altKey)return;
+if(q.t==='m'&&!P.checked[P.i]){const k=e.key.toLowerCase();let i='1234'.indexOf(k);if(i<0)i='abcd'.indexOf(k);if(i>=0&&i<q.choices.length&&!(P.removed[P.i]||[]).includes(i))pickP(i)}});
+
+load();toTree(false);setTimeout(scrollToNext,300);
+</script></body></html>

@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Labor Analysis Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FBFCFD; --ink:#16324F; --text:#22313F; --muted:#5B6B7A; --line:#D9E1E8; --tint:#EEF3F7;
+  --teal:#2B7A8C; --teal-soft:rgba(43,122,140,.14); --amber:#B87503; --amber-soft:rgba(217,142,4,.16);
+  --good:#1C7F4E; --good-soft:rgba(28,127,78,.12); --bad:#B8361F; --bad-soft:rgba(184,54,31,.1); --star:#D99A06;
+  --serif:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans:"IBM Plex Sans", "Segoe UI", Roboto, Arial, sans-serif;
+  --arabic:"IBM Plex Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --paper:#0F1A24; --ink:#E3ECF4; --text:#D4DEE8; --muted:#9AAABB; --line:#2A3A49; --tint:#172633;
+  --teal:#5CB3C4; --teal-soft:rgba(92,179,196,.16); --amber:#F0B23C; --amber-soft:rgba(240,178,60,.16);
+  --good:#46C184; --good-soft:rgba(70,193,132,.14); --bad:#EE6D52; --bad-soft:rgba(238,109,82,.14); --star:#F5C21B;
+}}
+:root[data-theme="dark"]{
+  --paper:#0F1A24; --ink:#E3ECF4; --text:#D4DEE8; --muted:#9AAABB; --line:#2A3A49; --tint:#172633;
+  --teal:#5CB3C4; --teal-soft:rgba(92,179,196,.16); --amber:#F0B23C; --amber-soft:rgba(240,178,60,.16);
+  --good:#46C184; --good-soft:rgba(70,193,132,.14); --bad:#EE6D52; --bad-soft:rgba(238,109,82,.14); --star:#F5C21B;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--text);font:16px/1.55 var(--sans)}
+button,input{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--serif);color:var(--ink);margin:0;font-weight:700}
+h1{font-size:2.3rem;line-height:1.12}
+h2{font-size:1.6rem;line-height:1.2}
+h3{font-size:1.08rem;margin:.1rem 0 .4rem}
+p{margin:0 0 .8rem;max-width:66ch}
+.wrap{max-width:920px;margin:0 auto;padding:1.8rem clamp(1rem,4vw,2rem) 2rem}
+.ar,[lang="ar"]{font-family:var(--arabic);direction:rtl}
+.small{font-size:.88rem;color:var(--muted)}
+.top{display:flex;align-items:center;gap:.6rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.top .grow{flex:1}
+.pill{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:.3rem .8rem;cursor:pointer;font-size:.88rem}
+.pill:hover{background:var(--tint)}
+.chip{border:1px solid var(--line);border-radius:999px;padding:.2rem .7rem;font-size:.85rem;color:var(--muted)}
+.chip b{color:var(--ink)}
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+
+/* start */
+.hero{display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:end;margin-bottom:1.6rem}
+.xp{text-align:right}
+.xp strong{display:block;font-family:var(--serif);font-size:2.4rem;color:var(--ink);line-height:1}
+.sections{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
+.sec{all:unset;cursor:pointer;display:block;border:1px solid var(--line);border-radius:14px;padding:1.3rem 1.3rem 1.1rem;background:var(--paper)}
+.sec:hover{border-color:var(--teal)}
+.sec:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.sec .num{font-family:var(--serif);font-size:3.2rem;font-weight:700;color:var(--teal);line-height:1}
+.sec .nm{font-family:var(--serif);font-size:1.35rem;font-weight:700;color:var(--ink);margin:.3rem 0 .1rem}
+.sec p{font-size:.93rem;margin:.6rem 0}
+.bar{height:8px;border-radius:99px;background:var(--tint);overflow:hidden;margin:.5rem 0 .3rem}
+.bar i{display:block;height:100%;background:var(--teal)}
+.ladder{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem;margin:1.6rem 0 .4rem}
+.ladder div{border-top:3px solid var(--line);padding-top:.4rem;font-size:.84rem;color:var(--muted)}
+.ladder b{display:block;color:var(--ink);font-size:.9rem}
+.ladder .m1{border-color:var(--teal)} .ladder .m2{border-color:#4F8E9C} .ladder .m3{border-color:var(--amber)} .ladder .m4{border-color:#8A6A2E} .ladder .m5{border-color:var(--ink)}
+
+/* level map */
+.levels{display:grid;gap:.7rem;margin-top:1.2rem}
+.lvl{all:unset;cursor:pointer;display:grid;grid-template-columns:auto 1fr auto;gap:.3rem 1rem;align-items:center;border:1px solid var(--line);border-radius:12px;padding:.9rem 1.1rem;background:var(--paper)}
+.lvl:hover{border-color:var(--teal)}
+.lvl:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.lvl[aria-disabled="true"]{cursor:not-allowed;opacity:.55}
+.lvl .n{width:2.6rem;height:2.6rem;border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:1.3rem;border:2px solid var(--teal);color:var(--teal)}
+.lvl.done .n{background:var(--teal);color:var(--paper)}
+.lvl .t{font-weight:600;color:var(--ink)}
+.lvl .meta{font-size:.85rem;color:var(--muted);display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+.stars{color:var(--star);letter-spacing:2px;font-size:1.1rem;white-space:nowrap}
+.stars .off{color:var(--line)}
+.tag{display:inline-block;font-size:.76rem;padding:.05rem .5rem;border-radius:999px;border:1px solid currentColor}
+.tag.full{color:var(--teal)} .tag.formula{color:#3F7F8C} .tag.hint{color:var(--amber)} .tag.late{color:#8A6A2E} .tag.none{color:var(--ink)}
+.toggle{display:flex;gap:.5rem;align-items:center;font-size:.88rem;color:var(--muted);margin-top:1rem}
+
+/* level */
+.casehead{display:flex;align-items:center;gap:.8rem;margin:.4rem 0 .8rem}
+.casehead .ico{font-size:2.4rem}
+.data{border:1px solid var(--line);border-radius:10px;padding:1rem 1.1rem;margin:1rem 0 1.4rem;background:var(--tint)}
+.data h3{font-size:1rem;margin-top:.9rem}
+.data h3:first-child{margin-top:0}
+.data ul{margin:.2rem 0;padding-left:1.1rem}
+.data li{margin:.15rem 0}
+table{border-collapse:collapse;width:100%;font-size:.92rem;margin:.3rem 0}
+th,td{padding:.35rem .5rem;border-bottom:1px solid var(--line);text-align:left}
+td.n,th.n{text-align:right}
+th{color:var(--muted);font-weight:500}
+td .ar{font-size:.85rem;color:var(--muted)}
+.tablewrap{overflow-x:auto}
+.mode{border-left:3px solid var(--teal);padding:.4rem .8rem;background:var(--teal-soft);border-radius:0 6px 6px 0;font-size:.93rem}
+.mode.hint,.mode.late{border-color:var(--amber);background:var(--amber-soft)}
+.mode.none{border-color:var(--ink);background:var(--tint)}
+.step{border:1px solid var(--line);border-radius:10px;padding:1rem 1.1rem;margin:0 0 .9rem;background:var(--paper)}
+.step.ok{border-color:var(--good)}
+.step.miss{border-color:var(--bad)}
+.sn{font-size:.82rem;color:var(--muted)}
+.guide{background:var(--tint);border-radius:8px;padding:.6rem .8rem;margin:.4rem 0 .8rem;font-size:.95rem}
+.formula{font-family:var(--serif);font-size:1.12rem;color:var(--ink);margin:.1rem 0 .3rem;overflow-x:auto}
+.ans{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.ans input{width:10rem;padding:.4rem .55rem;border:1px solid var(--line);border-radius:6px;background:var(--paper)}
+.ans input:disabled{opacity:.8}
+.btn{cursor:pointer;border:1px solid var(--teal);background:var(--teal);color:#fff;padding:.42rem .9rem;border-radius:6px;font-size:.93rem}
+.btn.ghost{background:transparent;color:var(--teal)}
+.link{all:unset;cursor:pointer;color:var(--amber);text-decoration:underline;font-size:.9rem}
+.link:focus-visible{outline:2px solid var(--teal)}
+.opts{display:grid;gap:.4rem}
+.opt{all:unset;cursor:pointer;border:1px solid var(--line);border-radius:8px;padding:.5rem .75rem}
+.opt:hover{border-color:var(--teal)}
+.opt:focus-visible{outline:2px solid var(--teal)}
+.opt.sel{border-color:var(--teal);background:var(--teal-soft)}
+.opt.right{border-color:var(--good);background:var(--good-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.fb{margin-top:.6rem;font-size:.93rem}
+.fb.good{color:var(--good)} .fb.bad{color:var(--bad)}
+.explain{margin-top:.6rem;border-top:1px dashed var(--line);padding-top:.6rem;font-size:.94rem}
+.explain .formula{font-size:1.02rem}
+.summary{border:2px solid var(--teal);border-radius:12px;padding:1.3rem;margin-top:1rem;text-align:center}
+.summary .big{font-family:var(--serif);font-size:3rem;color:var(--ink);line-height:1}
+.summary .stars{font-size:2rem}
+.row{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-top:.8rem}
+
+/* glossary */
+button.g{all:unset;cursor:help;text-decoration:underline;text-decoration-color:var(--teal);text-decoration-thickness:2px;text-underline-offset:3px}
+button.g:hover{background:var(--teal-soft)}
+button.g:focus-visible{outline:2px solid var(--teal)}
+#pop{position:fixed;z-index:30;max-width:320px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:.8rem .95rem;box-shadow:0 8px 28px rgba(10,30,50,.2)}
+#pop[hidden]{display:none}
+#pop .en{font-family:var(--serif);font-weight:700;color:var(--ink)}
+#pop .ar1{font-family:var(--arabic);direction:rtl;text-align:right;font-size:1.15rem;font-weight:600;color:var(--teal);margin:.2rem 0}
+#pop .ard{font-family:var(--arabic);direction:rtl;text-align:right;font-size:.95rem;margin:.2rem 0 .4rem}
+#pop .end{font-size:.85rem;color:var(--muted)}
+
+/* calculator */
+.fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:20;border:0;background:var(--ink);color:var(--paper);border-radius:999px;padding:.6rem 1.1rem;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.2);font-weight:500}
+#calc{position:fixed;right:16px;bottom:calc(70px + env(safe-area-inset-bottom,0px));z-index:20;width:min(330px,calc(100vw - 24px));background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 34px rgba(0,0,0,.22);overflow:hidden}
+#calc[hidden]{display:none}
+.chead{display:flex;align-items:center;gap:.5rem;padding:.5rem .7rem;background:var(--tint);cursor:move;touch-action:none;user-select:none}
+.chead b{flex:1;font-size:.9rem;color:var(--ink)}
+.chead .mem{font-size:.78rem;color:var(--amber);font-weight:600}
+.chead button{all:unset;cursor:pointer;font-size:1.1rem;padding:0 .3rem;color:var(--muted)}
+.cbody{padding:.6rem .7rem .7rem}
+#calcIn{width:100%;padding:.45rem .55rem;border:1px solid var(--line);border-radius:6px;background:var(--paper);font-size:1rem;text-align:right}
+#calcOut{font-family:var(--serif);font-size:1.5rem;color:var(--ink);text-align:right;min-height:2rem;margin:.3rem 0 .4rem;word-break:break-all}
+#calcOut.err{font-family:var(--sans);font-size:.9rem;color:var(--bad)}
+.keys{display:grid;grid-template-columns:repeat(5,1fr);gap:.3rem}
+.keys button{border:1px solid var(--line);background:var(--paper);border-radius:7px;padding:.45rem 0;cursor:pointer;font-size:.95rem}
+.keys button:hover{background:var(--tint)}
+.keys .op{color:var(--teal);font-weight:600}
+.keys .fn{font-size:.82rem;color:var(--muted)}
+.keys .eq{background:var(--teal);color:#fff;border-color:var(--teal)}
+.useans{width:100%;margin-top:.5rem}
+.hist{margin-top:.5rem;max-height:92px;overflow:auto;font-size:.82rem;border-top:1px solid var(--line);padding-top:.3rem}
+.hist button{all:unset;cursor:pointer;display:block;width:100%;text-align:right;padding:.12rem 0;color:var(--muted)}
+.hist button:hover{color:var(--ink)}
+.appbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:15;background:var(--paper);border-bottom:1px solid var(--line)}
+.appbar .in{max-width:920px;margin:0 auto;padding:.5rem clamp(1rem,4vw,2rem);display:flex;align-items:center;gap:.6rem}
+.appbar .brand{all:unset;cursor:pointer;font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1.05rem;flex:1}
+.appbar .brand:focus-visible{outline:2px solid var(--teal)}
+.fbtn{border:1px solid var(--teal);background:var(--teal);color:#fff;border-radius:999px;padding:.35rem .95rem;cursor:pointer;font-size:.9rem;font-weight:500}
+#fsheet{position:fixed;inset:0;z-index:40;background:rgba(10,25,40,.45);display:grid;place-items:start center;padding:calc(env(safe-area-inset-top,0px) + 3.5rem) .8rem 1rem;overflow:auto}
+#fsheet[hidden]{display:none}
+.fpanel{background:var(--paper);border-radius:14px;border:1px solid var(--line);width:min(760px,100%);box-shadow:0 16px 40px rgba(0,0,0,.25)}
+.fhead{display:flex;align-items:center;gap:.5rem;padding:.8rem 1rem;border-bottom:1px solid var(--line)}
+.fhead h2{flex:1;font-size:1.3rem}
+.fhead .x{all:unset;cursor:pointer;font-size:1.4rem;color:var(--muted);padding:0 .3rem}
+.fhead .x:focus-visible{outline:2px solid var(--teal)}
+.ftabs{display:flex;gap:.4rem;padding:.7rem 1rem 0}
+.ftabs button{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:.3rem .8rem;cursor:pointer;font-size:.88rem}
+.ftabs button[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.fbody{padding:.6rem 1rem 1.1rem}
+.fgroup{margin-top:.9rem}
+.fgroup h3{font-size:1rem;color:var(--teal);margin-bottom:.3rem}
+.frow{display:grid;grid-template-columns:1fr auto;gap:.2rem .8rem;padding:.45rem 0;border-bottom:1px solid var(--line)}
+.frow .f{font-family:var(--serif);font-size:1.08rem;color:var(--ink);overflow-x:auto}
+.frow .eq{font-size:.8rem;color:var(--muted);white-space:nowrap;align-self:center}
+.frow .w{grid-column:1/-1;font-size:.84rem;color:var(--muted)}
+.tchip{display:none;align-items:center;gap:.4rem;border:1px solid var(--amber);color:var(--amber);border-radius:999px;padding:.2rem .3rem .2rem .7rem;font-size:.85rem;font-weight:600}
+body.teacher .tchip{display:inline-flex}
+.tchip button{all:unset;cursor:pointer;border-radius:999px;padding:.1rem .5rem;background:var(--amber-soft);color:var(--ink);font-weight:500}
+.tchip button:focus-visible{outline:2px solid var(--teal)}
+#codeBox{position:fixed;inset:0;z-index:45;background:rgba(10,25,40,.45);display:grid;place-items:center;padding:1rem}
+#codeBox[hidden]{display:none}
+#codeBox .fpanel{width:min(340px,100%);padding:1.1rem}
+#codeIn{width:100%;padding:.5rem .6rem;border:1px solid var(--line);border-radius:6px;background:var(--paper);font-size:1.3rem;letter-spacing:.3em;text-align:center;margin:.6rem 0}
+.stabs{display:flex;gap:.3rem;margin:.1rem 0 .6rem;border-bottom:1px solid var(--line)}
+.stabs button{all:unset;cursor:pointer;padding:.3rem .8rem;font-size:.88rem;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
+.stabs button[aria-selected="true"]{color:var(--ink);border-color:var(--amber);font-weight:600}
+.stabs button:focus-visible{outline:2px solid var(--teal)}
+.akey{border:1px dashed var(--amber);background:var(--amber-soft);border-radius:8px;padding:.7rem .9rem}
+.akey .val{font-family:var(--serif);font-size:1.5rem;color:var(--ink);font-weight:700}
+.warn{color:var(--bad);font-size:.9rem;margin-left:.5rem}
+.credit{max-width:920px;margin:2rem auto 0;padding:1rem 1rem 90px;text-align:center;font-size:.85rem;color:var(--muted);border-top:1px solid var(--line)}
+.credit b{color:var(--ink)}
+@media (max-width:680px){.ladder{grid-template-columns:1fr 1fr}.hero{grid-template-columns:1fr}.xp{text-align:left}h1{font-size:1.8rem}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="appbar"><div class="in"><button class="brand" id="brandBtn">Labor Analysis Lab</button><span class="tchip" id="tchip">Teacher mode <button id="tExit">Exit</button></span><button class="fbtn" id="formBtn" aria-haspopup="dialog" aria-controls="fsheet">Formulas</button></div></header>
+<main class="wrap" id="app"></main>
+<div id="codeBox" hidden><div class="fpanel" role="dialog" aria-modal="true" aria-labelledby="codeTitle">
+  <h2 id="codeTitle" style="font-size:1.2rem">Teacher code</h2>
+  <input id="codeIn" type="password" inputmode="numeric" autocomplete="off" maxlength="8" aria-label="Teacher code">
+  <div class="small" id="codeMsg" style="min-height:1.3rem"></div>
+  <div class="row" style="justify-content:flex-end"><button class="btn ghost" id="codeCancel">Cancel</button><button class="btn" id="codeOk">Enter</button></div>
+</div></div>
+<div id="fsheet" hidden><div class="fpanel" role="dialog" aria-modal="true" aria-labelledby="fTitle">
+  <div class="fhead"><h2 id="fTitle">Formula sheet</h2><button class="x" id="fClose" aria-label="Close formula sheet">×</button></div>
+  <div class="ftabs" role="tablist"><button role="tab" data-f="ws">2.3.3 Work Sampling</button><button role="tab" data-f="wage">2.4 Wage and Fringe Rates</button></div>
+  <div class="fbody" id="fBody"></div>
+</div></div>
+<footer class="credit">
+  <p style="margin:0">Designed by <b>Dr. Ramiz Assaf</b>, Industrial Engineering, An-Najah National University</p>
+  <p style="margin:2px 0 0">Labor Analysis Lab v1.0 · 2026 · Built with Claude AI</p>
+  <p style="margin:2px 0 0" lang="ar">تصميم د. رامز عساف، جامعة النجاح الوطنية · 2026</p>
+</footer>
+<div id="pop" role="dialog" hidden></div>
+
+<button class="fab" id="calcBtn" aria-expanded="false" aria-controls="calc">Calculator</button>
+<section id="calc" role="dialog" aria-label="Calculator" hidden>
+  <div class="chead" id="calcHead"><b>Calculator</b><span class="mem" id="calcMem"></span><button id="calcClose" aria-label="Close calculator">×</button></div>
+  <div class="cbody">
+    <input id="calcIn" autocomplete="off" spellcheck="false" aria-label="Expression" placeholder="Type or tap keys">
+    <div id="calcOut" aria-live="polite"></div>
+    <div class="keys" id="keys"></div>
+    <button class="btn useans" id="useAns">Put result in my answer</button>
+    <div class="hist" id="calcHist" aria-label="History"></div>
+  </div>
+</section>
+
+<script>
+/* ================= helpers ================= */
+const $=id=>document.getElementById(id);
+const rint=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const r=(x,d)=>+x.toFixed(d);
+const fmt=(x,d=4)=>r(x,d).toLocaleString('en-US',{maximumFractionDigits:d});
+const usd=x=>'$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const sum=a=>a.reduce((x,y)=>x+y,0);
+const mean=a=>sum(a)/a.length;
+const ZT={90:1.645,95:1.96,99:2.576};
+const needN=(p,I,z)=>4*z*z*p*(1-p)/(I*I);
+const ceilN=(p,I,z)=>Math.ceil(needN(p,I,z)-1e-9);
+function parseNum(v){v=String(v??'').trim().replace(/\s/g,'').replace(/,/g,'').replace(/^\$/,'').replace(/%$/,'');if(!/^-?\d*\.?\d+$/.test(v))return NaN;return parseFloat(v);}
+const near=(x,a,rel,abs=0)=>Math.abs(x-a)<=Math.max(abs,Math.abs(a)*rel);
+let store={best:{},unlock:false};try{store=Object.assign(store,JSON.parse(localStorage.getItem('labor-lab')||'{}'));}catch(_){}
+function save(){try{localStorage.setItem('labor-lab',JSON.stringify(store));}catch(_){}}
+
+/* ================= glossary ================= */
+const G={
+ws:["Work sampling","معاينة العمل (أخذ عينات العمل)","أسلوب إحصائي لتقدير نسبة الوقت الذي يقضيه العامل أو الآلة في كل نشاط، باستخدام مشاهدات لحظية عشوائية.","Estimating the share of time on each activity from random instant observations."],
+obs:["Observation","مشاهدة / ملاحظة","تسجيل حالة العامل (يعمل، خامل، غائب) في لحظة واحدة.","One record of what a worker does at one instant."],
+prelim:["Preliminary study","الدراسة الأولية","عدد صغير من المشاهدات قبل الدراسة الرئيسية، لتقدير النسب التقريبية p'.","A small first study that gives rough values of p'."],
+main:["Main study","الدراسة الرئيسية","الدراسة الكاملة التي تُجمع فيها المشاهدات المطلوبة بعد حساب حجم العينة.","The full study, run after the sample size is set."],
+prop:["Observed proportion p'","النسبة المشاهدة","عدد مشاهدات النشاط مقسوماً على العدد الكلي للمشاهدات.","Ni divided by N."],
+element:["Work element","عنصر العمل","جزء محدد وواضح البداية والنهاية من العملية.","A distinct, defined part of the operation."],
+idle:["Idle","خامل / متوقف","العامل موجود لكنه لا ينفذ عملاً منتجاً.","Present but not doing productive work."],
+z:["Z value","القيمة المعيارية Z","عدد الانحرافات المعيارية بين المتوسط وحد فترة الثقة.","Standard deviations from the mean to the limit."],
+cl:["Confidence level","مستوى الثقة","نسبة الدراسات التي تحتوي فتراتها على القيمة الحقيقية لو كررنا الدراسة مرات كثيرة.","Share of repeated studies whose interval holds the true value."],
+tail:["Tail area","منطقة الذيل","المساحة خارج حدود الفترة، وتمثل احتمال الخطأ.","Area outside the limits; the chance of error."],
+se:["Standard error","الخطأ المعياري","الانحراف المعياري للنسبة المقدّرة p'، ويقل كلما زاد عدد المشاهدات.","Standard deviation of p'. Falls as N grows."],
+interval:["Interval I","عرض الفترة (الدقة المطلوبة)","العرض الكلي لفترة الثقة، وهو ضعف هامش الخطأ.","Full width of the confidence interval."],
+ci:["Confidence interval","فترة الثقة","مدى من القيم حول p' نتوقع أن يحتوي على النسبة الحقيقية p.","A range around p' expected to contain the true p."],
+ss:["Sample size","حجم العينة","عدد المشاهدات اللازم للوصول إلى الدقة المطلوبة.","Observations needed for the chosen accuracy."],
+rel:["Relative accuracy","الدقة النسبية","نصف عرض الفترة مقسوماً على p'.","Half the interval divided by p'."],
+accuracy:["Accuracy target","هدف الدقة","أقصى عرض مسموح لفترة الثقة لعنصر معين.","The widest interval you accept for an element."],
+serr:["Sampling error","خطأ المعاينة","الفرق بين p' و p الناتج عن أخذ عينة بدل مراقبة كل الوقت.","Difference between p' and p caused by sampling."],
+pfd:["PF&D allowance","سماحات الاحتياجات الشخصية والتعب والتأخير","نسبة وقت تُضاف لتغطية الاستراحة والتعب والتأخيرات التي لا يمكن تجنبها.","Extra time for personal needs, fatigue, and delays."],
+normaltime:["Normal time","الزمن العادي","الوقت المنتج لكل وحدة قبل إضافة السماحات.","Productive time per unit before allowances."],
+stdtime:["Standard time","الزمن القياسي","الزمن العادي بعد إضافة السماحات، ويُستخدم لتقدير التكلفة والطاقة الإنتاجية.","Normal time plus allowances. Used for costing."],
+station:["Work station","محطة عمل","مكان عمل فيه عامل واحد أو آلة واحدة.","A place with one operator or machine."],
+salary:["Annual salary","الراتب السنوي","الأجر الكلي لسنة كاملة.","Pay for a full year."],
+hourly:["Hourly rate","الأجر بالساعة","المبلغ المدفوع مقابل ساعة عمل واحدة.","Pay for one hour of work."],
+wageonly:["Wage-only method","طريقة الأجر فقط","حساب تكلفة العمالة المباشرة من الساعات والأجر فقط، وتُحمَّل المزايا على التكاليف غير المباشرة.","Labor cost from hours and wage only. Fringes go to overhead."],
+cdl:["Direct labor cost","تكلفة العمالة المباشرة","تكلفة العمل المبذول مباشرة على المنتج.","Cost of labor spent directly on the product."],
+attendance:["Attendance (day work)","الأجر حسب الحضور (العمل اليومي)","يُدفع الأجر حسب ساعات الحضور بغض النظر عن كمية الإنتاج.","Pay = hours × rate, whatever the output."],
+piecerate:["Piece rate","الأجر بالقطعة","يُدفع الأجر حسب عدد القطع المنتجة.","Pay = pieces × rate per piece."],
+incentive:["Incentive wage plan","خطة الأجر التحفيزي","نظام أجر يربط الدخل بالإنتاج لتشجيع العامل على زيادة إنتاجه.","A pay plan that links pay to output."],
+guarantee:["Guaranteed base","الأجر الأساسي المضمون","حد أدنى للأجر يساوي الساعات الفعلية × الأجر بالساعة، حتى لو قل الإنتاج.","A pay floor of Ha × Rh, even when output is low."],
+stdhours:["Standard hours","الساعات القياسية","الزمن القياسي المسموح لإنتاج قطعة واحدة أو 100 قطعة.","Standard time allowed per piece."],
+efficiency:["Labor efficiency","كفاءة العمل","الساعات القياسية المكتسبة مقسومة على الساعات الفعلية × 100. أكثر من 100% يعني أداء أسرع من المعيار.","Standard hours earned ÷ actual hours × 100."],
+fringe:["Fringe benefits","المزايا الإضافية (ملحقات الأجر)","تكاليف يدفعها صاحب العمل فوق الأجر، مثل التأمين والإجازات والتقاعد.","Employer costs on top of wages: insurance, leave, pension."],
+legal:["Legally required","إلزامي قانونياً","مزايا يفرضها القانون على صاحب العمل.","Benefits the law requires."],
+voluntary:["Voluntary / contractual","اختياري / تعاقدي","مزايا يقدمها صاحب العمل باختياره أو حسب عقد العمل.","Benefits the employer offers by choice or contract."],
+fica:["FICA","ضريبة الضمان الاجتماعي الأمريكية","ضريبة أمريكية للضمان الاجتماعي والرعاية الصحية، تُحسب نسبة من الأجور.","US social security tax, a percent of wages."],
+overtimeprem:["Overtime premium","علاوة العمل الإضافي","المبلغ الزائد عن الأجر العادي مقابل ساعات العمل الإضافي، عادة 50%.","Extra pay for overtime hours, often 50%."],
+chargeable:["Chargeable hours","الساعات القابلة للتحميل","الساعات التي يعمل فيها العامل فعلياً على المنتجات، ويمكن تحميلها على الوظائف.","Hours of productive work, charged to jobs."],
+nonchargeable:["Nonchargeable hours","الساعات غير القابلة للتحميل","ساعات مدفوعة دون عمل منتج، مثل العطل والإجازات والاجتماعات.","Paid hours with no productive work."],
+ghc:["Gross hourly cost (GHC)","التكلفة الإجمالية للساعة","إجمالي الأجور والمزايا مقسوماً على الساعات القابلة للتحميل.","Total wages and fringes ÷ chargeable hours."]
+};
+const g=(k,t)=>`<button class="g" data-t="${k}">${t}</button>`;
+const pop=$('pop');let popFor=null;
+function closePop(){pop.hidden=true;popFor=null;}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button.g');
+  if(b){e.stopPropagation();if(popFor===b){closePop();return;}const d=G[b.dataset.t];if(!d)return;
+    pop.innerHTML=`<div class="en">${d[0]}</div><div class="ar1" lang="ar">${d[1]}</div><div class="ard" lang="ar">${d[2]}</div><div class="end">${d[3]}</div>`;
+    pop.hidden=false;popFor=b;const rc=b.getBoundingClientRect(),pw=pop.offsetWidth,ph=pop.offsetHeight;
+    let top=rc.bottom+8;if(top+ph>innerHeight-8)top=rc.top-ph-8;
+    pop.style.left=Math.min(Math.max(8,rc.left),innerWidth-pw-8)+'px';pop.style.top=Math.max(8,top)+'px';return;}
+  if(!pop.contains(e.target))closePop();
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePop();});
+addEventListener('scroll',closePop,true);
+
+/* ================= calculator ================= */
+const C={ans:0,mem:0,hist:[],last:null};
+const KEYS=[["MC","fn"],["MR","fn"],["M+","fn"],["M−","fn"],["AC","fn"],
+ ["(",""],[")",""],["√","op"],["x²","op"],["⌫","fn"],
+ ["7",""],["8",""],["9",""],["÷","op"],["^","op"],
+ ["4",""],["5",""],["6",""],["×","op"],["%","op"],
+ ["1",""],["2",""],["3",""],["−","op"],["Ans","fn"],
+ ["0",""],[".",""],["±","fn"],["+","op"],["=","eq"]];
+$('keys').innerHTML=KEYS.map(([k,c])=>`<button class="${c}" data-k="${k}" aria-label="${k==='√'?'square root':k==='x²'?'square':k==='⌫'?'delete':k}">${k}</button>`).join('');
+const cin=$('calcIn'),cout=$('calcOut');
+function toJS(s){
+  let t=s.replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-').replace(/√/g,'sqrt').replace(/,/g,'')
+    .replace(/Ans/g,'('+C.ans+')').replace(/(\d+(?:\.\d+)?|\))%/g,'($1/100)').replace(/\^/g,'**');
+  if(!/^[0-9+\-*/().\s]*$/.test(t.replace(/sqrt/g,'')))throw 0;
+  return t;
+}
+function evalExpr(s){
+  if(!s.trim())return null;
+  let open=(s.match(/\(/g)||[]).length-(s.match(/\)/g)||[]).length;
+  if(open>0)s+=')'.repeat(open);
+  const v=Function('"use strict";const sqrt=Math.sqrt;return ('+toJS(s)+')')();
+  if(typeof v!=='number'||!Number.isFinite(v))throw 0;
+  return +v.toPrecision(12);
+}
+function preview(){try{const v=evalExpr(cin.value);cout.className='';cout.textContent=v==null?'':'= '+v.toLocaleString('en-US',{maximumFractionDigits:10});}catch(_){cout.className='';cout.textContent='';}}
+function equals(){
+  try{const v=evalExpr(cin.value);if(v==null)return;C.hist.unshift([cin.value,v]);C.hist=C.hist.slice(0,8);C.ans=v;cin.value=String(v);cout.className='';cout.textContent='= '+v.toLocaleString('en-US',{maximumFractionDigits:10});drawHist();}
+  catch(_){cout.className='err';cout.textContent='Check the expression. Close every bracket.';}
+}
+function drawHist(){$('calcHist').innerHTML=C.hist.map(([e,v],i)=>`<button data-h="${i}">${e.replace(/</g,'&lt;')} = <b>${v}</b></button>`).join('');}
+function insert(t){const a=cin.selectionStart??cin.value.length,b=cin.selectionEnd??cin.value.length;cin.value=cin.value.slice(0,a)+t+cin.value.slice(b);const p=a+t.length;cin.focus();cin.setSelectionRange(p,p);preview();}
+function memVal(){try{const v=evalExpr(cin.value);return v==null?C.ans:v;}catch(_){return null;}}
+$('keys').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const k=b.dataset.k;
+  if(k==='=')return equals();
+  if(k==='AC'){cin.value='';preview();return;}
+  if(k==='⌫'){const a=cin.selectionStart,bb=cin.selectionEnd;if(a!==bb){cin.value=cin.value.slice(0,a)+cin.value.slice(bb);cin.setSelectionRange(a,a);}else if(a>0){cin.value=cin.value.slice(0,a-1)+cin.value.slice(a);cin.setSelectionRange(a-1,a-1);}cin.focus();preview();return;}
+  if(k==='√')return insert('√(');
+  if(k==='x²')return insert('^2');
+  if(k==='±'){cin.value=cin.value.startsWith('−(')&&cin.value.endsWith(')')?cin.value.slice(2,-1):'−('+(cin.value||'0')+')';preview();return;}
+  if(k==='MC'){C.mem=0;$('calcMem').textContent='';return;}
+  if(k==='MR')return insert(String(C.mem));
+  if(k==='M+'||k==='M−'){const v=memVal();if(v==null)return;C.mem+=k==='M+'?v:-v;C.mem=+C.mem.toPrecision(12);$('calcMem').textContent='M = '+C.mem;return;}
+  insert(k);
+});
+cin.addEventListener('input',preview);
+cin.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();equals();}if(e.key==='Escape'){toggleCalc(false);}});
+$('calcHist').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const h=C.hist[+b.dataset.h];cin.value=h[0];preview();cin.focus();});
+function toggleCalc(show){const c=$('calc');c.hidden=!show;$('calcBtn').setAttribute('aria-expanded',show);if(show)cin.focus();}
+$('calcBtn').onclick=()=>toggleCalc($('calc').hidden);
+$('calcClose').onclick=()=>toggleCalc(false);
+document.addEventListener('focusin',e=>{if(e.target.matches&&e.target.matches('input[id^=in]'))C.last=e.target.id;});
+$('useAns').onclick=()=>{
+  let v;try{v=evalExpr(cin.value);}catch(_){v=null;}if(v==null)v=C.ans;
+  const el=C.last&&$(C.last);
+  if(!el||el.disabled){cout.className='err';cout.textContent='Tap an answer box first, then press this button.';return;}
+  el.value=String(v);el.dispatchEvent(new Event('input',{bubbles:true}));el.focus();
+};
+(function drag(){const box=$('calc'),h=$('calcHead');let sx,sy,ox,oy,on=false;
+  h.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;on=true;h.setPointerCapture(e.pointerId);const rc=box.getBoundingClientRect();sx=e.clientX;sy=e.clientY;ox=rc.left;oy=rc.top;});
+  h.addEventListener('pointermove',e=>{if(!on)return;const rc=box.getBoundingClientRect();const x=Math.min(Math.max(0,ox+e.clientX-sx),innerWidth-rc.width),y=Math.min(Math.max(0,oy+e.clientY-sy),innerHeight-rc.height);box.style.left=x+'px';box.style.top=y+'px';box.style.right='auto';box.style.bottom='auto';});
+  h.addEventListener('pointerup',()=>on=false);})();
+
+/* ================= modes ================= */
+const MODES=['full','formula','hint','late','none'];
+const LV={full:"Full guidance",formula:"Formula given",hint:"Hint on request",late:"Hint after a miss",none:"No guidance"};
+const MODE_NOTE={full:"Full guidance. Each step shows the formula and the numbers to use.",formula:"Formula given. Each step shows the formula. You plug in the numbers.",hint:"Hint on request. Open a hint when stuck. A hint costs 25% of the step's points.",late:"Hint after a miss. The hint button appears after your first wrong answer. A hint costs 25% of the step's points.",none:"No guidance. No hints and no feedback until you check all answers at the end."};
+
+/* ================= 2.3.3 work sampling levels ================= */
+const N0=200;
+function prelim(n){for(;;){const idle=rint(10,24),rem=N0-idle;const w=Array.from({length:n},()=>0.6+Math.random()),ws=sum(w);const cnt=w.map(x=>Math.floor(x/ws*rem));let left=rem-sum(cnt);for(let i=0;left>0;i=(i+1)%n,left--)cnt[i]++;if(Math.min(...cnt)>=8)return {idle,cnt};}}
+function prelimTable(els,d,idleName="Idle",idleAr="خامل"){return `<div class="tablewrap"><table><thead><tr><th>${g('element','Element')}</th><th class="n">Observations</th></tr></thead><tbody>${els.map((e,k)=>`<tr><td>${e[0]} <span class="ar">${e[1]}</span></td><td class="n">${d.cnt[k]}</td></tr>`).join('')}<tr><td>${idleName} <span class="ar">${idleAr}</span></td><td class="n">${d.idle}</td></tr><tr><td><b>Total</b></td><td class="n"><b>${N0}</b></td></tr></tbody></table></div>`;}
+const zStep=(conf)=>({title:"Z value",kind:"num",q:`The study uses a ${g('cl','confidence level')} of ${conf}%. What is the ${g('z','Z value')}?`,formula:"90% → Z = 1.645 &nbsp; 95% → Z = 1.960 &nbsp; 99% → Z = 2.576",hintText:`${100-conf}% of the area lies outside the limits, ${(100-conf)/2}% in each ${g('tail','tail')}.`,guide:`Read the Z for ${conf}% from the line above.`,ans:ZT[conf],rel:0,abs:.006,traps:[[1.645,"That Z belongs to 90%."],[1.96,"That Z belongs to 95%."],[2.576,"That Z belongs to 99%."]],explain:`${conf}% confidence leaves ${(100-conf)/2}% in each tail, so Z = <b>${ZT[conf]}</b>`});
+const nStep=(name,p,I,z,N,cntTxt)=>({title:`Sample size for ${name}`,kind:"num",q:`${cntTxt?cntTxt+' ':''}The ${g('accuracy','accuracy target')} for <b>${name}</b> is I = ${I}. Find the required ${g('ss','sample size')} N. Round up.`,formula:"N = 4 Z² p'(1 − p') / I²",guide:`N = 4 × (${z})² × ${fmt(p,3)} × (1 − ${fmt(p,3)}) / (${I})²`,ans:N,rel:.012,abs:2,traps:[[4*z*p*(1-p)/I**2,"You used Z. The formula needs Z²."],[z*z*p*(1-p)/I**2,"You missed the 4 in front."],[4*z*z*p*(1-p)/I,"Square the interval: divide by I², not I."]],explain:`N = 4 × ${z}² × ${fmt(p,3)} × ${fmt(1-p,3)} / ${I}² = ${fmt(needN(p,I,z),1)} → <b>${N.toLocaleString()}</b>`});
+const iStep=(name,n,Nm,z,pm,Iach)=>({title:"Achieved interval",kind:"num",q:`The ${g('main','main study')} collected N = ${Nm.toLocaleString()} observations. <b>${name}</b> appeared ${n} times. Find the achieved interval I. This measures the ${g('serr','sampling error')}.`,formula:"p' = N<sub>i</sub> / N &nbsp; then &nbsp; I = 2Z √( p'(1 − p') / N )",guide:`p' = ${n} / ${Nm} = ${fmt(pm,4)}<br>I = 2 × ${z} × √( ${fmt(pm,4)} × (1 − ${fmt(pm,4)}) / ${Nm} )`,ans:Iach,rel:.025,traps:[[Iach/2,"That is half the interval. I = 2Z × standard error."],[2*z*pm*(1-pm)/Nm,"Take the square root of p'(1 − p')/N."]],explain:`p' = ${n} / ${Nm} = ${fmt(pm,4)}<br>${g('se','Standard error')} = √(${fmt(pm,4)} × ${fmt(1-pm,4)} / ${Nm}) = ${fmt(Math.sqrt(pm*(1-pm)/Nm),5)}<br>I = 2 × ${z} × ${fmt(Math.sqrt(pm*(1-pm)/Nm),5)} = <b>${fmt(Iach,4)}</b>`});
+const metStep=(name,Iach,IA,met,extra='')=>({title:"Accuracy check",kind:"mcq",q:`Does the main study meet the accuracy target for <b>${name}</b> (I = ${IA})?`,guide:"Compare the achieved I with the target I.",hintText:"A narrower interval means better accuracy.",opts:[{t:"Yes. The achieved I is at or below the target.",ok:met,why:met?"":"The achieved I is wider than the target."},{t:"No. The achieved I is wider than the target, so more observations are needed.",ok:!met,why:!met?"":"The achieved I is narrower than the target."}],explain:`Achieved I = ${fmt(Iach,4)}, target I = ${IA}. ${met?"Achieved ≤ target: <b>the target is met</b>.":"Achieved > target: <b>not met</b>."}${extra}`});
+const idleStep=(nI,Nm,S,H,D,T,idleH,unitWord="stations")=>({title:"Idle hours",kind:"num",q:`${g('idle','Idle')} appeared ${nI} times in ${Nm.toLocaleString()} observations. The study covered ${S} ${g('station',unitWord)} × ${H} hours × ${D} days. Find the idle hours.`,formula:"Idle hours = (idle observations / N) × total hours",guide:`Total hours = ${S} × ${H} × ${D} = ${T}<br>Idle hours = (${nI} / ${Nm}) × ${T}`,ans:idleH,rel:.015,traps:[[nI/Nm,"That is the idle proportion. Multiply by total hours."]],explain:`Total hours = ${S} × ${H} × ${D} = ${T}<br>Idle hours = (${nI} / ${Nm}) × ${T} = <b>${fmt(idleH,2)} h</b>`});
+const stStep=(T,idleH,U,PFD,unit,ntH,stMin)=>({title:"Standard time",kind:"num",q:`The line produced ${U.toLocaleString()} ${unit}s during the study. The ${g('pfd','PF&D allowance')} is ${PFD}%. Find the ${g('stdtime','standard time')} per ${unit}, in minutes.`,formula:"Normal time = (total hours − idle hours) / units<br>Standard time = normal time × 100 / (100 − PF&amp;D)",guide:`${g('normaltime','Normal time')} = (${T} − ${fmt(idleH,2)}) / ${U} hours<br>Standard time = normal time × 100 / (100 − ${PFD}) × 60 minutes`,ans:stMin,rel:.015,traps:[[stMin/60,"Your answer is in hours. Multiply by 60."],[ntH*60,"You left out the PF&D allowance."],[ntH*(1+PFD/100)*60,"PF&D here is a share of the shift. Use 100 / (100 − PF&D), not (1 + PF&D)."],[T/U*100/(100-PFD)*60,"Subtract the idle hours first."]],explain:`Normal time = (${T} − ${fmt(idleH,2)}) / ${U} = ${fmt(ntH,5)} h<br>Standard time = ${fmt(ntH,5)} × 100 / ${100-PFD} = ${fmt(stMin/60,5)} h = <b>${fmt(stMin,2)} min</b>`});
+
+const WS=[
+{ico:"🥮",name:"Nablus knafeh bakery",ar:"مخبز كنافة في نابلس",topic:"Proportion, standard error, and the confidence interval",
+ intro:"A knafeh bakery in the Old City of Nablus has 4 bakers. The owner wants to know how much of the day the bakers stand idle.",introAr:"مخبز كنافة في البلدة القديمة في نابلس فيه 4 خبازين. يريد المالك معرفة نسبة الوقت الذي يقف فيه الخبازون دون عمل.",
+ gen(){const N=rint(15,45)*10,k=Math.round(N*(0.08+0.17*Math.random())),p=k/N,z=1.645,se=Math.sqrt(p*(1-p)/N),I=2*z*se;return {N,k,p,z,se,I,lo:p-I/2,hi:p+I/2,D:rint(4,7)};},
+ data(d){return `<h3>Study data</h3><ul><li>4 bakers, ${g('random','random')} ${g('obs','observations')} over ${d.D} days</li><li>Total observations N = ${d.N}</li><li>Working: ${d.N-d.k}</li><li>Idle: ${d.k}</li><li>${g('cl','Confidence level')}: 90%</li></ul>`;},
+ steps(d){return [
+  {title:"Idle proportion",kind:"num",q:`Find the ${g('prop',"observed proportion p'")} of idle time.`,formula:"p' = N<sub>i</sub> / N",guide:`p' = ${d.k} / ${d.N}`,ans:d.p,rel:.004,abs:.0011,traps:[[d.p*100,"Write p' as a decimal between 0 and 1."],[(d.N-d.k)/d.N,"That is the working proportion. Use the idle count."]],explain:`p' = ${d.k} / ${d.N} = <b>${fmt(d.p,4)}</b>`},
+  zStep(90),
+  {title:"Standard error",kind:"num",q:`Find the ${g('se','standard error')} of p'.`,formula:"σ<sub>p'</sub> = √( p'(1 − p') / N )",guide:`σ = √( ${fmt(d.p,4)} × (1 − ${fmt(d.p,4)}) / ${d.N} )`,ans:d.se,rel:.012,traps:[[d.p*(1-d.p)/d.N,"Take the square root."],[Math.sqrt(d.p*(1-d.p))/d.N,"Keep N inside the square root."]],explain:`√(${fmt(d.p,4)} × ${fmt(1-d.p,4)} / ${d.N}) = <b>${fmt(d.se,5)}</b>`},
+  {title:"Interval width",kind:"num",q:`Find the full ${g('interval','interval I')} at 90% confidence.`,formula:"I = 2 Z σ<sub>p'</sub>",guide:`I = 2 × 1.645 × ${fmt(d.se,5)}`,ans:d.I,rel:.015,traps:[[d.I/2,"That is half the interval. Multiply by 2."]],explain:`I = 2 × 1.645 × ${fmt(d.se,5)} = <b>${fmt(d.I,4)}</b>`},
+  {title:"Lower limit",kind:"num",q:`Find the lower limit of the ${g('ci','confidence interval')}.`,formula:"Lower limit = p' − I / 2",guide:`Lower = ${fmt(d.p,4)} − ${fmt(d.I,4)} / 2`,ans:d.lo,rel:.012,abs:.0015,traps:[[d.p-d.I,"Subtract half the interval, not the whole interval."],[d.hi,"That is the upper limit."]],explain:`${fmt(d.p,4)} − ${fmt(d.I/2,4)} = <b>${fmt(d.lo,4)}</b>. Upper limit = ${fmt(d.hi,4)}. The true idle share lies between these limits about 90% of the time.`},
+  {title:"When to use work sampling",kind:"mcq",q:`Which study suits ${g('ws','work sampling')} best?`,guide:"Work sampling counts many workers at random instants over a long period.",hintText:"",opts:shuffle([{t:"All 4 bakers across the whole day, over a week",ok:true},{t:"One baker's 30-second cheese-spreading step",ok:false,why:"Brief operations suit a stopwatch time study."},{t:"One oven's single baking cycle",ok:false,why:"One machine makes work sampling inefficient."},{t:"One baker for one hour",ok:false,why:"Too short and too small for random sampling."}]),explain:"Work sampling fits many workers or machines over a large area and long periods. It is inefficient for one worker and for brief operations."}];}},
+{ico:"🎧",name:"Ramallah call center",ar:"مركز اتصال في رام الله",topic:"Sample size and the element that sets it",
+ intro:"A customer call center in Ramallah has 20 agents. The manager plans a work sampling study of how agents spend their shift.",introAr:"مركز خدمة عملاء في رام الله فيه 20 موظفاً. يخطط المدير لدراسة معاينة عمل لمعرفة كيف يقضي الموظفون ورديتهم.",
+ els:[["On a call","في مكالمة"],["After-call notes","ملاحظات ما بعد المكالمة"],["Waiting for calls","انتظار المكالمات"]],
+ gen(){const z=1.645;for(;;){const {idle,cnt}=prelim(3);const A=cnt.indexOf(Math.max(...cnt));const B=pick([0,1,2].filter(i=>i!==A));const IA=pick([.04,.05]),IB=pick([.02,.03]);const pA=cnt[A]/N0,pB=cnt[B]/N0,NA=ceilN(pA,IA,z),NB=ceilN(pB,IB,z);if(Math.abs(NA-NB)/Math.max(NA,NB)<.06)continue;return {z,idle,cnt,A,B,IA,IB,pA,pB,NA,NB};}},
+ data(d){const e=this.els;return `<h3>${g('prelim','Preliminary study')}: ${N0} observations</h3>${prelimTable(e,d,"Away from desk","بعيد عن المكتب")}<h3>${g('accuracy','Accuracy targets')} at 90% confidence</h3><ul><li>${e[d.A][0]}: I = ${d.IA}</li><li>${e[d.B][0]}: I = ${d.IB}</li></ul>`;},
+ steps(d){const e=this.els,A=e[d.A][0],B=e[d.B][0],big=Math.max(d.NA,d.NB),small=Math.min(d.NA,d.NB);return [
+  {title:"Observed proportion",kind:"num",q:`Find the ${g('prop',"observed proportion p'")} of <b>${A}</b> in the ${g('prelim','preliminary study')}.`,formula:"p' = N<sub>i</sub> / N",guide:`p' = ${d.cnt[d.A]} / ${N0}`,ans:d.pA,rel:.004,abs:.0011,traps:[[d.pA*100,"Write p' as a decimal between 0 and 1."]],explain:`p' = ${d.cnt[d.A]} / ${N0} = <b>${fmt(d.pA,3)}</b>`},
+  nStep(A,d.pA,d.IA,d.z,d.NA),
+  nStep(B,d.pB,d.IB,d.z,d.NB,`${B} appeared ${d.cnt[d.B]} times in the preliminary study.`),
+  {title:"Study size",kind:"mcq",q:`How many observations should the ${g('main','main study')} plan for, so both elements meet their targets?`,guide:"Compare the two N values. Which one satisfies both targets?",hintText:"Every observation records all elements at once.",opts:shuffle([[big,true],[small,false],[d.NA+d.NB,false],[Math.round((d.NA+d.NB)/2),false]]).map(([v,ok])=>({t:v.toLocaleString(),ok,why:ok?"":v===small?"This N meets the target of one element only.":v===d.NA+d.NB?"Each observation records all elements at once, so you do not add the N values.":"An average leaves one element short of its target."})),explain:`The largest N sets the study size: <b>${big.toLocaleString()}</b>. On the slide, setup (15%) set the size, not the biggest activity.`},
+  {title:"Relative accuracy",kind:"num",q:`Find the ${g('rel','relative accuracy')} of <b>${B}</b>, in percent.`,formula:"Relative accuracy = (I / 2) / p' × 100",guide:`(${d.IB} / 2) / ${fmt(d.pB,3)} × 100`,ans:d.IB/2/d.pB*100,rel:.01,traps:[[d.IB/d.pB*100,"Use half the interval."],[d.IB/2/d.pB,"Multiply by 100 for percent."]],explain:`(${d.IB} / 2) / ${fmt(d.pB,3)} × 100 = <b>${fmt(d.IB/2/d.pB*100,1)}%</b>`},
+  {title:"Tighter target",kind:"mcq",q:`The manager wants the interval for ${A} cut in half. What happens to the required N?`,guide:"I sits in the denominator as I².",hintText:"Halve I, then square it.",opts:shuffle([{t:"It grows 4 times",ok:true},{t:"It doubles",ok:false,why:"I is squared, so halving I multiplies N by 2² = 4."},{t:"It falls by half",ok:false,why:"A narrower interval needs more observations, not fewer."},{t:"It stays the same",ok:false,why:"N depends on I²."}]),explain:`N = 4Z²p'(1 − p') / I². Halving I divides I² by 4, so N grows 4 times: ${d.NA.toLocaleString()} → about ${ceilN(d.pA,d.IA/2,d.z).toLocaleString()}.`}];}},
+{ico:"🥛",name:"Jenin dairy",ar:"مصنع ألبان في جنين",topic:"Sampling error after the main study",
+ intro:"A yogurt line in Jenin runs 4 stations. The plant engineer checks whether the main study reached its accuracy target.",introAr:"خط إنتاج لبن في جنين فيه 4 محطات. يتحقق مهندس المصنع من وصول الدراسة الرئيسية إلى الدقة المطلوبة.",
+ els:[["Fill the cups","تعبئة الأكواب"],["Seal the cups","إغلاق الأكواب"],["Pack in crates","التعبئة في صناديق"],["Clean the line","تنظيف الخط"]],
+ gen(){for(;;){const conf=pick([90,95]),z=ZT[conf];const {idle,cnt}=prelim(4);const A=rint(0,3),IA=pick([.03,.04,.05]),pA=cnt[A]/N0,NA=ceilN(pA,IA,z);const Nm=Math.round(NA*(0.6+0.7*Math.random())/5)*5,nA=Math.round(Nm*pA*(0.9+0.2*Math.random())),pm=nA/Nm,Iach=2*z*Math.sqrt(pm*(1-pm)/Nm);if(Math.abs(Iach-IA)/IA<.04)continue;return {conf,z,idle,cnt,A,IA,pA,NA,Nm,nA,pm,Iach,met:Iach<=IA,need:ceilN(pm,IA,z)};}},
+ data(d){const e=this.els;return `<h3>${g('prelim','Preliminary study')}: ${N0} observations</h3>${prelimTable(e,d)}<h3>Targets</h3><ul><li>${g('cl','Confidence level')}: ${d.conf}%</li><li>${e[d.A][0]}: I = ${d.IA}</li></ul><h3>${g('main','Main study')} results</h3><ul><li>Total observations: ${d.Nm.toLocaleString()}</li><li>${e[d.A][0]}: ${d.nA}</li></ul>`;},
+ steps(d){const A=this.els[d.A][0];return [
+  {title:"Observed proportion",kind:"num",q:`Find p' of <b>${A}</b> in the ${g('prelim','preliminary study')}.`,formula:"p' = N<sub>i</sub> / N",guide:`p' = ${d.cnt[d.A]} / ${N0}`,ans:d.pA,rel:.004,abs:.0011,traps:[[d.pA*100,"Write p' as a decimal between 0 and 1."]],explain:`p' = ${d.cnt[d.A]} / ${N0} = <b>${fmt(d.pA,3)}</b>`},
+  zStep(d.conf),
+  nStep(A,d.pA,d.IA,d.z,d.NA),
+  iStep(A,d.nA,d.Nm,d.z,d.pm,d.Iach),
+  metStep(A,d.Iach,d.IA,d.met),
+  {title:"Observations needed",kind:"num",q:`Use p' from the main study. How many observations does the target I = ${d.IA} need? Round up.`,formula:"N = 4 Z² p'(1 − p') / I²",guide:`N = 4 × (${d.z})² × ${fmt(d.pm,4)} × (1 − ${fmt(d.pm,4)}) / (${d.IA})²`,ans:d.need,rel:.015,abs:2,traps:[[d.NA,"Use p' from the main study, not the preliminary one."],[4*d.z*d.pm*(1-d.pm)/d.IA**2,"You used Z. The formula needs Z²."]],explain:`N = 4 × ${d.z}² × ${fmt(d.pm,4)} × ${fmt(1-d.pm,4)} / ${d.IA}² = <b>${d.need.toLocaleString()}</b>. ${d.met?`The study took ${d.Nm.toLocaleString()}, so it has enough.`:`The study took ${d.Nm.toLocaleString()}, so it needs about ${(d.need-d.Nm).toLocaleString()} more.`}`}];}},
+{ico:"🪨",name:"Hebron stone cutting",ar:"مصنع قص حجر في الخليل",topic:"From work sampling results to standard time",
+ intro:"A stone factory in Hebron cuts and polishes building slabs. The main study is complete. Turn the counts into hours and a standard time.",introAr:"مصنع حجر في الخليل يقص ويصقل ألواح البناء. انتهت الدراسة الرئيسية. حوّل الأعداد إلى ساعات وزمن قياسي.",
+ els:[["Cut the blocks","قص الكتل"],["Polish the slabs","صقل الألواح"],["Move the slabs","نقل الألواح"],["Change the blades","تغيير الشفرات"],["Inspect","الفحص"]],
+ gen(){for(;;){const S=rint(2,4),H=8,D=rint(8,12),T=S*H*D,Nm=rint(120,180)*10;const idleC=Math.round(Nm*(0.06+0.06*Math.random()));const w=this.els.map(()=>0.5+Math.random()),ws=sum(w);const cnt=w.map(x=>Math.floor(x/ws*(Nm-idleC)));cnt[0]+=Nm-idleC-sum(cnt);const srt=cnt.slice().sort((a,b)=>b-a);if(srt[0]-srt[1]<Nm*0.02)continue;const X=cnt.indexOf(srt[0]);const pX=cnt[X]/Nm,hX=pX*T,idleH=idleC/Nm*T,nt=15+10*Math.random();const U=Math.round((T-idleH)*60/nt/10)*10,ntH=(T-idleH)/U,PFD=pick([10,12,15,18,20]);return {S,H,D,T,Nm,idleC,cnt,X,pX,hX,idleH,U,ntH,PFD,stMin:ntH*100/(100-PFD)*60};}},
+ data(d){const e=this.els;return `<h3>Study setup</h3><ul><li>${d.S} cutting ${g('station','stations')}, ${d.H}-hour shifts, ${d.D} days</li><li>Output: ${d.U.toLocaleString()} slabs</li><li>${g('pfd','PF&D allowance')}: ${d.PFD}%</li></ul><h3>${g('main','Main study')} results</h3><div class="tablewrap"><table><thead><tr><th>${g('element','Element')}</th><th class="n">Observations</th></tr></thead><tbody>${e.map((x,k)=>`<tr><td>${x[0]} <span class="ar">${x[1]}</span></td><td class="n">${d.cnt[k]}</td></tr>`).join('')}<tr><td>Idle <span class="ar">خامل</span></td><td class="n">${d.idleC}</td></tr><tr><td><b>Total</b></td><td class="n"><b>${d.Nm.toLocaleString()}</b></td></tr></tbody></table></div>`;},
+ steps(d){const e=this.els,X=e[d.X][0];const others=shuffle(e.map((_,k)=>k).filter(k=>k!==d.X)).slice(0,3);return [
+  {title:"Share of observations",kind:"num",q:`What percent of the observations went to <b>${X}</b>?`,formula:"% of observations = N<sub>i</sub> / N × 100",guide:`${d.cnt[d.X]} / ${d.Nm} × 100`,ans:d.pX*100,rel:.005,abs:.06,traps:[[d.pX,"Multiply by 100 for percent."]],explain:`${d.cnt[d.X]} / ${d.Nm} × 100 = <b>${fmt(d.pX*100,1)}%</b>`},
+  {title:"Hours on the element",kind:"num",q:`Total hours = stations × hours × days. How many hours went to <b>${X}</b>?`,formula:"Element hours = p' × total hours",guide:`Total hours = ${d.S} × ${d.H} × ${d.D} = ${d.T}<br>Hours = ${fmt(d.pX,4)} × ${d.T}`,ans:d.hX,rel:.012,traps:[[d.pX*100*d.T,"Use p' as a decimal, not a percent."]],explain:`${fmt(d.pX,4)} × ${d.T} = <b>${fmt(d.hX,1)} h</b>`},
+  idleStep(d.idleC,d.Nm,d.S,d.H,d.D,d.T,d.idleH),
+  {title:"Improvement target",kind:"mcq",q:"Which element should the engineer study first to cut labor time?",guide:"Compare the shares of the working elements.",hintText:"On the slide, handling wafers at 25.7% was the first target.",opts:shuffle([d.X,...others]).map(k=>({t:e[k][0],ok:k===d.X,why:k===d.X?"":"Another element takes a larger share of the time."})),explain:`<b>${X}</b> takes the largest share (${fmt(d.pX*100,1)}%), so a small cut there saves the most hours.`},
+  {title:"Normal time",kind:"num",q:`Find the ${g('normaltime','normal time')} per slab, in hours.`,formula:"Normal time = (total hours − idle hours) / units",guide:`(${d.T} − ${fmt(d.idleH,2)}) / ${d.U}`,ans:d.ntH,rel:.012,traps:[[d.T/d.U,"Subtract the idle hours first."],[d.ntH*60,"Give the answer in hours."]],explain:`(${d.T} − ${fmt(d.idleH,2)}) / ${d.U} = <b>${fmt(d.ntH,4)} h</b>`},
+  {title:"Standard time",kind:"num",q:`Find the ${g('stdtime','standard time')} per slab, in minutes.`,formula:"Standard time = normal time × 100 / (100 − PF&amp;D) × 60",guide:`${fmt(d.ntH,4)} × 100 / (100 − ${d.PFD}) × 60`,ans:d.stMin,rel:.012,traps:[[d.stMin/60,"Your answer is in hours. Multiply by 60."],[d.ntH*60,"You left out the PF&D allowance."],[d.ntH*(1+d.PFD/100)*60,"Use 100 / (100 − PF&D), not (1 + PF&D)."]],explain:`${fmt(d.ntH,4)} × 100 / ${100-d.PFD} = ${fmt(d.stMin/60,4)} h = <b>${fmt(d.stMin,2)} min</b>`}];}},
+{ico:"💊",name:"Beit Jala pharmaceutical plant",ar:"مصنع أدوية في بيت جالا",topic:"The full work sampling study",
+ intro:"A tablet line in Beit Jala runs a full work sampling study, from the preliminary counts to the standard time per box.",introAr:"خط أقراص في بيت جالا يجري دراسة معاينة عمل كاملة، من الدراسة الأولية حتى الزمن القياسي لكل علبة.",
+ els:[["Weigh the powders","وزن المساحيق"],["Blend","الخلط"],["Run the tablet press","تشغيل آلة الكبس"],["Pack blisters","تعبئة الأشرطة"],["Clean between batches","التنظيف بين الدفعات"]],
+ gen(){for(;;){const conf=pick([95,99]),z=ZT[conf];const {idle,cnt}=prelim(5);const A=cnt.indexOf(Math.max(...cnt)),B=pick([0,1,2,3,4].filter(i=>i!==A));const IA=conf===99?pick([.05,.06]):pick([.04,.05]),IB=conf===99?pick([.03,.04]):pick([.02,.03]);const pA=cnt[A]/N0,pB=cnt[B]/N0,NA=ceilN(pA,IA,z),NB=ceilN(pB,IB,z);if(Math.abs(NA-NB)/Math.max(NA,NB)<.06)continue;const Nm=Math.round(Math.max(NA,NB)*(0.55+0.7*Math.random())/5)*5,nA=Math.round(Nm*pA*(0.9+0.2*Math.random())),nI=Math.round(Nm*idle/N0*(0.85+0.3*Math.random()));const pm=nA/Nm,Iach=2*z*Math.sqrt(pm*(1-pm)/Nm);if(Math.abs(Iach-IA)/IA<.04)continue;const S=rint(2,4),H=8,D=rint(8,12),T=S*H*D,idleH=nI/Nm*T,nt=2.5+3.5*Math.random(),U=Math.round((T-idleH)*60/nt/10)*10,PFD=pick([12,15,18,20]),ntH=(T-idleH)/U;return {conf,z,idle,cnt,A,B,IA,IB,pA,pB,NA,NB,Nm,nA,nI,pm,Iach,met:Iach<=IA,S,H,D,T,idleH,U,PFD,ntH,stMin:ntH*100/(100-PFD)*60};}},
+ data(d){const e=this.els;return `<h3>Study setup</h3><ul><li>${d.S} ${g('station','stations')}, one operator each, ${d.H}-hour shifts, ${d.D} days</li><li>${g('cl','Confidence level')}: ${d.conf}%</li></ul><h3>${g('prelim','Preliminary study')}: ${N0} observations</h3>${prelimTable(e,d)}<h3>${g('accuracy','Accuracy targets')}</h3><ul><li>${e[d.A][0]}: I = ${d.IA}</li><li>${e[d.B][0]}: I = ${d.IB}</li></ul><h3>${g('main','Main study')} results</h3><ul><li>Total observations: ${d.Nm.toLocaleString()}</li><li>${e[d.A][0]}: ${d.nA}</li><li>Idle: ${d.nI}</li><li>Output: ${d.U.toLocaleString()} boxes</li><li>${g('pfd','PF&D allowance')}: ${d.PFD}%</li></ul>`;},
+ steps(d){const e=this.els,A=e[d.A][0],B=e[d.B][0],big=Math.max(d.NA,d.NB),small=Math.min(d.NA,d.NB);return [
+  {title:"Observed proportion",kind:"num",q:`Find p' of <b>${A}</b> in the preliminary study.`,formula:"p' = N<sub>i</sub> / N",guide:`p' = ${d.cnt[d.A]} / ${N0}`,ans:d.pA,rel:.004,abs:.0011,traps:[[d.pA*100,"Write p' as a decimal between 0 and 1."]],explain:`p' = ${d.cnt[d.A]} / ${N0} = <b>${fmt(d.pA,3)}</b>`},
+  nStep(A,d.pA,d.IA,d.z,d.NA),
+  nStep(B,d.pB,d.IB,d.z,d.NB,`${B} appeared ${d.cnt[d.B]} times in the preliminary study.`),
+  {title:"Study size",kind:"mcq",q:"How many observations should the main study plan for?",guide:"",hintText:"",opts:shuffle([[big,true],[small,false],[d.NA+d.NB,false],[Math.round((d.NA+d.NB)/2),false]]).map(([v,ok])=>({t:v.toLocaleString(),ok,why:ok?"":v===small?"This N meets one target only.":v===d.NA+d.NB?"Do not add the N values.":"An average leaves one element short."})),explain:`The largest N sets the study size: <b>${big.toLocaleString()}</b>.`},
+  iStep(A,d.nA,d.Nm,d.z,d.pm,d.Iach),
+  metStep(A,d.Iach,d.IA,d.met,d.met?"":` With p' = ${fmt(d.pm,4)}, the study needs about ${ceilN(d.pm,d.IA,d.z).toLocaleString()} observations.`),
+  idleStep(d.nI,d.Nm,d.S,d.H,d.D,d.T,d.idleH),
+  stStep(d.T,d.idleH,d.U,d.PFD,"box",d.ntH,d.stMin)];}}
+];
+
+/* ================= 2.4 wage and fringe levels ================= */
+const W=[
+{ico:"👷",name:"Salary to hourly rate",ar:"من الراتب السنوي إلى الأجر بالساعة",topic:"Wage-only method, Eq. 2.13",
+ intro:"A production engineer at a factory in Nablus earns an annual salary. The cost estimator needs an hourly rate to price a design job.",introAr:"مهندس إنتاج في مصنع في نابلس يتقاضى راتباً سنوياً. يحتاج مقدّر التكلفة إلى أجر بالساعة لتسعير مهمة تصميم.",
+ gen(){const S=rint(24,56)*1500,m=S/12,wk=m*12/52,mh=52*40/12,Rh=m/mh,Ha=pick([12,16.5,22,27.5,35,40]);return {S,m,wk,mh,Rh,Ha,Cdl:Ha*Rh};},
+ data(d){return `<h3>Employee data</h3><ul><li>${g('salary','Annual salary')}: ${usd(d.S)}</li><li>Work year: 52 weeks × 40 hours</li><li>Design job: ${d.Ha} hours</li></ul>`;},
+ steps(d){return [
+  {title:"Monthly salary",kind:"num",q:"Find the monthly salary.",formula:"Monthly = annual / 12",guide:`${usd(d.S)} / 12`,ans:d.m,rel:.002,abs:.01,traps:[[d.S/52,"That is the weekly pay. Divide by 12 for months."]],explain:`${usd(d.S)} / 12 = <b>${usd(d.m)}</b>`},
+  {title:"Weekly pay",kind:"num",q:"Find the weekly pay.",formula:"Weekly = monthly × 12 / 52",guide:`${usd(d.m)} × 12 / 52`,ans:d.wk,rel:.002,abs:.01,traps:[[d.m/4,"A month holds 52/12 = 4.33 weeks, not 4."]],explain:`${usd(d.m)} × 12 / 52 = <b>${usd(d.wk)}</b>`},
+  {title:"Monthly hours",kind:"num",q:"How many working hours does one month hold?",formula:"Monthly hours = 52 × 40 / 12",guide:"52 × 40 / 12",ans:d.mh,rel:.002,abs:.05,traps:[[160,"A month holds 4.33 weeks, not 4. Use 52 × 40 / 12."]],explain:`52 × 40 / 12 = <b>${fmt(d.mh,1)} h</b>`},
+  {title:"Hourly rate",kind:"num",q:`Find the ${g('hourly','hourly rate')} R<sub>h</sub>.`,formula:"R<sub>h</sub> = monthly salary / monthly hours",guide:`${usd(d.m)} / ${fmt(d.mh,2)}`,ans:d.Rh,rel:.003,abs:.01,traps:[[d.m/160,"Use 173.3 hours a month, not 160."]],explain:`${usd(d.m)} / ${fmt(d.mh,2)} = <b>${usd(d.Rh)}/h</b>. Check: ${usd(d.S)} / 2,080 h gives the same rate.`},
+  {title:"Direct labor cost",kind:"num",q:`Use the ${g('wageonly','wage-only method')}. Find the ${g('cdl','direct labor cost')} of the ${d.Ha}-hour design job.`,formula:"C<sub>dl</sub> = H<sub>a</sub> × R<sub>h</sub> &nbsp; (Eq. 2.13)",guide:`${d.Ha} × ${usd(d.Rh)}`,ans:d.Cdl,rel:.004,abs:.02,explain:`${d.Ha} × ${usd(d.Rh)} = <b>${usd(d.Cdl)}</b>. Under the wage-only method, fringes go to overhead.`},
+  {title:"Wage category",kind:"mcq",q:"Which wage category fits this engineer?",guide:"The engineer earns the same salary whatever the output.",hintText:"",opts:shuffle([{t:"Attendance (day work): pay = hours × rate",ok:true},{t:"Performance (incentive): pay = pieces × rate per piece",ok:false,why:"The salary does not depend on pieces produced."}]),explain:`A salary pays for time at work, so it is ${g('attendance','attendance (day work)')} pay.`}];}},
+{ico:"🧼",name:"Day work or piece rate",ar:"الأجر اليومي أم الأجر بالقطعة",topic:"Attendance pay and piece rate, Eq. 2.14",
+ intro:"A wrapper at a Nablus soap factory works an 8-hour shift. The factory compares hourly pay with a piece-rate plan.",introAr:"عامل تغليف في مصنع صابون في نابلس يعمل وردية 8 ساعات. يقارن المصنع بين الأجر بالساعة وخطة الأجر بالقطعة.",
+ gen(){for(;;){const Rh=rint(48,64)/4,Ha=8,Np=rint(180,320),ratio=Math.random()<.5?0.75+0.19*Math.random():1.06+0.19*Math.random(),Rp=r(Ha*Rh/Np*ratio,3);const day=Ha*Rh,piece=Np*Rp;if(Math.abs(piece/day-1)<.04)continue;return {Rh,Ha,Np,Rp,day,piece,be:Ha*Rh/Np,beN:Math.ceil(Ha*Rh/Rp-1e-9)};}},
+ data(d){return `<h3>Shift data</h3><ul><li>Hours worked H<sub>a</sub>: ${d.Ha}</li><li>${g('hourly','Hourly rate')} R<sub>h</sub>: ${usd(d.Rh)}</li><li>Bars wrapped N<sub>p</sub>: ${d.Np}</li><li>${g('piecerate','Piece rate')} R<sub>p</sub>: $${d.Rp.toFixed(3)} per bar</li></ul>`;},
+ steps(d){return [
+  {title:"Day work pay",kind:"num",q:`Find the shift pay under ${g('attendance','attendance (day work)')}.`,formula:"Pay = H<sub>a</sub> × R<sub>h</sub>",guide:`${d.Ha} × ${usd(d.Rh)}`,ans:d.day,rel:.002,abs:.01,explain:`${d.Ha} × ${usd(d.Rh)} = <b>${usd(d.day)}</b>`},
+  {title:"Piece-rate pay",kind:"num",q:"Find the shift pay under the pure piece-rate plan.",formula:"C<sub>dl</sub> = N<sub>p</sub> × R<sub>p</sub> &nbsp; (Eq. 2.14)",guide:`${d.Np} × $${d.Rp.toFixed(3)}`,ans:d.piece,rel:.003,abs:.01,explain:`${d.Np} × $${d.Rp.toFixed(3)} = <b>${usd(d.piece)}</b>`},
+  {title:"Better pay",kind:"mcq",q:"Which plan pays this worker more for this shift?",guide:"Compare the two answers.",hintText:"",opts:[{t:"Day work",ok:d.day>d.piece,why:"The piece-rate pay is higher."},{t:"Piece rate",ok:d.piece>d.day,why:"The day work pay is higher."}],explain:`Day work ${usd(d.day)} vs piece rate ${usd(d.piece)}: <b>${d.piece>d.day?"piece rate":"day work"}</b> pays more.`},
+  {title:"Break-even piece rate",kind:"num",q:"What piece rate gives the same pay as day work for this output? Give 4 decimals.",formula:"R<sub>p</sub> = H<sub>a</sub> × R<sub>h</sub> / N<sub>p</sub>",guide:`${usd(d.day)} / ${d.Np}`,ans:d.be,rel:.004,abs:.0002,traps:[[d.Np/d.day,"Divide the pay by the pieces, not the reverse."]],explain:`${usd(d.day)} / ${d.Np} = <b>$${d.be.toFixed(4)}</b> per bar`},
+  {title:"Break-even output",kind:"num",q:`At $${d.Rp.toFixed(3)} per bar, how many bars must the worker wrap to earn the day work pay? Round up.`,formula:"N<sub>p</sub> = H<sub>a</sub> × R<sub>h</sub> / R<sub>p</sub>",guide:`${usd(d.day)} / ${d.Rp.toFixed(3)}`,ans:d.beN,rel:0,abs:1,explain:`${usd(d.day)} / ${d.Rp.toFixed(3)} = ${fmt(d.day/d.Rp,1)} → <b>${d.beN} bars</b>`},
+  {title:"Who carries the risk?",kind:"mcq",q:"Under which plan does the factory carry the cost of slow output?",guide:"Under one plan the pay stays the same whatever the output.",hintText:"",opts:shuffle([{t:"Day work",ok:true},{t:"Piece rate",ok:false,why:"Under piece rate, slow output means lower pay for the worker."},{t:"Neither plan",ok:false,why:"Day work pays the same for low output, so the factory pays more per bar."}]),explain:"Day work pays for hours, so low output raises the labor cost per bar. Piece rate moves that risk to the worker."}];}},
+{ico:"👞",name:"Incentive with a guaranteed base",ar:"الحافز مع أجر أساسي مضمون",topic:"Eq. 2.15 and labor efficiency, Eq. 2.17",
+ intro:"A stitcher at a Hebron shoe workshop works under an incentive plan with a guaranteed base wage.",introAr:"عامل خياطة في ورشة أحذية في الخليل يعمل بخطة حوافز مع أجر أساسي مضمون.",
+ gen(){for(;;){const Rh=rint(24,36)/2,Ha=pick([0.8,1.5,2,4,6,7.5,8]),Hs100=r(0.8+2*Math.random(),3),Hs=Hs100/100,Et=Math.random()<.35?70+20*Math.random():110+60*Math.random();const Np=Math.round(Et/100*Ha/Hs);if(Np<10)continue;const std=Hs*Np,E=std/Ha*100;if(Math.abs(E-100)<6)continue;const base=Ha*Rh,Cdl=Math.max(base,base+Rh*(std-Ha));return {Rh,Ha,Hs100,Hs,Np,std,E,base,Cdl,bonus:Cdl-base,guar:std<Ha};}},
+ data(d){return `<h3>Job data</h3><ul><li>Actual hours H<sub>a</sub>: ${d.Ha} h</li><li>${g('hourly','Hourly rate')} R<sub>h</sub>: ${usd(d.Rh)}</li><li>Pieces stitched N<sub>p</sub>: ${d.Np}</li><li>${g('stdhours','Standard hours')}: ${d.Hs100.toFixed(3)} h per 100 pieces</li></ul><p class="small">Slide example: H<sub>a</sub> = 0.8 h, R<sub>h</sub> = $14.50, N<sub>p</sub> = 128, H<sub>s</sub> = 1.010 h/100 units gives C<sub>dl</sub> = $18.75 and E = 162%.</p>`;},
+ steps(d){return [
+  {title:"Standard hours per piece",kind:"num",q:"Find H<sub>s</sub>, the standard hours per piece.",formula:"H<sub>s</sub> = (hours per 100 pieces) / 100",guide:`${d.Hs100.toFixed(3)} / 100`,ans:d.Hs,rel:.003,abs:.000005,traps:[[d.Hs100,"Divide by 100 to get hours per piece."]],explain:`${d.Hs100.toFixed(3)} / 100 = <b>${d.Hs.toFixed(5)} h</b>`},
+  {title:"Standard hours earned",kind:"num",q:"How many standard hours did the stitcher earn?",formula:"Standard hours earned = H<sub>s</sub> × N<sub>p</sub>",guide:`${d.Hs.toFixed(5)} × ${d.Np}`,ans:d.std,rel:.004,traps:[[d.Hs100*d.Np,"Use hours per piece, not per 100 pieces."]],explain:`${d.Hs.toFixed(5)} × ${d.Np} = <b>${fmt(d.std,4)} h</b>`},
+  {title:"Labor efficiency",kind:"num",q:`Find the ${g('efficiency','labor efficiency')} E, in percent.`,formula:"E = N<sub>p</sub> × (H<sub>s</sub> / H<sub>a</sub>) × 100 &nbsp; (Eq. 2.17)",guide:`${d.Np} × (${d.Hs.toFixed(5)} / ${d.Ha}) × 100`,ans:d.E,rel:.006,traps:[[d.E/100,"Multiply by 100 for percent."],[d.Ha/d.std*100,"Put standard hours on top: earned ÷ actual."]],explain:`${d.Np} × ${d.Hs.toFixed(5)} / ${d.Ha} × 100 = <b>${fmt(d.E,1)}%</b>`},
+  {title:"Bonus or guarantee?",kind:"mcq",q:`Which part of the ${g('incentive','incentive plan')} applies to this job? The ${g('guarantee','guaranteed base')} sets a pay floor.`,guide:"Compare standard hours earned with actual hours.",hintText:"The plan never pays less than H<sub>a</sub> × R<sub>h</sub>.",opts:[{t:"A bonus: standard hours earned exceed actual hours.",ok:!d.guar,why:"Standard hours earned fall below actual hours, so no bonus."},{t:"The guaranteed base: standard hours earned fall below actual hours.",ok:d.guar,why:"Standard hours earned exceed actual hours, so the stitcher earns a bonus."}],explain:`Earned ${fmt(d.std,4)} h vs actual ${d.Ha} h. ${d.guar?"E is below 100%, so the guarantee holds pay at H<sub>a</sub> × R<sub>h</sub>.":"E is above 100%, so the stitcher earns a bonus on top of the base."}`},
+  {title:"Direct labor cost",kind:"num",q:"Find the stitcher's pay C<sub>dl</sub> for this job.",formula:"C<sub>dl</sub> = H<sub>a</sub>R<sub>h</sub> + R<sub>h</sub>(H<sub>s</sub>N<sub>p</sub> − H<sub>a</sub>), with C<sub>dl</sub> ≥ H<sub>a</sub>R<sub>h</sub> &nbsp; (Eq. 2.15)",guide:`${d.Ha} × ${usd(d.Rh)} + ${usd(d.Rh)} × (${fmt(d.std,4)} − ${d.Ha})`,ans:d.Cdl,rel:.004,abs:.01,traps:d.guar?[[d.base+d.Rh*(d.std-d.Ha),"Pay cannot fall below the guaranteed base H<sub>a</sub> × R<sub>h</sub>."]]:[[d.base,"The stitcher beat the standard. Add the bonus."]],explain:`${d.Ha} × ${usd(d.Rh)} = ${usd(d.base)}. ${d.guar?`The formula gives ${usd(d.base+d.Rh*(d.std-d.Ha))}, below the base, so C<sub>dl</sub> = <b>${usd(d.Cdl)}</b>.`:`Bonus = ${usd(d.Rh)} × (${fmt(d.std,4)} − ${d.Ha}) = ${usd(d.bonus)}. C<sub>dl</sub> = <b>${usd(d.Cdl)}</b>.`}`},
+  {title:"Bonus amount",kind:"num",q:"How much did the stitcher earn above the guaranteed base? Enter 0 if nothing.",formula:"Bonus = C<sub>dl</sub> − H<sub>a</sub> × R<sub>h</sub>",guide:`${usd(d.Cdl)} − ${usd(d.base)}`,ans:d.bonus,rel:.005,abs:.01,explain:`${usd(d.Cdl)} − ${usd(d.base)} = <b>${usd(d.bonus)}</b>`}];}},
+{ico:"🪑",name:"Fringe benefits",ar:"المزايا الإضافية",topic:"Legally required and voluntary fringes",
+ intro:"An assembler at a Tulkarm furniture factory earns an hourly wage for 2,080 paid hours a year. The company uses the textbook fringe items.",introAr:"عامل تجميع في مصنع أثاث في طولكرم يتقاضى أجراً بالساعة مقابل 2,080 ساعة مدفوعة في السنة. تستخدم الشركة بنود المزايا الواردة في الكتاب.",
+ gen(){const Rh=rint(52,72)/4,wages=2080*Rh,fica=0.076*wages,wc=rint(30,70)*10,un=rint(20,50)*10,med=rint(40,120)*10,uni=rint(3,10)*10,fr=fica+wc+un+med+uni;const legal=pick(["FICA (Social Security)","Workers' compensation","Unemployment insurance","Medicare"]);const vol=shuffle(["Medical/dental insurance","Life/disability insurance","Pension plan","Uniforms and tools","Stock purchase plan","Holidays and vacation pay"]).slice(0,3);return {Rh,wages,fica,wc,un,med,uni,fr,pct:fr/wages*100,perH:(wages+fr)/2080,legal,vol};},
+ data(d){return `<h3>Employee data</h3><ul><li>${g('hourly','Hourly rate')}: ${usd(d.Rh)}</li><li>Paid hours: 2,080 a year</li></ul><h3>${g('fringe','Fringe')} items (annual)</h3><ul><li>${g('fica','FICA')}: 7.6% of wages</li><li>Workers' compensation: ${usd(d.wc)}</li><li>Unemployment insurance: ${usd(d.un)}</li><li>Medical insurance: ${usd(d.med)}</li><li>Uniforms and tools: ${usd(d.uni)}</li></ul>`;},
+ steps(d){return [
+  {title:"Legally required",kind:"mcq",q:`Which fringe item is ${g('legal','legally required')}?`,guide:"Legally required: FICA, workers' compensation, unemployment insurance, Medicare.",hintText:"The law sets these, whatever the contract says.",opts:shuffle([{t:d.legal,ok:true},...d.vol.map(v=>({t:v,ok:false,why:`This one is ${"voluntary or contractual"}.`}))]),explain:`<b>${d.legal}</b> is legally required. The others are ${g('voluntary','voluntary or contractual')}.`},
+  {title:"Annual wages",kind:"num",q:"Find the annual wages.",formula:"Wages = paid hours × R<sub>h</sub>",guide:`2,080 × ${usd(d.Rh)}`,ans:d.wages,rel:.002,abs:.5,explain:`2,080 × ${usd(d.Rh)} = <b>${usd(d.wages)}</b>`},
+  {title:"FICA",kind:"num",q:`Find the annual ${g('fica','FICA')} cost.`,formula:"FICA = 7.6% × wages",guide:`0.076 × ${usd(d.wages)}`,ans:d.fica,rel:.004,abs:.5,traps:[[7.6*d.wages,"Write 7.6% as 0.076."]],explain:`0.076 × ${usd(d.wages)} = <b>${usd(d.fica)}</b>`},
+  {title:"Total fringes",kind:"num",q:"Find the total annual fringe cost.",formula:"Total = FICA + workers' comp + unemployment + medical + uniforms",guide:`${usd(d.fica)} + ${usd(d.wc)} + ${usd(d.un)} + ${usd(d.med)} + ${usd(d.uni)}`,ans:d.fr,rel:.004,abs:.5,traps:[[d.fr-d.fica,"Include FICA."]],explain:`<b>${usd(d.fr)}</b>`},
+  {title:"Fringe share",kind:"num",q:"Fringes equal what percent of wages?",formula:"Fringe % = fringes / wages × 100",guide:`${usd(d.fr)} / ${usd(d.wages)} × 100`,ans:d.pct,rel:.006,traps:[[d.pct/100,"Multiply by 100 for percent."]],explain:`${usd(d.fr)} / ${usd(d.wages)} × 100 = <b>${fmt(d.pct,1)}%</b>. The slide notes fringes run up to 30% of wages.`},
+  {title:"Cost per paid hour",kind:"num",q:"Find the wage plus fringe cost per paid hour.",formula:"Cost per paid hour = (wages + fringes) / 2,080",guide:`(${usd(d.wages)} + ${usd(d.fr)}) / 2,080`,ans:d.perH,rel:.004,abs:.01,traps:[[d.fr/2080,"Add the wages too."]],explain:`(${usd(d.wages)} + ${usd(d.fr)}) / 2,080 = <b>${usd(d.perH)}/h</b>. Level 5 divides by chargeable hours instead, which raises the rate.`}];}},
+{ico:"🔌",name:"Gross hourly cost",ar:"التكلفة الإجمالية للساعة",topic:"The full GHC table (Table 2.5)",
+ intro:"An electronics assembler in Ramallah needs a gross hourly cost for job estimates. Build the full GHC table.",introAr:"عامل تجميع إلكترونيات في رام الله يحتاج إلى تكلفة إجمالية للساعة لتقدير الوظائف. ابنِ جدول التكلفة الإجمالية كاملاً.",
+ gen(){for(;;){const Rh=rint(48,72)/4,OT=rint(12,30)*8,hol=rint(5,10),vac=rint(8,15),nc=pick([3,4,5,6]);const ncH=nc/100*2080,nonW=8*(hol+vac)+ncH,ch=2080+OT-nonW;if(ch<1965||ch>2042)continue;const reg=2080*Rh,otPay=OT*Rh*1.5,wages=reg+otPay,fica=0.076*wages,wc=rint(35,60)*10,un=rint(25,40)*10,med=rint(45,80)*10,uni=rint(3,8)*10,fr=fica+wc+un+med+uni,ghc=(wages+fr)/ch;return {Rh,OT,hol,vac,nc,ncH,nonW,ch,reg,otPay,wages,fica,wc,un,med,uni,fr,ghc,above:(ghc/Rh-1)*100};}},
+ data(d){return `<h3>Employee data</h3><ul><li>Base wage: ${usd(d.Rh)}/h</li><li>Regular paid clock hours: 2,080</li><li>Planned overtime: ${d.OT} h, paid at 150% (${g('overtimeprem','overtime premium')} 50%)</li><li>Holidays: ${d.hol} days, vacation: ${d.vac} days (8 h a day)</li><li>${g('nonchargeable','Nonchargeable')} time: ${d.nc}% of regular hours</li></ul><h3>${g('fringe','Fringe')} items (annual)</h3><ul><li>${g('fica','FICA')}: 7.6% of total wages</li><li>Workers' compensation: ${usd(d.wc)}</li><li>Unemployment insurance: ${usd(d.un)}</li><li>Medical insurance: ${usd(d.med)}</li><li>Uniforms and tools: ${usd(d.uni)}</li></ul><p class="small">Slide check: $34,336 wages + $3,960 fringes = $38,296. $38,296 / 2,040 chargeable hours = $18.77/h, 29% above the $14.50 base.</p>`;},
+ steps(d){return [
+  {title:"Regular wages",kind:"num",q:"Find the pay for regular clock hours.",formula:"Regular pay = 2,080 × R<sub>h</sub>",guide:`2,080 × ${usd(d.Rh)}`,ans:d.reg,rel:.002,abs:.5,explain:`<b>${usd(d.reg)}</b>`},
+  {title:"Overtime pay",kind:"num",q:"Find the overtime pay, including the 50% premium.",formula:"Overtime pay = OT hours × R<sub>h</sub> × 1.5",guide:`${d.OT} × ${usd(d.Rh)} × 1.5`,ans:d.otPay,rel:.003,abs:.5,traps:[[d.OT*d.Rh,"Add the 50% premium."],[d.OT*d.Rh*0.5,"That is the premium only. Add the base overtime pay."]],explain:`${d.OT} × ${usd(d.Rh)} = ${usd(d.OT*d.Rh)}, premium ${usd(d.OT*d.Rh*0.5)}. Total <b>${usd(d.otPay)}</b>`},
+  {title:"Total wages",kind:"num",q:"Find the total annual wages.",formula:"Total wages = regular pay + overtime pay",guide:`${usd(d.reg)} + ${usd(d.otPay)}`,ans:d.wages,rel:.002,abs:.5,explain:`<b>${usd(d.wages)}</b>`},
+  {title:"Non-working hours",kind:"num",q:"Find the paid non-working hours: holidays, vacation, and nonchargeable time.",formula:"Non-working = 8 × (holiday days + vacation days) + nonchargeable % × 2,080",guide:`8 × (${d.hol} + ${d.vac}) + ${d.nc/100} × 2,080`,ans:d.nonW,rel:.003,abs:.6,traps:[[d.hol+d.vac+d.ncH,"Convert days to hours: 8 hours a day."]],explain:`${8*(d.hol+d.vac)} + ${fmt(d.ncH,1)} = <b>${fmt(d.nonW,1)} h</b>`},
+  {title:"Chargeable hours",kind:"num",q:`Find the ${g('chargeable','chargeable hours')}.`,formula:"Chargeable = 2,080 + overtime hours − non-working hours",guide:`2,080 + ${d.OT} − ${fmt(d.nonW,1)}`,ans:d.ch,rel:.002,abs:.6,traps:[[2080-d.nonW,"Add the overtime hours."]],explain:`2,080 + ${d.OT} − ${fmt(d.nonW,1)} = <b>${fmt(d.ch,1)} h</b>`},
+  {title:"Total fringes",kind:"num",q:"Find the total annual fringe cost.",formula:"Fringes = 7.6% × total wages + other items",guide:`0.076 × ${usd(d.wages)} + ${usd(d.wc)} + ${usd(d.un)} + ${usd(d.med)} + ${usd(d.uni)}`,ans:d.fr,rel:.004,abs:.5,traps:[[0.076*d.reg+d.wc+d.un+d.med+d.uni,"FICA applies to total wages, overtime included."]],explain:`FICA = ${usd(d.fica)}. Fringes = <b>${usd(d.fr)}</b>`},
+  {title:"Gross hourly cost",kind:"num",q:`Find the ${g('ghc','gross hourly cost')}.`,formula:"GHC = (total wages + fringes) / chargeable hours",guide:`(${usd(d.wages)} + ${usd(d.fr)}) / ${fmt(d.ch,1)}`,ans:d.ghc,rel:.004,abs:.01,traps:[[(d.wages+d.fr)/2080,"Divide by chargeable hours, not paid clock hours."],[d.wages/d.ch,"Add the fringes."]],explain:`(${usd(d.wages)} + ${usd(d.fr)}) / ${fmt(d.ch,1)} = <b>${usd(d.ghc)}/h</b>`},
+  {title:"Increase over base",kind:"num",q:"By what percent does the GHC exceed the base wage?",formula:"Increase = (GHC / base − 1) × 100",guide:`(${usd(d.ghc)} / ${usd(d.Rh)} − 1) × 100`,ans:d.above,rel:.012,abs:.2,traps:[[d.ghc/d.Rh*100,"Subtract 1 before multiplying by 100."]],explain:`(${usd(d.ghc)} / ${usd(d.Rh)} − 1) × 100 = <b>${fmt(d.above,1)}%</b>`}];}}
+];
+
+const SECTIONS={
+ ws:{num:"2.3.3",title:"Work Sampling",ar:"معاينة العمل",blurb:"Random observations, confidence intervals, sample size, sampling error, and standard time.",levels:WS},
+ wage:{num:"2.4",title:"Wage and Fringe Rates",ar:"الأجور والمزايا الإضافية",blurb:"Hourly rates, day work, piece rates, incentive pay, fringes, and the gross hourly cost.",levels:W}
+};
+
+
+/* ================= formula sheet ================= */
+const FORM={
+ ws:[["Proportion and error",[
+   ["p' = N<sub>i</sub> / N","Eq. 2.7","N<sub>i</sub>: observations of the element. N: total observations."],
+   ["σ<sub>p'</sub> = √( p'(1 − p') / N )","Eq. 2.8","Standard error of p'."],
+   ["I = 2Z √( p'(1 − p') / N )","Eq. 2.10","Full width of the confidence interval."],
+   ["Limits = p' ± I / 2","","Lower and upper limits of the interval."]]],
+  ["Confidence and sample size",[
+   ["90% → Z = 1.645 &nbsp; 95% → Z = 1.960 &nbsp; 99% → Z = 2.576","","90% is the standard for work sampling."],
+   ["N = 4Z² p'(1 − p') / I²","Eq. 2.11","Round up. The largest N among the elements sets the study size."],
+   ["Relative accuracy = (I / 2) / p' × 100","","In percent."]]],
+  ["Hours and standard time",[
+   ["Total hours = stations × hours per shift × days","",""],
+   ["Element hours = p' × total hours","","Idle hours use the idle p'."],
+   ["Normal time = (total hours − idle hours) / units","","Per unit."],
+   ["Standard time = normal time × 100 / (100 − PF&amp;D)","","PF&amp;D as a percent of the shift. × 60 for minutes."]]]],
+ wage:[["Hourly rate",[
+   ["Monthly = annual salary / 12","",""],
+   ["Weekly = monthly × 12 / 52","",""],
+   ["Monthly hours = 52 × 40 / 12 = 173.3","",""],
+   ["R<sub>h</sub> = monthly salary / 173.3","","Same as annual salary / 2,080."]]],
+  ["Direct labor cost",[
+   ["C<sub>dl</sub> = H<sub>a</sub> × R<sub>h</sub>","Eq. 2.13","Wage-only method. H<sub>a</sub>: actual hours. R<sub>h</sub>: rate per hour."],
+   ["C<sub>dl</sub> = N<sub>p</sub> × R<sub>p</sub>","Eq. 2.14","Pure piece rate. N<sub>p</sub>: pieces. R<sub>p</sub>: rate per piece."],
+   ["C<sub>dl</sub> = H<sub>a</sub>R<sub>h</sub> + R<sub>h</sub>(H<sub>s</sub>N<sub>p</sub> − H<sub>a</sub>), with C<sub>dl</sub> ≥ H<sub>a</sub>R<sub>h</sub>","Eq. 2.15","Incentive with guaranteed base. H<sub>s</sub>: standard hours per piece."],
+   ["E = N<sub>p</sub> × (H<sub>s</sub> / H<sub>a</sub>) × 100","Eq. 2.17","Labor efficiency, in percent."]]],
+  ["Fringes and gross hourly cost",[
+   ["Overtime pay = overtime hours × R<sub>h</sub> × 1.5","","Includes the 50% premium."],
+   ["Non-working hours = 8 × (holiday + vacation days) + nonchargeable % × 2,080","",""],
+   ["Chargeable hours = 2,080 + overtime hours − non-working hours","",""],
+   ["Fringes = 7.6% × total wages + other fringe items","","FICA plus workers' comp, unemployment, medical, uniforms."],
+   ["GHC = (total wages + fringes) / chargeable hours","","Slide: $38,296 / 2,040 = $18.77/h."]]]]
+};
+let fTab='ws',fReturn=null;
+function drawForm(){
+  document.querySelectorAll('.ftabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.f===fTab));
+  $('fBody').innerHTML=FORM[fTab].map(([h,rows])=>`<div class="fgroup"><h3>${h}</h3>${rows.map(([f,eq,w])=>`<div class="frow"><div class="f">${f}</div><div class="eq">${eq}</div>${w?`<div class="w">${w}</div>`:''}</div>`).join('')}</div>`).join('');
+}
+function openForm(){fReturn=document.activeElement;fTab=cur?cur.s:(app.dataset.sec||fTab);drawForm();$('fsheet').hidden=false;$('fClose').focus();}
+function closeForm(){$('fsheet').hidden=true;if(fReturn&&fReturn.focus)fReturn.focus();}
+$('formBtn').onclick=openForm;
+$('fClose').onclick=closeForm;
+$('fsheet').addEventListener('click',e=>{if(e.target.id==='fsheet')closeForm();});
+document.querySelectorAll('.ftabs button').forEach(b=>b.onclick=()=>{fTab=b.dataset.f;drawForm();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('fsheet').hidden)closeForm();});
+/* ================= teacher mode ================= */
+let teacher=false,taps=0,tapTimer=null;
+$('brandBtn').onclick=()=>{
+  taps++;clearTimeout(tapTimer);
+  if(taps>=3){taps=0;openCode();return;}
+  tapTimer=setTimeout(()=>{taps=0;home();},450);
+};
+function openCode(){$('codeIn').value='';$('codeMsg').textContent='';$('codeBox').hidden=false;$('codeIn').focus();}
+function closeCode(){$('codeBox').hidden=true;$('brandBtn').focus();}
+function tryCode(){
+  if($('codeIn').value.trim()==='2225'){teacher=true;document.body.classList.add('teacher');closeCode();refresh();}
+  else{$('codeMsg').textContent='Wrong code.';$('codeIn').select();}
+}
+$('codeOk').onclick=tryCode;$('codeCancel').onclick=closeCode;
+$('codeIn').addEventListener('keydown',e=>{if(e.key==='Enter')tryCode();if(e.key==='Escape')closeCode();});
+$('codeBox').addEventListener('click',e=>{if(e.target.id==='codeBox')closeCode();});
+$('tExit').onclick=()=>{teacher=false;document.body.classList.remove('teacher');if(cur)cur.st.forEach(t=>t.tab='q');refresh();};
+function refresh(){if(cur)renderSteps();else if(app.dataset.sec&&app.querySelector('.levels'))section(app.dataset.sec);else home();}
+function ansText(v){const a=Math.abs(v);return a>=1000?fmt(v,1):a>=100?fmt(v,2):a>=1?fmt(v,4):fmt(v,5);}
+
+/* ================= screens ================= */
+const app=$('app');let cur=null;
+const key=(s,i)=>`${s}-${i+1}`;
+const starsOf=p=>p==null?0:p>=85?3:p>=60?2:1;
+const starHTML=n=>`<span class="stars" aria-label="${n} of 3 stars">${'★'.repeat(n)}<span class="off">${'★'.repeat(3-n)}</span></span>`;
+const unlocked=(s,i)=>teacher||store.unlock||i===0||store.best[key(s,i-1)]!=null;
+function totalXP(){return sum(Object.values(store.best));}
+function secStars(s){return sum(SECTIONS[s].levels.map((_,i)=>starsOf(store.best[key(s,i)])));}
+
+function home(){
+  cur=null;window.scrollTo(0,0);
+  app.innerHTML=`<div class="hero"><div><h1>Labor Analysis Lab</h1><p style="margin-top:.5rem">Chapter 2 practice. Pick a section and climb five levels, from full guidance to no guidance.</p><p class="small">Tap any underlined word for its Arabic meaning. Every attempt gives new numbers.</p></div>
+  <div class="xp"><strong>${totalXP()}</strong><span class="small">XP earned</span></div></div>
+  <div class="sections">${Object.entries(SECTIONS).map(([k,s])=>{const st=secStars(k);return `<button class="sec" data-s="${k}"><div class="num">${s.num}</div><div class="nm">${s.title}</div><div class="ar small">${s.ar}</div><p>${s.blurb}</p><div class="bar"><i style="width:${st/15*100}%"></i></div><span class="small">${st} of 15 stars</span></button>`;}).join('')}</div>
+  <h2 style="margin-top:2rem">How the levels work</h2>
+  <div class="ladder"><div class="m1"><b>Level 1</b>Formula and numbers shown</div><div class="m2"><b>Level 2</b>Formula shown</div><div class="m3"><b>Level 3</b>Hint on request</div><div class="m4"><b>Level 4</b>Hint after a miss</div><div class="m5"><b>Level 5</b>No guidance</div></div>
+  <p class="small">Points per step: 100% on the first try, 50% on the second, 25% after that. A hint costs 25%. Stars: 3 for 85% or more, 2 for 60% or more, 1 for finishing. Finish a level to open the next.</p>`;
+  app.querySelectorAll('.sec').forEach(b=>b.onclick=()=>section(b.dataset.s));
+}
+function section(s){
+  cur=null;window.scrollTo(0,0);const S=SECTIONS[s];app.dataset.sec=s;
+  app.innerHTML=`<div class="top"><button class="pill" id="backBtn">All sections</button><span class="grow"></span><span class="chip"><b>${secStars(s)}</b> of 15 stars</span></div>
+  <h1>${S.num} ${S.title}</h1><div class="ar small" style="margin-top:.2rem">${S.ar}</div>
+  <div class="levels">${S.levels.map((L,i)=>{const b=store.best[key(s,i)],open=unlocked(s,i);return `<button class="lvl ${b!=null?'done':''}" data-i="${i}" aria-disabled="${!open}"><span class="n">${open?i+1:'🔒'}</span><span><span class="t">Level ${i+1}: ${L.name}</span><br><span class="meta"><span>${L.ico} ${L.topic}</span><span class="tag ${MODES[i]}">${LV[MODES[i]]}</span></span></span><span>${starHTML(starsOf(b))}${b!=null?`<br><span class="small">Best ${b}%</span>`:''}</span></button>`;}).join('')}</div>
+  ${teacher?`<label class="toggle"><input type="checkbox" id="unlockAll" ${store.unlock?'checked':''}> Keep all levels open on this device after I exit teacher mode</label>`:''}`;
+  $('backBtn').onclick=home;
+  if($('unlockAll'))$('unlockAll').onchange=e=>{store.unlock=e.target.checked;save();section(s);};
+  app.querySelectorAll('.lvl').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(!unlocked(s,i)){b.animate?.([{transform:'translateX(-4px)'},{transform:'translateX(4px)'},{transform:'none'}],{duration:180});return;}start(s,i);});
+}
+function start(s,i){
+  const L=SECTIONS[s].levels[i],d=L.gen(),steps=L.steps(d);
+  cur={s,i,L,d,mode:MODES[i],steps,st:steps.map(()=>({tries:0,done:false,ok:false,pts:0,hint:false,val:'',sel:null,msg:''})),open:0,checked:false,streak:0};
+  renderLevel();window.scrollTo(0,0);
+}
+function renderLevel(){
+  const {s,i,L,d,mode}=cur,S=SECTIONS[s];
+  app.innerHTML=`<div class="top"><button class="pill" id="backBtn">${S.num} levels</button><span class="grow"></span><span class="chip" id="streak">Streak <b>0</b></span><span class="tag ${mode}">${LV[mode]}</span></div>
+  <div class="casehead"><span class="ico">${L.ico}</span><div><h2>Level ${i+1}: ${L.name}</h2><div class="ar small">${L.ar}</div></div></div>
+  <p>${L.intro}</p><p class="ar small" lang="ar">${L.introAr}</p>
+  <div class="mode ${mode}">${MODE_NOTE[mode]}</div>
+  <section class="data" aria-label="Level data">${L.data(d)}</section>
+  <div id="steps"></div><div id="summary"></div>`;
+  $('backBtn').onclick=()=>section(s);
+  renderSteps();
+}
+function renderSteps(focus){
+  const {mode,steps}=cur,box=$('steps');
+  const n=mode==='none'||teacher?steps.length:Math.min(cur.open+1,steps.length);
+  let h='';for(let k=0;k<n;k++)h+=stepHTML(k);
+  if(mode==='none'&&!cur.checked)h+=`<div class="row" style="justify-content:flex-start"><button class="btn" id="checkAll">Check all answers</button></div>`;
+  box.innerHTML=h;wire();
+  const sk=$('streak');if(sk)sk.innerHTML=`Streak <b>${cur.streak}</b>${cur.streak>=3?' 🔥':''}`;
+  if(cur.st.every(t=>t.done))summary();
+  if(focus!=null){const el=$('step'+focus);if(el){el.scrollIntoView({behavior:'smooth',block:'start'});const inp=el.querySelector('input,.opt');if(inp)inp.focus({preventScroll:true});}}
+}
+function guideBox(s,withGuide){return `<div class="guide">${s.formula?`<div class="formula">${s.formula}</div>`:''}${s.hintText?`<div>${s.hintText}</div>`:''}${withGuide&&s.guide?`<div>${s.guide}</div>`:''}</div>`;}
+function stepHTML(k){
+  const {mode,steps,st}=cur,s=steps[k],t=st[k];
+  let h=`<article class="step ${t.done?(t.ok?'ok':'miss'):''}" id="step${k}"><div class="sn">Step ${k+1} of ${steps.length}</div><h3>${s.title}</h3>`;
+  if(teacher){
+    const tab=t.tab||'q';
+    h+=`<div class="stabs" role="tablist"><button role="tab" data-tab="${k}:q" aria-selected="${tab==='q'}">Question</button><button role="tab" data-tab="${k}:a" aria-selected="${tab==='a'}">Answer</button></div>`;
+    if(tab==='a'){
+      const val=s.kind==='num'?ansText(s.ans):s.opts.find(o=>o.ok).t;
+      return h+`<p>${s.q}</p><div class="akey"><div class="small">Correct answer</div><div class="val">${val}</div><div class="formula" style="margin-top:.5rem;font-size:1rem">${s.explain}</div></div></article>`;
+    }
+  }
+  h+=`<p>${s.q}</p>`;
+  if(mode==='full')h+=guideBox(s,true);
+  else if(mode==='formula'){if(s.formula||s.hintText)h+=guideBox(s,false);}
+  else if(mode==='hint'||mode==='late'){
+    if(t.hint)h+=guideBox(s,false);
+    else if(!t.done&&(s.formula||s.hintText)&&(mode==='hint'||t.tries>=1))h+=`<p><button class="link" data-hint="${k}">Show hint (costs 25%)</button></p>`;
+  }
+  const locked=t.done||(mode==='none'&&cur.checked);
+  if(s.kind==='num'){
+    h+=`<div class="ans"><label class="small" for="in${k}">Your answer</label><input id="in${k}" inputmode="decimal" autocomplete="off" value="${t.val}" ${locked?'disabled':''}>`;
+    if(mode!=='none'&&!t.done)h+=`<button class="btn" data-check="${k}">Check</button>`;
+    h+=`</div>`;
+  }else{
+    h+=`<div class="opts" role="radiogroup">${s.opts.map((o,j)=>{let oc='';if(locked){if(o.ok)oc='right';else if(t.sel===j)oc='wrong';}else if(t.sel===j)oc='sel';return `<button class="opt ${oc}" role="radio" aria-checked="${t.sel===j}" data-opt="${k}:${j}" ${locked?'disabled':''}>${o.t}</button>`;}).join('')}</div>`;
+  }
+  if(t.msg)h+=`<div class="fb ${t.done&&t.ok?'good':'bad'}">${t.msg}</div>`;
+  if(mode!=='none'&&!t.done&&t.tries>=2)h+=`<p style="margin-top:.5rem"><button class="link" data-reveal="${k}">Show the solution</button></p>`;
+  if(t.done)h+=`<div class="explain"><div class="formula">${s.explain}</div></div>`;
+  return h+`</article>`;
+}
+function wire(){
+  app.querySelectorAll('[data-check]').forEach(b=>b.onclick=()=>checkNum(+b.dataset.check));
+  app.querySelectorAll('input[id^=in]').forEach(inp=>{const k=+inp.id.slice(2);inp.oninput=()=>cur.st[k].val=inp.value;inp.onkeydown=e=>{if(e.key==='Enter'&&cur.mode!=='none')checkNum(k);};});
+  app.querySelectorAll('[data-opt]').forEach(b=>b.onclick=()=>{const [k,j]=b.dataset.opt.split(':').map(Number);cur.st[k].sel=j;if(cur.mode==='none')renderSteps();else checkOpt(k,j);});
+  app.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{const [k,tab]=b.dataset.tab.split(':');cur.st[+k].tab=tab;renderSteps();});
+  app.querySelectorAll('[data-hint]').forEach(b=>b.onclick=()=>{cur.st[+b.dataset.hint].hint=true;renderSteps();});
+  app.querySelectorAll('[data-reveal]').forEach(b=>b.onclick=()=>{const k=+b.dataset.reveal,t=cur.st[k];t.done=true;t.ok=false;t.pts=0;cur.streak=0;t.msg='Solution shown. Study the working, then go on.';advance(k);});
+  const ca=$('checkAll');if(ca)ca.onclick=checkAll;
+}
+const ptsFor=(tries,hint)=>(tries===1?1:tries===2?.5:.25)*(hint?.75:1);
+function judgeNum(k,raw){
+  const s=cur.steps[k],v=parseNum(raw);
+  if(Number.isNaN(v))return {ok:false,msg:'Enter a number, such as 0.125 or 1534.',noTry:true};
+  if(near(v,s.ans,s.rel,s.abs||0))return {ok:true};
+  for(const [tv,m] of (s.traps||[]))if(near(v,tv,.012,1e-4)&&!near(tv,s.ans,s.rel,s.abs||0))return {ok:false,msg:m};
+  return {ok:false,msg:'Not yet. Check your numbers and your arithmetic.'};
+}
+function correct(t){t.done=true;t.ok=true;t.pts=ptsFor(t.tries,t.hint);if(t.tries===1)cur.streak++;else cur.streak=0;t.msg=t.tries===1?(cur.streak>=3?`Correct. ${cur.streak} in a row.`:'Correct.'):`Correct on attempt ${t.tries}.`;}
+function checkNum(k){
+  const t=cur.st[k];t.val=$('in'+k).value;const j=judgeNum(k,t.val);
+  if(j.noTry){t.msg=j.msg;renderSteps();return;}
+  t.tries++;
+  if(j.ok){correct(t);advance(k);}else{cur.streak=0;t.msg=j.msg;renderSteps();$('in'+k)?.focus();}
+}
+function checkOpt(k,j){const t=cur.st[k],o=cur.steps[k].opts[j];t.tries++;if(o.ok){correct(t);advance(k);}else{cur.streak=0;t.msg=o.why||'Not yet.';renderSteps();}}
+function advance(k){if(cur.open===k)cur.open=Math.min(k+1,cur.steps.length);renderSteps(k+1<cur.steps.length?k+1:null);}
+function checkAll(){
+  const empty=cur.steps.filter((s,k)=>s.kind==='num'?Number.isNaN(parseNum(cur.st[k].val)):cur.st[k].sel==null).length;
+  if(empty&&!cur.warned){cur.warned=true;const b=$('checkAll');if(b&&!b.nextElementSibling)b.insertAdjacentHTML('afterend',`<span class="warn">You left ${empty} step(s) empty. Press again to check anyway.</span>`);return;}
+  let run=0;cur.streak=0;
+  cur.steps.forEach((s,k)=>{const t=cur.st[k];t.done=true;
+    if(s.kind==='num'){const j=judgeNum(k,t.val);t.ok=!!j.ok;t.msg=j.ok?'Correct.':(Number.isNaN(parseNum(t.val))?'No answer.':'Incorrect. '+(j.msg&&!j.msg.startsWith('Not yet')?j.msg:''));}
+    else{const o=t.sel!=null?s.opts[t.sel]:null;t.ok=!!(o&&o.ok);t.msg=t.ok?'Correct.':o?'Incorrect. '+(o.why||''):'No answer.';}
+    t.pts=t.ok?1:0;run=t.ok?run+1:0;cur.streak=Math.max(cur.streak,run);});
+  cur.checked=true;renderSteps();$('summary').scrollIntoView({behavior:'smooth'});
+}
+function summary(){
+  const {s,i}=cur,S=SECTIONS[s];
+  const pts=sum(cur.st.map(t=>t.pts)),pct=Math.round(pts/cur.steps.length*100),n=starsOf(pct),k=key(s,i);
+  const prev=store.best[k],improved=prev==null||pct>prev;if(improved){store.best[k]=pct;save();}
+  const first=cur.st.filter(t=>t.ok&&t.tries<=1).length;
+  const msg=pct>=85?'Strong work.':pct>=60?'Good progress. Review the steps marked in red.':'Review the worked solutions, then try again with new numbers.';
+  const nxt=i<S.levels.length-1;
+  $('summary').innerHTML=`<div class="summary">${starHTML(n)}<div class="big" style="margin-top:.3rem">${pct}%</div><p style="margin:.5rem auto">${cur.mode==='none'?`${first} of ${cur.steps.length} correct.`:`${first} of ${cur.steps.length} correct on the first try.`} ${msg}${improved&&prev!=null?' New best score.':''}</p>
+  <div class="row"><button class="btn ghost" id="again">Try new numbers</button>${nxt?`<button class="btn" id="next">Level ${i+2}</button>`:''}<button class="btn ghost" id="toSec">${S.num} levels</button></div></div>`;
+  $('again').onclick=()=>start(s,i);$('toSec').onclick=()=>section(s);if(nxt)$('next').onclick=()=>start(s,i+1);
+}
+home();
+</script>
+</body>
+</html>
