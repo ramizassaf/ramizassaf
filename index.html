@@ -183,6 +183,24 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: .82rem; color: var(--muted); margin-top: 8px; }
 .legend i { display: inline-block; width: 18px; height: 3px; border-radius: 2px; vertical-align: middle; margin-inline-end: 6px; }
 
+/* Supervision */
+.sup-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+@media (max-width: 600px) { .sup-stats { grid-template-columns: 1fr; } }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+.chip { padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--muted); font: inherit; font-size: .86rem; font-weight: 500; cursor: pointer; }
+.chip:hover { color: var(--text); border-color: var(--accent); }
+.chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+:root[data-theme="dark"] .chip.on { color: #0f1113; }
+.chip .c { opacity: .7; margin-inline-start: 4px; }
+.sup-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+.sup { padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; }
+.sup h3 { margin: 0; font-size: 1rem; line-height: 1.4; }
+.sup .who { font-size: .9rem; color: var(--muted); }
+.sup .who b { color: var(--text); font-weight: 600; }
+.sup .meta { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-top: auto; padding-top: 6px; }
+.role-badge { font-size: .76rem; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+.role-badge.co { background: var(--bg-2); color: var(--muted); border: 1px solid var(--line); }
+
 /* Skills */
 .skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
 .skill-grid h3 { margin: 0 0 12px; font-size: 1rem; }
@@ -205,7 +223,7 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
 /* Print: one clean CV */
 @media print {
   @page { margin: 14mm; }
-  nav, .cta, .avatar-badge, #labs, #contact form, .proj-links, .hero::before, .no-print { display: none !important; }
+  nav, .cta, .avatar-badge, #labs, .chips, #contact form, .proj-links, .hero::before, .no-print { display: none !important; }
   body { background: #fff; color: #000; font-size: 10.5pt; }
   .reveal { opacity: 1; transform: none; }
   section.block { padding: 10px 0; background: none; }
@@ -229,6 +247,7 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
     <div class="nav-links">
       <a href="#about" data-i18n="nav_about">About</a>
       <a href="#experience" data-i18n="nav_exp">Experience</a>
+      <a href="#supervision" data-i18n="nav_sup">Supervision</a>
       <a href="#projects" data-i18n="nav_proj">Projects</a>
       <a href="#labs" data-i18n="nav_labs">Live demos</a>
       <a href="#skills" data-i18n="nav_skills">Skills</a>
@@ -262,10 +281,10 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
     </div>
 
     <div class="stats">
-      <div class="stat reveal"><div class="num" data-count="6">0</div><div class="lbl" data-i18n="st1">Open-source projects</div></div>
-      <div class="stat reveal"><div class="num" data-count="2">0</div><div class="lbl" data-i18n="st2">Interactive live demos</div></div>
-      <div class="stat reveal"><div class="num" data-count="1">0</div><div class="lbl" data-i18n="st3">Technical white paper</div></div>
-      <div class="stat reveal"><div class="num" data-count="2">0</div><div class="lbl" data-i18n="st4">Working languages</div></div>
+      <div class="stat reveal"><div class="num" data-count="6">6</div><div class="lbl" data-i18n="st1">Open-source projects</div></div>
+      <div class="stat reveal"><div class="num" data-count="2">2</div><div class="lbl" data-i18n="st2">Interactive live demos</div></div>
+      <div class="stat reveal"><div class="num" data-count="1">1</div><div class="lbl" data-i18n="st3">Technical white paper</div></div>
+      <div class="stat reveal"><div class="num" data-count="13">13</div><div class="lbl" data-i18n="st4">Theses supervised</div></div>
     </div>
   </div>
 </header>
@@ -324,10 +343,27 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
   </div>
 </section>
 
-<section class="block alt" id="projects">
+<section class="block alt" id="supervision">
   <div class="container">
     <div class="sec-head reveal">
-      <div class="kicker">03 / projects</div>
+      <div class="kicker">03 / supervision</div>
+      <h2 data-i18n="sup_h">Thesis supervision</h2>
+      <p data-i18n="sup_p">Theses I supervised or co-supervised at An-Najah National University, in AI adoption, operations, quality, and sustainability.</p>
+    </div>
+    <div class="sup-stats">
+      <div class="stat reveal"><div class="num" data-count="13">13</div><div class="lbl" data-i18n="ss1">Theses supervised</div></div>
+      <div class="stat reveal"><div class="num" data-count="5">5</div><div class="lbl" data-i18n="ss2">On AI and machine learning</div></div>
+      <div class="stat reveal"><div class="num" data-count="2017">2017</div><div class="lbl" data-i18n="ss3">Supervising since</div></div>
+    </div>
+    <div class="chips" id="supChips"></div>
+    <div class="sup-list" id="supList"></div>
+  </div>
+</section>
+
+<section class="block" id="projects">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div class="kicker">04 / projects</div>
       <h2 data-i18n="proj_h">Selected projects</h2>
       <p data-i18n="proj_p">Open-source work in engineering economics, statistics, and data analysis.</p>
     </div>
@@ -378,10 +414,10 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
   </div>
 </section>
 
-<section class="block" id="labs">
+<section class="block alt" id="labs">
   <div class="container">
     <div class="sec-head reveal">
-      <div class="kicker">04 / live demos</div>
+      <div class="kicker">05 / live demos</div>
       <h2 data-i18n="labs_h">Try my work, right here</h2>
       <p data-i18n="labs_p">Two of my projects running live in your browser. Change the inputs and watch the results update.</p>
     </div>
@@ -433,10 +469,10 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
   </div>
 </section>
 
-<section class="block alt" id="skills">
+<section class="block" id="skills">
   <div class="container">
     <div class="sec-head reveal">
-      <div class="kicker">05 / skills</div>
+      <div class="kicker">06 / skills</div>
       <h2 data-i18n="skills_h">Skills</h2>
     </div>
     <div class="skill-grid">
@@ -448,10 +484,10 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
   </div>
 </section>
 
-<section class="block" id="contact">
+<section class="block alt" id="contact">
   <div class="container">
     <div class="sec-head reveal">
-      <div class="kicker">06 / contact</div>
+      <div class="kicker">07 / contact</div>
       <h2 data-i18n="contact_h">Let's work together</h2>
       <p data-i18n="contact_p">Send a message about roles, projects, or collaboration. I reply within 2 working days.</p>
     </div>
@@ -487,7 +523,7 @@ const AR = {
   open: "متاح لفرص جديدة", iam: "أنا",
   lead: "مهندس صناعي أحوّل البيانات إلى قرارات. أبني أدوات في الاقتصاد الهندسي والإحصاء والعمليات، وأنشرها كتطبيقات مفتوحة المصدر.",
   download: "تحميل السيرة الذاتية", try: "جرّب العروض الحية", hire: "تواصل معي", loc_short: "نابلس، فلسطين",
-  st1: "مشاريع مفتوحة المصدر", st2: "عروض تفاعلية حية", st3: "ورقة بحثية تقنية", st4: "لغات العمل",
+  st1: "مشاريع مفتوحة المصدر", st2: "عروض تفاعلية حية", st3: "ورقة بحثية تقنية", st4: "رسالة بإشرافي",
   about_h: "نبذة عني",
   about_p1: "أنا مهندس صناعي ومتخصص بيانات من نابلس، فلسطين. أعمل حيث تلتقي القرارات الهندسية بالأرقام: مقارنة التكاليف، تحليل نقطة التعادل، الاختبارات الإحصائية، وطرق التقريب.",
   about_p2: "أفضّل تسليم أدوات تعمل فعلاً بدل العروض التقديمية. معظم مشاريعي تأتي مع تطبيق ويب تفاعلي ليختبر صانعو القرار السيناريوهات بأنفسهم.",
@@ -507,6 +543,8 @@ const AR = {
   cdf_t: "تقريب دالة التوزيع الطبيعي التراكمية", cdf_s: "تقريب Φ(x) بقطع مستقيمة على الفترة [−4، 4]. كلما زادت القطع قلّ الخطأ. هذا العرض يستخدم نقاطاً متساوية التباعد، وورقتي البحثية تحسّن مواقعها بطريقة minimax.",
   segs: "عدد القطع", maxerr: "أقصى خطأ مطلق", argerr: "عند x =", cdf_note: "الاستخدام: حساب الاحتمالات بسرعة في الأنظمة المدمجة وجداول البيانات دون مكتبة إحصائية.",
   approx: "التقريب الخطي", error: "الخطأ",
+  nav_sup: "الإشراف", sup_h: "الإشراف على الرسائل", sup_p: "رسائل أشرفت أو شاركت في الإشراف عليها في جامعة النجاح الوطنية، في تبني الذكاء الاصطناعي والعمليات والجودة والاستدامة.",
+  ss1: "رسالة بإشرافي", ss2: "عن الذكاء الاصطناعي وتعلم الآلة", ss3: "أشرف منذ عام",
   skills_h: "المهارات", sk1: "تحليل البيانات", sk2: "الإحصاء", sk3: "الهندسة الصناعية", sk4: "الأدوات",
   contact_h: "لنعمل معاً", contact_p: "أرسل رسالة بخصوص وظائف أو مشاريع أو تعاون. أرد خلال يومي عمل.",
   c_name: "الاسم", c_email: "البريد الإلكتروني", c_msg: "الرسالة", c_send: "إرسال",
@@ -531,6 +569,7 @@ function setLang(l) {
   store.set("lang", l);
   roleIdx = 0; charIdx = 0; deleting = false;
   drawBE();
+  drawSup();
 }
 document.getElementById("langBtn").onclick = () => setLang(lang === "en" ? "ar" : "en");
 
@@ -696,6 +735,55 @@ function drawCDF() {
 }
 document.getElementById("nSeg").addEventListener("input", drawCDF);
 
+/* ---------- Supervision ---------- */
+// EDIT: one entry per thesis. role: "main" (supervisor) or "co" (co-supervisor). year: null when unknown.
+const THEMES = {
+  ai:   { en: "AI and machine learning", ar: "الذكاء الاصطناعي" },
+  ops:  { en: "Operations and optimisation", ar: "العمليات والتحسين" },
+  qual: { en: "Quality and healthcare", ar: "الجودة والرعاية الصحية" },
+  sus:  { en: "Sustainability", ar: "الاستدامة" },
+  tel:  { en: "Telecom and IT", ar: "الاتصالات وتكنولوجيا المعلومات" },
+  biz:  { en: "Business", ar: "الأعمال" }
+};
+const THESES = [
+  { t: "Machine Learning-based Throughput Optimization for Serial Production Lines", s: "Mosab Ghaleb Mohammed Adwan", role: "co", with: "Dr. Anas Toma", year: null, th: ["ai", "ops"] },
+  { t: "A Simulation-Optimization Approach for Evaluating and Selecting Municipal Projects in Developing Countries", s: "Moath Adli Helal Odeh", role: "main", with: "", year: null, th: ["ops"] },
+  { t: "Identifying the Success Factors for AI-Supported Crisis Management in the Public Sector in Palestine: A Multi-Criteria Decision-Making Approach", s: "Taymaa Majdi H. AlSaleh", role: "main", with: "", year: null, th: ["ai", "ops"] },
+  { t: "Examining the Acceptance of Artificial Intelligence Tools and Technologies Among Engineers and Technicians in Technical Institutions: An Empirical Study", s: "Ahmed Khaled AbdAlrahman Draidi", role: "main", with: "Prof. Yahya Salahat", year: null, th: ["ai"] },
+  { t: "The Impact of Using Generative Artificial Intelligence Tools on Enhancing Self-Directed Learning for Engineering Students: Trust and Privacy Concerns as Mediators", s: "Saly Ammar Ahmad Khamis", role: "main", with: "Prof. Yahya Salahat", year: null, th: ["ai"] },
+  { t: "The Impact of Generative Artificial Intelligence Tools on Self-Directed Learning Skills in Engineering Education: The Role of Self-Efficacy and Self-Motivation as Mediating Variables in a Technology Acceptance Model", s: "Samar Moamar Husni Shtawi", role: "main", with: "Dr. Muawiyah Ramadan", year: null, th: ["ai"] },
+  { t: "The Impact of Medical Equipment Maintenance Management System (MEMMS) on User Satisfaction: The Mediating Role of JCI Accreditation", s: "Tareq Alqabb", role: "main", with: "Dr. Yahya Saleh", year: null, th: ["qual"] },
+  { t: "Assessing the Impact of Adopting Green Innovation Practices on Sustainable Performance in the Palestinian Construction Industry: Green Organizational Culture as a Moderator", s: "Maryana Faour", role: "main", with: "", year: 2025, th: ["sus"] },
+  { t: "The Impact of Enterprise Resource Planning (ERP) Implementation on Sustainability Performance in Healthcare and the Mediator Effect of JCI", s: "Ebaa Maher Abu Al Haj", role: "main", with: "", year: 2025, th: ["qual", "sus"] },
+  { t: "Factors Affecting the Success of Family Business in the West Bank: Zalmout Companies Group as Case Study", s: "", role: "main", with: "", year: 2018, th: ["biz"] },
+  { t: "The Role of Quality in Bit Stream Access Internet Service Providers on Customer's Loyalty in Palestine", s: "Ashraf Demaidi", role: "main", with: "", year: 2017, th: ["tel", "qual"] },
+  { t: "The Impact of Social Network Analysis on the Palestinian Telecom Industry: Jawwal, Palestine", s: "Wael Khalil Abu Rezeq", role: "main", with: "", year: 2017, th: ["tel"] },
+  { t: "Framework for the Adoption of Cloud Computing in the Palestinian Ministry of Telecommunication and Information Technology", s: "محمود فارس يونس", role: "main", with: "", year: 2017, th: ["tel"] }
+];
+let supFilter = "all";
+function drawSup() {
+  const L = lang === "ar";
+  const W = L ? { all: "الكل", by: "الطالب:", main: "مشرف رئيسي", co: "مشرف مشارك", with: "بالاشتراك مع", repo: "مستودع جامعة النجاح" }
+              : { all: "All", by: "Student:", main: "Supervisor", co: "Co-supervisor", with: "With", repo: "An-Najah repository" };
+  const keys = Object.keys(THEMES).filter(k => THESES.some(x => x.th.includes(k)));
+  const chip = (k, label, n) => `<button class="chip${supFilter === k ? " on" : ""}" data-k="${k}">${label}<span class="c">${n}</span></button>`;
+  document.getElementById("supChips").innerHTML = chip("all", W.all, THESES.length) +
+    keys.map(k => chip(k, THEMES[k][L ? "ar" : "en"], THESES.filter(x => x.th.includes(k)).length)).join("");
+  document.querySelectorAll("#supChips .chip").forEach(b => b.onclick = () => { supFilter = b.dataset.k; drawSup(); });
+  const q = t => "https://repository.najah.edu/search?query=" + encodeURIComponent(t);
+  document.getElementById("supList").innerHTML = THESES.filter(x => supFilter === "all" || x.th.includes(supFilter)).map(x => `
+    <article class="card sup">
+      <h3><a href="${q(x.t)}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none" dir="ltr">${x.t}</a></h3>
+      ${x.s ? `<div class="who">${W.by} <b>${x.s}</b></div>` : ""}
+      ${x.with ? `<div class="who">${W.with} ${x.with}</div>` : ""}
+      <div class="meta">
+        <span class="role-badge${x.role === "co" ? " co" : ""}">${W[x.role]}</span>
+        ${x.year ? `<span class="when">${x.year}</span>` : ""}
+        ${x.th.map(k => `<span class="tag">${THEMES[k][L ? "ar" : "en"]}</span>`).join("")}
+      </div>
+    </article>`).join("");
+}
+
 /* ---------- Contact ---------- */
 document.getElementById("contactForm").addEventListener("submit", async ev => {
   ev.preventDefault();
@@ -715,7 +803,10 @@ document.getElementById("contactForm").addEventListener("submit", async ev => {
 
 /* ---------- Init ---------- */
 document.getElementById("yr").textContent = new Date().getFullYear();
-addEventListener("beforeprint", () => document.querySelectorAll(".reveal").forEach(r => r.classList.add("in")));
+addEventListener("beforeprint", () => {
+  document.querySelectorAll(".reveal").forEach(r => r.classList.add("in"));
+  document.querySelectorAll("[data-count]").forEach(n => n.textContent = n.dataset.count);
+});
 setLang(store.get("lang") === "ar" ? "ar" : "en");
 drawCDF();
 tick();
