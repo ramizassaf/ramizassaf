@@ -9,7 +9,8 @@ Personal CV website of Ramiz Assaf, Data Professional and Industrial Engineer ba
 ## Features
 
 - **App layout.** A home screen of boxes. Each box opens a section, with a bottom navigation bar and a back button. Links like `#research` open a section directly.
-- **ATS CV download.** "Download CV" builds `Ramiz_Assaf_CV.md`, a plain Markdown CV that applicant tracking systems read cleanly.
+- **ATS CV download.** "Download CV (PDF)" turns the Markdown CV into a clean, text-based PDF that applicant tracking systems read. The `.md` version is one click away.
+- **Courses I teach.** 11 courses in three groups.
 - **Slides about me.** One click generates a 14-slide HTML deck from the same data. Arrow keys to move, F for full screen, Save to keep a copy.
 - **Services.** Training, online teaching, consulting, research collaboration, and more, each with a request button that fills the contact form.
 - **Interactive teaching.** Dynamic HTML lecture slides (`slides/`) and three learning games (`games/`).
@@ -25,6 +26,7 @@ Personal CV website of Ramiz Assaf, Data Professional and Industrial Engineer ba
 | --- | --- |
 | `index.html` | The whole site: content, styles, and scripts |
 | `og.png` | 1200 × 630 link preview image |
+| `vendor/jspdf.umd.min.js` | jsPDF 2.5.1 (MIT), builds the PDF CV in the browser |
 | `LICENSE` | MIT license for the code |
 
 ## Edit the content

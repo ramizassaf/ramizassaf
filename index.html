@@ -373,6 +373,7 @@ html[lang="ar"] body { font-family: "IBM Plex Sans Arabic", sans-serif; }
 h1, h2, h3, .num, .logo b, .tt, .big, .rv-score .big, .stat .num { font-family: "Changa", "IBM Plex Sans Arabic", sans-serif; }
 .kicker, .when, .chart text, .pub .yr, code { font-family: "IBM Plex Mono", monospace !important; }
 .hero::before { display: none; }
+.md-link { display: block; margin-top: 10px; background: none; border: 0; padding: 0; color: var(--accent); font: inherit; font-size: .85rem; text-decoration: underline; cursor: pointer; }
 .headline { margin: 10px 0 4px; font-family: "Changa", sans-serif; font-weight: 600; font-size: clamp(1.15rem, 2.4vw, 1.5rem); color: var(--text); line-height: 1.3; }
 .hl { background: linear-gradient(transparent 62%, var(--amber) 62%, var(--amber) 92%, transparent 92%); padding: 0 .08em; }
 .card, .stat, .tile, .icon-btn, .btn { border: 2px solid var(--edge); }
@@ -474,6 +475,17 @@ section.block.active { display: block; animation: panelIn .32s ease; }
 .demo-card p { color: var(--muted); margin: 0 0 14px; }
 .demo-btns { display: flex; gap: 10px; flex-wrap: wrap; }
 
+/* Courses */
+.crs-group { margin-bottom: 26px; }
+.crs-group h3 { margin: 0 0 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+.crs-group h3 span { font-family: "IBM Plex Mono", monospace; font-size: .74rem; font-weight: 500; color: var(--accent); background: var(--accent-soft); border-radius: 999px; padding: 2px 10px; }
+.crs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+.crs { display: flex; gap: 14px; align-items: flex-start; padding: 18px; border-inline-start: 7px solid var(--amber); }
+.crs .ci { font-size: 1.6rem; line-height: 1; }
+.crs h4 { margin: 0 0 4px; font-family: "Changa", sans-serif; font-size: 1.02rem; line-height: 1.3; }
+.crs p { margin: 0; color: var(--muted); font-size: .86rem; }
+.crs a { display: inline-block; margin-top: 8px; font-size: .82rem; font-weight: 700; text-decoration: none; }
+
 /* Services */
 .svc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
 .svc { display: flex; flex-direction: column; gap: 8px; border-inline-start: 7px solid var(--amber); }
@@ -517,10 +529,11 @@ footer { border-top: 0; }
         <div class="typed"><span data-i18n="iam">I am</span> <b id="typed"></b><span class="caret"></span></div>
         <p class="lead" data-i18n="lead">Assistant Professor of Industrial Engineering and Coordinator of the Master of Engineering Management program at An-Najah National University. I train engineers and professionals in data analytics with Excel, Python, SQL, Tableau, and Alteryx.</p>
         <div class="cta">
-          <button class="btn primary" type="button" id="cvBtn"><span>↓</span> <span data-i18n="download">Download CV</span></button>
+          <button class="btn primary" type="button" id="cvBtn"><span>↓</span> <span data-i18n="download">Download CV (PDF)</span></button>
           <button class="btn" type="button" id="slidesBtn"><span>🖥</span> <span data-i18n="slides">Slides about me</span></button>
           <button class="btn" type="button" data-demo=""><span>▶</span> <span data-i18n="try">Try my live demos</span></button>
         </div>
+        <button class="md-link" type="button" id="cvMd" data-i18n="cv_md">or download the Markdown version (.md)</button>
         <div class="social-row"><a href="https://www.linkedin.com/in/ramiz-assaf-529610353" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></svg><span>LinkedIn</span></a><a href="https://scholar.google.com/citations?user=yDDnd50AAAAJ&amp;hl=en" target="_blank" rel="noopener" aria-label="Google Scholar" title="Google Scholar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 2 9.5l10 5.5 10-5.5z"/><path d="M6 11.7v4.3c0 1.7 2.7 3 6 3s6-1.3 6-3v-4.3"/></svg><span>Google Scholar</span></a><a href="https://www.youtube.com/@RamizAssaf-E" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="m10 9.5 5 2.5-5 2.5z" fill="currentColor"/></svg><span>YouTube</span></a><a href="https://github.com/ramizassaf" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4 1.3-4-2-6-2.5M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg><span>GitHub</span></a><a href="https://www.datacamp.com/courses/data-validation-in-excel" target="_blank" rel="noopener" aria-label="DataCamp course" title="DataCamp course"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h11a3 3 0 0 1 3 3v11H7a3 3 0 0 1-3-3z"/><path d="M8 9h6M8 13h4"/></svg><span>DataCamp course</span></a><a href="mailto:ramizassaf@najah.edu" target="_blank" rel="noopener" aria-label="Email" title="Email"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span>Email</span></a></div>
       </div>
       <div class="avatar-wrap">
@@ -543,6 +556,7 @@ footer { border-top: 0; }
     <div class="tiles-head"><h2 data-i18n="tiles_h">Explore</h2><p data-i18n="tiles_p">Tap a box to open a section.</p></div>
     <div class="tile-grid">
       <a class="tile reveal" href="#about"><span class="ti">👤</span><span class="tt" data-i18n="t_about">About me</span><span class="ts" data-i18n="t_about_s">Profile, roles, and languages</span><span class="ta">→</span></a>
+      <a class="tile reveal" href="#courses"><span class="ti">📚</span><span class="tt" data-i18n="t_crs">Courses I teach</span><span class="ts" data-i18n="t_crs_s">11 courses in IE and engineering management</span><span class="ta">→</span></a>
       <a class="tile reveal" href="#experience"><span class="ti">💼</span><span class="tt" data-i18n="t_exp">Experience</span><span class="ts" data-i18n="t_exp_s">14+ years in academia and training</span><span class="ta">→</span></a>
       <a class="tile reveal" href="#research"><span class="ti">📊</span><span class="tt" data-i18n="t_res">Research</span><span class="ts" data-i18n="t_res_s">1,849 citations · h-index 20</span><span class="ta">→</span></a>
       <a class="tile reveal" href="#supervision"><span class="ti">🎓</span><span class="tt" data-i18n="t_sup">Thesis supervision</span><span class="ts" data-i18n="t_sup_s">16 supervised · 20+ defense committees</span><span class="ta">→</span></a>
@@ -632,6 +646,18 @@ footer { border-top: 0; }
     <h3 class="sub-h reveal" style="margin-top:28px" data-i18n="cert_d">Data science and analytics certifications</h3>
     <div class="cert-grid" id="certData"></div>
     </div>
+  </div>
+</section>
+
+<section class="block" id="courses">
+  <div class="container">
+    <a class="back" href="#home" data-i18n="back">← Home</a>
+    <div class="sec-head reveal">
+      <div class="kicker">courses</div>
+      <h2 data-i18n="crs_h">Courses I teach</h2>
+      <p data-i18n="crs_p">Undergraduate and graduate courses in industrial engineering and engineering management, from optimisation and simulation to economics and entrepreneurship.</p>
+    </div>
+    <div id="courseGroups"></div>
   </div>
 </section>
 
@@ -982,7 +1008,7 @@ const AR = {
   nav_about: "نبذة", nav_exp: "الخبرات", nav_proj: "المشاريع", nav_labs: "عروض حية", nav_skills: "المهارات", nav_contact: "تواصل",
   open: "دكتوراه، جامعة البوليتكنيك في ميلانو", iam: "أنا",
   lead: "أستاذ مساعد في الهندسة الصناعية ومنسق برنامج ماجستير الإدارة الهندسية في جامعة النجاح الوطنية. أدرّب المهندسين والمهنيين على تحليل البيانات باستخدام Excel و Python و SQL و Tableau و Alteryx.",
-  download: "تحميل السيرة الذاتية", try: "جرّب العروض الحية", hire: "تواصل معي", loc_short: "نابلس، فلسطين",
+  download: "تحميل السيرة الذاتية (PDF)", cv_md: "أو حمّل نسخة Markdown (.md)", try: "جرّب العروض الحية", hire: "تواصل معي", loc_short: "نابلس، فلسطين",
   st1: "سنة في التدريس الجامعي", st2: "متدرب في Udacity", st3: "اقتباس في Google Scholar", st4: "رسالة بإشرافي",
   about_h: "نبذة عني",
   about_p1: "أنا أستاذ مساعد في الهندسة الصناعية في جامعة النجاح الوطنية ومنسق برنامج ماجستير الإدارة الهندسية فيها. أقود تطوير المناهج والتخطيط الأكاديمي، وأعمل محرراً مشاركاً في مجلة جامعة النجاح للأبحاث (ب) للعلوم الطبيعية.",
@@ -1046,6 +1072,7 @@ const AR = {
   gl_h: "ألعاب التعلّم", lv_tag: "عرض من 5 شرائح · جرّبه في دقيقة", lv_t: "شرائح حية: الطريقة نفسها، أرقام جديدة",
   lv_d: "عرض قصير للفكرة وراء محاضراتي. اضغط أرقام جديدة وشاهد قسط القرض وحل NPV والاختبار تتغير. يتعلم الطلاب الطريقة لأن الإجابة لا تبقى نفسها.",
   lv_open: "جرّب العرض ↗", lv_share: "شارك على LinkedIn", lv_copy: "انسخ الرابط",
+  crs_h: "المساقات التي أدرّسها", crs_p: "مساقات بكالوريوس ودراسات عليا في الهندسة الصناعية والإدارة الهندسية، من التحسين والمحاكاة إلى الاقتصاد وريادة الأعمال.", t_crs: "المساقات التي أدرّسها", t_crs_s: "11 مساقاً في الهندسة الصناعية والإدارة الهندسية",
   rm1: "اقتباس", rm1s: "1,783 منذ 2021", rm2s: "19 منذ 2021", rm3s: "24 منذ 2021", rm4: "منشور", rm4s: "منذ 2009",
   cit_h: "الاقتباسات سنوياً", cit_s: "قيم تقريبية مأخوذة من رسم Google Scholar.", top_h: "الأكثر اقتباساً", res_link: "الملف الكامل على Google Scholar ↗",
   skills_h: "المهارات", sk1: "علم البيانات والتحليلات", sk2: "الإحصاء", sk3: "الهندسة الصناعية", sk4: "التدريس والقيادة",
@@ -1076,6 +1103,7 @@ function setLang(l) {
   drawExp();
   drawRes();
   drawCerts();
+  drawCourses();
   if (typeof drawDash === "function" && document.getElementById("pubChart")) { drawDash(); drawCit(); }
 }
 document.getElementById("langBtn").onclick = () => setLang(lang === "en" ? "ar" : "en");
@@ -1241,6 +1269,32 @@ function drawCDF() {
   el("circle", { cx: X(argE), cy: Ye(errs[Math.round((argE + L) / (2 * L) * N)]), r: 5, fill: css("--s3") }, e);
 }
 document.getElementById("nSeg").addEventListener("input", drawCDF);
+
+/* ---------- Courses ---------- */
+// EDIT: add or change courses here. link (optional) points to course material on this site.
+const COURSE_GROUPS = [
+  { en: "Foundations", ar: "الأساسيات", items: [
+    { ic: "🏭", en: "Introduction to Industrial Engineering", ar: "مقدمة في الهندسة الصناعية", den: "What industrial engineers do: productivity, work design, quality, and systems thinking.", dar: "ماذا يفعل المهندس الصناعي: الإنتاجية وتصميم العمل والجودة والتفكير المنظومي." },
+    { ic: "💻", en: "Computer Applications in Industrial Engineering", ar: "تطبيقات الحاسوب في الهندسة الصناعية", den: "Spreadsheets and software tools for modelling, analysing, and reporting engineering data.", dar: "الجداول الإلكترونية والبرمجيات لنمذجة البيانات الهندسية وتحليلها وعرضها." } ] },
+  { en: "Operations and optimisation", ar: "العمليات والتحسين", items: [
+    { ic: "📐", en: "Operations Research", ar: "بحوث العمليات", den: "Linear programming, network models, and decision tools for allocating scarce resources.", dar: "البرمجة الخطية ونماذج الشبكات وأدوات القرار لتوزيع الموارد المحدودة." },
+    { ic: "🎲", en: "Industrial Systems Simulation", ar: "محاكاة الأنظمة الصناعية", den: "Discrete-event simulation to study queues, production lines, and service systems.", dar: "محاكاة الأحداث المنفصلة لدراسة الطوابير وخطوط الإنتاج وأنظمة الخدمة." },
+    { ic: "⚙️", en: "Operations Management", ar: "إدارة العمليات", den: "Forecasting, capacity, scheduling, inventory, and lean operations.", dar: "التنبؤ والطاقة الإنتاجية والجدولة والمخزون والعمليات الرشيقة." },
+    { ic: "🚚", en: "Supply Chain Management", ar: "إدارة سلاسل الإمداد", den: "Sourcing, logistics, network design, and coordination across the chain.", dar: "التوريد والخدمات اللوجستية وتصميم الشبكات والتنسيق عبر السلسلة." },
+    { ic: "🤖", en: "Computer Integrated Manufacturing", ar: "التصنيع المتكامل بالحاسوب", den: "Automation, CAD/CAM, and the integration of manufacturing information systems.", dar: "الأتمتة والتصميم والتصنيع بالحاسوب وتكامل أنظمة معلومات التصنيع." } ] },
+  { en: "Economics, management, and innovation", ar: "الاقتصاد والإدارة والابتكار", items: [
+    { ic: "💰", en: "Engineering Economics", ar: "الاقتصاد الهندسي", den: "Time value of money, PW, AW, IRR, and comparing alternatives, by hand and in Excel.", dar: "القيمة الزمنية للنقود والقيمة الحالية والسنوية ومعدل العائد الداخلي ومقارنة البدائل يدوياً وفي Excel.", link: "slides/week1-excel-engineering-economy.html", len: "Open a live lecture ↗", lar: "افتح محاضرة تفاعلية ↗" },
+    { ic: "🧮", en: "Projects Cost Analysis and Estimation", ar: "تحليل وتقدير تكاليف المشاريع", den: "Estimating labour, material, and overhead costs and building project budgets.", dar: "تقدير تكاليف العمالة والمواد والمصاريف غير المباشرة وبناء موازنات المشاريع." },
+    { ic: "💡", en: "Innovation and Entrepreneurship", ar: "الابتكار وريادة الأعمال", den: "From idea to venture: opportunity analysis, business models, and pitching.", dar: "من الفكرة إلى المشروع: تحليل الفرص ونماذج الأعمال وعرض الأفكار." },
+    { ic: "📈", en: "Business Simulation", ar: "محاكاة الأعمال", den: "Team decisions in a simulated company to practise strategy, finance, and operations.", dar: "قرارات جماعية في شركة افتراضية للتدرب على الاستراتيجية والمالية والعمليات." } ] }
+];
+const COURSES = COURSE_GROUPS.flatMap(g => g.items);
+function drawCourses() {
+  const L = lang === "ar" ? "ar" : "en", n = L === "ar" ? "مساقات" : "courses";
+  document.getElementById("courseGroups").innerHTML = COURSE_GROUPS.map(g => `
+    <div class="crs-group"><h3>${g[L]} <span>${g.items.length} ${n}</span></h3><div class="crs-grid">${g.items.map(c => `
+      <article class="card crs"><span class="ci">${c.ic}</span><div><h4>${c[L]}</h4><p>${L === "ar" ? c.dar : c.den}</p>${c.link ? `<a href="${c.link}" target="_blank" rel="noopener">${L === "ar" ? c.lar : c.len}</a>` : ""}</div></article>`).join("")}</div></div>`).join("");
+}
 
 /* ---------- Experience ---------- */
 // EDIT: newest first. Each role: [title en, title ar, dates]. Bullets: { en, ar }.
@@ -1567,29 +1621,68 @@ function cvMarkdown() {
     e.bullets.forEach(b => L.push(`- ${strip(b.en)}`));
     L.push("");
   });
-  L.push("## Education", "");
+  L.push("## Courses Taught", "");
+  COURSE_GROUPS.forEach(g => L.push(`- ${g.en}: ${g.items.map(c => c.en).join(", ")}`));
+  L.push("", "## Education", "");
   EDU.forEach(e => L.push(`- ${e.d.en}, ${e.s.en} (${e.y.replace(/\s*–\s*/, "-")})`));
+  L.push("", "## Languages", "", "- Arabic (Native), English (Full professional), Italian (Limited working)");
   L.push("", "## Certifications", "");
   CERTS.forEach(c => L.push(`- ${c.t}, ${c.i.en}${c.d ? " (" + c.d + ")" : ""}`));
   L.push("", "## Research", "", `- Google Scholar: 1,849 citations, h-index 20, i10-index 26, ${PUBS.length} publications`, "", "### Selected Publications", "");
-  const sel = [...PUBS].sort((a, b) => b.c - a.c).slice(0, 10);
+  const sel = [...PUBS].sort((a, b) => b.c - a.c).slice(0, 8);
   sel.forEach(x => L.push(`- ${x.a.replace(", ...", " et al.")} (${x.y || "n.d."}). ${x.t}. ${x.v}.`));
   L.push("", "## Thesis Supervision", "", `- Supervised or co-supervised ${THESES.length} master's theses at An-Najah National University`, "- Served on more than 20 master's thesis defense committees");
-  THESES.slice(0, 8).forEach(t => L.push(`- ${t.t}${t.year ? " (" + t.year + ")" : ""}`));
+  THESES.slice(0, 6).forEach(t => L.push(`- ${t.t}${t.year ? " (" + t.year + ")" : ""}`));
   L.push("", "## Teaching Innovation", "",
     "- Dynamic HTML lecture slides (built with Claude): Week 1, Excel for Engineering Economy, 29 slides with worked examples and quizzes that generate new numbers on demand",
     "- Data Validation in Excel, published course on DataCamp, rated 4.8/5 from 628 reviews",
     "- Excel Skill Tree, Labor Analysis Lab, and Financial Decisions Lab: gamified browser labs for courses",
-    "- IE Program Guide: bilingual website for prospective industrial engineering students", "",
-    "## Languages", "", "- Arabic (Native)", "- English (Full professional)", "- Italian (Limited working)", "");
+    "- IE Program Guide: bilingual website for prospective industrial engineering students", "");
   return L.join("\n");
 }
-document.getElementById("cvBtn").addEventListener("click", () => {
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob([cvMarkdown()], { type: "text/markdown" }));
-  a.download = "Ramiz_Assaf_CV.md"; document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+function saveBlob(blob, name) {
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+function loadJsPDF() {
+  if (window.jspdf) return Promise.resolve();
+  return new Promise((res, rej) => { const sc = document.createElement("script"); sc.src = "vendor/jspdf.umd.min.js"; sc.onload = res; sc.onerror = rej; document.head.appendChild(sc); });
+}
+// Render the Markdown CV as a clean, single-column, text-based PDF (ATS-readable)
+function mdToPdf(md) {
+  const { jsPDF } = window.jspdf, doc = new jsPDF({ unit: "pt", format: "a4" });
+  const W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight(), M = 50, CW = W - 2 * M;
+  const ascii = t => t.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"').replace(/[\u2013\u2014]/g, "-").replace(/\u2026/g, "...").replace(/\u00B7/g, "|").replace(/[^\x00-\xFF]/g, "");
+  let y = M, afterH3 = false, head = true;
+  const need = h => { if (y + h > H - M) { doc.addPage(); y = M; } };
+  const write = (t, size, style, opts = {}) => {
+    doc.setFont("helvetica", style); doc.setFontSize(size); doc.setTextColor(...(opts.color || [20, 30, 45]));
+    const x = M + (opts.indent || 0), lines = doc.splitTextToSize(ascii(t), CW - (opts.indent || 0)), lh = size * 1.32;
+    lines.forEach((ln, k) => { need(lh); if (opts.bullet && k === 0) doc.text("\u2022", M + (opts.indent || 0) - 10, y); doc.text(ln, x, y); y += lh; });
+  };
+  md.split("\n").forEach(raw => {
+    const ln = raw.trimEnd();
+    if (!ln) { y += head ? 1 : 4; return; }
+    if (ln.startsWith("# ")) { write(ln.slice(2), 22, "bold"); y += 2; return; }
+    if (ln.startsWith("## ")) { head = false; y += 8; need(30); write(ln.slice(3).toUpperCase(), 11.5, "bold", { color: [30, 90, 140] }); doc.setDrawColor(30, 90, 140); doc.setLineWidth(0.8); doc.line(M, y - 9, W - M, y - 9); y += 4; return; }
+    if (ln.startsWith("### ")) { y += 3; need(34); write(ln.slice(4), 10.5, "bold"); afterH3 = true; return; }
+    if (ln.startsWith("- ")) { write(ln.slice(2), 9.6, "normal", { indent: 14, bullet: true }); afterH3 = false; return; }
+    if (afterH3) { write(ln, 9.2, "italic", { color: [90, 105, 120] }); afterH3 = false; return; }
+    write(ln, head ? 9.8 : 9.8, "normal", { color: head ? [60, 75, 90] : [20, 30, 45] });
+  });
+  const n = doc.getNumberOfPages();
+  for (let i = 1; i <= n; i++) { doc.setPage(i); doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(140, 150, 160); doc.text(`Ramiz Assaf | CV | Page ${i} of ${n}`, W - M, H - 24, { align: "right" }); }
+  doc.setProperties({ title: "Dr. Ramiz Assaf - CV", author: "Ramiz Assaf", subject: "Curriculum Vitae", keywords: "industrial engineering, data science, engineering management, operations research" });
+  return doc;
+}
+document.getElementById("cvBtn").addEventListener("click", async e => {
+  const b = e.currentTarget, old = b.innerHTML;
+  b.disabled = true; b.innerHTML = lang === "ar" ? "جارٍ التحضير…" : "Preparing PDF…";
+  try { await loadJsPDF(); mdToPdf(cvMarkdown()).save("Ramiz_Assaf_CV.pdf"); }
+  catch (err) { saveBlob(new Blob([cvMarkdown()], { type: "text/markdown" }), "Ramiz_Assaf_CV.md"); }
+  finally { b.disabled = false; b.innerHTML = old; }
 });
+document.getElementById("cvMd").addEventListener("click", () => saveBlob(new Blob([cvMarkdown()], { type: "text/markdown" }), "Ramiz_Assaf_CV.md"));
 
 /* ---------- Slides generator ---------- */
 const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
@@ -1607,6 +1700,7 @@ function deckHTML() {
   S.push(`<section class="s"><h2>${T("Who I am", "من أنا")}</h2><ul class="lst">${(AR ? ["مهندس صناعي ومدرب في علم البيانات من نابلس، فلسطين", "دكتوراه من جامعة البوليتكنيك في ميلانو، وماجستير في الإدارة الهندسية، وبكالوريوس في الهندسة الصناعية", "أكثر من 14 عاماً في التدريس الجامعي في فلسطين والسعودية", "هدفي: ربط الهندسة باتخاذ القرار المبني على البيانات"] : ["Industrial engineer and data science trainer based in Nablus, Palestine", "PhD, Politecnico di Milano. MEng, Engineering Management. BSc, Industrial Engineering", "14+ years teaching at universities in Palestine and Saudi Arabia", "Goal: bridge engineering and data-driven decision making"]).map(x => `<li>${x}</li>`).join("")}</ul></section>`);
   S.push(`<section class="s"><h2>${T("By the numbers", "بالأرقام")}</h2><div class="kp"><div><b>14+</b>${T("years teaching", "سنة في التدريس")}</div><div><b>800+</b>${T("professionals trained", "متدرب محترف")}</div><div><b>1,849</b>${T("citations", "اقتباس")}</div><div><b>${PUBS.length}</b>${T("publications", "منشور")}</div><div><b>${THESES.length}</b>${T("theses supervised", "رسالة بإشرافي")}</div><div><b>20+</b>${T("defense committees", "لجنة مناقشة")}</div></div></section>`);
   S.push(`<section class="s"><h2>${T("Career path", "المسار المهني")}</h2><div class="tline">${EXP.slice().sort((a, b) => startKey(a.when) - startKey(b.when)).map(x => `<div><span dir="ltr">${e(x.when)}</span><b>${e(x.org)}</b><small>${e(AR ? x.roles[0][1] : x.roles[0][0])}</small></div>`).join("")}</div></section>`);
+  S.push(`<section class="s"><h2>${T("Courses I teach", "المساقات التي أدرّسها")}</h2><div class="cards">${COURSE_GROUPS.map(g => `<div><b>${g[L]}</b>${g.items.map(c => c[L]).join(AR ? "، " : ", ")}</div>`).join("")}</div></section>`);
   S.push(`<section class="s"><h2>${T("Academic leadership at An-Najah", "القيادة الأكاديمية في جامعة النجاح")}</h2><ul class="lst">${(AR ? ["أستاذ مساعد في الهندسة الصناعية (منذ 2022)", "منسق برنامج ماجستير الإدارة الهندسية: التخطيط الأكاديمي والإرشاد وتطوير البرنامج", "محرر مشارك في مجلة جامعة النجاح للأبحاث (ب) للعلوم الطبيعية", "منسق جودة سابق لاعتماد NCAAA في جامعة الأعمال والتكنولوجيا، جدة"] : ["Assistant Professor, Industrial Engineering (2022 to present)", "Coordinator, Master of Engineering Management: academic planning, advising, and program development", "Associate Editor, An-Najah University Journal for Research B (Natural Sciences)", "Former NCAAA quality coordinator at the University of Business and Technology, Jeddah"]).map(x => `<li>${x}</li>`).join("")}</ul></section>`);
   S.push(`<section class="s"><h2>${T("Training impact", "أثر التدريب")}</h2><div class="kp"><div><b>800+</b>${T("Udacity learners, MENA", "متعلم في Udacity بالمنطقة")}</div><div><b>94%</b>${T("post-training satisfaction", "رضا بعد التدريب")}</div><div><b>~200</b>${T("Correlation One students", "طالب في Correlation One")}</div><div><b>4.8/5</b>${T("DataCamp course, 628 reviews", "مساق DataCamp، 628 مراجعة")}</div></div><p class="note" dir="ltr">Excel · SQL · Python · Tableau · Alteryx</p></section>`);
   S.push(`<section class="s"><h2>${T("Research at a glance", "البحث العلمي باختصار")}</h2><div class="kp k3"><div><b>1,849</b>${T("citations", "اقتباس")}</div><div><b>20</b>h-index</div><div><b>26</b>i10-index</div></div><div class="bars">${themes.map(([n, v]) => `<div><span>${e(n)}</span><i style="width:${v / mx * 100}%"></i><b>${v}</b></div>`).join("")}</div></section>`);
