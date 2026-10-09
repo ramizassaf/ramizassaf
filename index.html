@@ -374,7 +374,7 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
       <div class="stat reveal"><div class="num" data-count="14" data-suffix="+">14+</div><div class="lbl" data-i18n="st1">Years teaching at university</div></div>
       <div class="stat reveal"><div class="num" data-count="800" data-suffix="+">800+</div><div class="lbl" data-i18n="st2">Professionals trained at Udacity</div></div>
       <div class="stat reveal"><div class="num" data-count="1849" data-fmt="1">1,849</div><div class="lbl" data-i18n="st3">Google Scholar citations</div></div>
-      <div class="stat reveal"><div class="num" data-count="13">13</div><div class="lbl" data-i18n="st4">Theses supervised</div></div>
+      <div class="stat reveal"><div class="num" data-count="16">16</div><div class="lbl" data-i18n="st4">Theses supervised</div></div>
     </div>
   </div>
 </header>
@@ -476,8 +476,8 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
       <p data-i18n="sup_p">Theses I supervised or co-supervised at An-Najah National University, in AI adoption, operations, quality, and sustainability.</p>
     </div>
     <div class="sup-stats">
-      <div class="stat reveal"><div class="num" data-count="13">13</div><div class="lbl" data-i18n="ss1">Theses supervised</div></div>
-      <div class="stat reveal"><div class="num" data-count="5">5</div><div class="lbl" data-i18n="ss2">On AI and machine learning</div></div>
+      <div class="stat reveal"><div class="num" data-count="16" id="supN">16</div><div class="lbl" data-i18n="ss1">Theses supervised</div></div>
+      <div class="stat reveal"><div class="num" data-count="6" id="supAI">6</div><div class="lbl" data-i18n="ss2">On AI and machine learning</div></div>
       <div class="stat reveal"><div class="num" data-count="2017">2017</div><div class="lbl" data-i18n="ss3">Supervising since</div></div>
     </div>
     <div class="chips" id="supChips"></div>
@@ -1143,6 +1143,9 @@ const THEMES = {
   biz:  { en: "Business", ar: "الأعمال" }
 };
 const THESES = [
+  { t: "Assessing the Acceptance for Implementing Artificial Intelligence Technologies in the Governmental Sector: An Empirical Study", s: "", role: "main", with: "Dr. Yahya Saleh", year: 2024, th: ["ai"] },
+  { t: "Determinants of Green Building Technology (GBT) Adoption in the West Bank: A Managerial Framework", s: "Mohammad Hani Mohammad Qalalwah", role: "main", with: "", year: null, th: ["sus"] },
+  { t: "Optimizing Cash Management Strategies for Automated Teller Machines (ATMs) in Palestine: Enhancing Customer Satisfaction and Cost-Effectiveness", s: "Rabab Shehadeh", role: "main", with: "", year: null, th: ["ops"] },
   { t: "Machine Learning-based Throughput Optimization for Serial Production Lines", s: "Mosab Ghaleb Mohammed Adwan", role: "co", with: "Dr. Anas Toma", year: null, th: ["ai", "ops"] },
   { t: "A Simulation-Optimization Approach for Evaluating and Selecting Municipal Projects in Developing Countries", s: "Moath Adli Helal Odeh", role: "main", with: "", year: null, th: ["ops"] },
   { t: "Identifying the Success Factors for AI-Supported Crisis Management in the Public Sector in Palestine: A Multi-Criteria Decision-Making Approach", s: "Taymaa Majdi H. AlSaleh", role: "main", with: "", year: null, th: ["ai", "ops"] },
@@ -1152,13 +1155,15 @@ const THESES = [
   { t: "The Impact of Medical Equipment Maintenance Management System (MEMMS) on User Satisfaction: The Mediating Role of JCI Accreditation", s: "Tareq Alqabb", role: "main", with: "Dr. Yahya Saleh", year: null, th: ["qual"] },
   { t: "Assessing the Impact of Adopting Green Innovation Practices on Sustainable Performance in the Palestinian Construction Industry: Green Organizational Culture as a Moderator", s: "Maryana Faour", role: "main", with: "", year: 2025, th: ["sus"] },
   { t: "The Impact of Enterprise Resource Planning (ERP) Implementation on Sustainability Performance in Healthcare and the Mediator Effect of JCI", s: "Ebaa Maher Abu Al Haj", role: "main", with: "", year: 2025, th: ["qual", "sus"] },
-  { t: "Factors Affecting the Success of Family Business in the West Bank: Zalmout Companies Group as Case Study", s: "", role: "main", with: "", year: 2018, th: ["biz"] },
+  { t: "Factors Affecting the Success of Family Business in the West Bank: Zalmout Companies Group as Case Study", s: "Mohammad Zalmout", role: "main", with: "Dr. Sameh Atout", year: 2018, th: ["biz"] },
   { t: "The Role of Quality in Bit Stream Access Internet Service Providers on Customer's Loyalty in Palestine", s: "Ashraf Demaidi", role: "main", with: "", year: 2017, th: ["tel", "qual"] },
   { t: "The Impact of Social Network Analysis on the Palestinian Telecom Industry: Jawwal, Palestine", s: "Wael Khalil Abu Rezeq", role: "main", with: "", year: 2017, th: ["tel"] },
   { t: "Framework for the Adoption of Cloud Computing in the Palestinian Ministry of Telecommunication and Information Technology", s: "محمود فارس يونس", role: "main", with: "", year: 2017, th: ["tel"] }
 ];
 let supFilter = "all";
 function drawSup() {
+  document.getElementById("supN").textContent = THESES.length;
+  document.getElementById("supAI").textContent = THESES.filter(x => x.th.includes("ai")).length;
   const L = lang === "ar";
   const W = L ? { all: "الكل", by: "الطالب:", main: "مشرف رئيسي", co: "مشرف مشارك", with: "بالاشتراك مع", repo: "مستودع جامعة النجاح" }
               : { all: "All", by: "Student:", main: "Supervisor", co: "Co-supervisor", with: "With", repo: "An-Najah repository" };
