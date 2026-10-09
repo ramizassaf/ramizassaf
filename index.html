@@ -162,6 +162,25 @@ section.alt { background: var(--bg-2); }
 .facts.edu li span { color: var(--text); }
 .facts.edu li small { color: var(--muted); font-size: .85rem; }
 
+/* Course reviews */
+.reviews { margin-top: 8px; }
+.reviews .kicker { font-family: "JetBrains Mono", monospace; color: var(--accent); font-size: .82rem; }
+.rv-head { display: grid; grid-template-columns: 1.4fr auto 1fr; gap: 28px; align-items: center; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+@media (max-width: 860px) { .rv-head { grid-template-columns: 1fr; gap: 14px; } }
+.rv-head h3 { margin: 4px 0; font-size: 1.15rem; }
+.rv-head h3 a { color: var(--text); text-decoration: none; }
+.rv-head h3 a:hover { color: var(--accent); }
+.rv-score { text-align: center; }
+.rv-score .big { font-size: 2.6rem; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+.rv-score .big span { font-size: 1rem; color: var(--muted); font-weight: 500; }
+.stars { color: #e0a800; letter-spacing: 2px; font-size: 1rem; }
+.rv-dist { display: grid; gap: 6px; }
+.rv-dist .hb { grid-template-columns: 44px 1fr 40px; }
+.rv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 14px; margin-top: 18px; }
+.rv-grid blockquote { margin: 0; padding: 16px; background: var(--bg-2); border-radius: 14px; font-size: .9rem; line-height: 1.55; display: flex; flex-direction: column; gap: 8px; }
+.rv-grid cite { font-style: normal; font-weight: 600; font-size: .85rem; margin-top: auto; }
+.rv-grid cite small { color: var(--muted); font-weight: 400; }
+
 /* Projects */
 .proj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
 .proj { display: flex; flex-direction: column; transition: transform .2s, border-color .2s; }
@@ -414,6 +433,32 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
     </div>
     <!-- EDIT: experience entries live in the EXP list inside the script -->
     <div class="timeline" id="expList"></div>
+    <div class="card reviews reveal" id="dcReviews">
+      <div class="rv-head">
+        <div>
+          <div class="kicker">DataCamp</div>
+          <h3><a href="https://www.datacamp.com/courses/data-validation-in-excel" target="_blank" rel="noopener">Data Validation in Excel ↗</a></h3>
+          <p class="pub-meta" data-i18n="rv_p">My published course for engineers and analysts moving into data work.</p>
+        </div>
+        <div class="rv-score">
+          <div class="big">4.8<span>/5</span></div>
+          <div class="stars" aria-label="4.8 out of 5 stars">★★★★★</div>
+          <div class="pub-meta" data-i18n="rv_n">from 628 reviews</div>
+        </div>
+        <div class="rv-dist" aria-label="Rating distribution">
+          <div class="hb"><span class="l">5 ★</span><span class="t"><span class="f" style="width:83%"></span></span><span class="v">83%</span></div>
+          <div class="hb"><span class="l">4 ★</span><span class="t"><span class="f" style="width:16%"></span></span><span class="v">16%</span></div>
+          <div class="hb"><span class="l">3 ★</span><span class="t"><span class="f" style="width:1%"></span></span><span class="v">1%</span></div>
+          <div class="hb"><span class="l">1–2 ★</span><span class="t"><span class="f" style="width:0%"></span></span><span class="v">0%</span></div>
+        </div>
+      </div>
+      <div class="rv-grid">
+        <blockquote dir="auto"><div class="stars">★★★★★</div>"The examples were very practical from various fields and the step by step exercises reinforced my learning experience. I can now create error proof spreadsheets."<cite>Nwanne</cite></blockquote>
+        <blockquote dir="auto"><div class="stars">★★★★★</div>"This course was both challenging and enjoyable, pushing me to think more carefully about data accuracy and structure in Excel. I found the practical approach especially helpful, and using the supplied Excel files was a great way to reinforce the concepts through hands-on practice."<cite>Steve</cite></blockquote>
+        <blockquote dir="auto"><div class="stars">★★★★★</div>"This course taught me how to validate data in Excel with understandable explanation. Thank you!"<cite>Syfia</cite></blockquote>
+        <blockquote dir="auto" lang="fr"><div class="stars">★★★★★</div>« Ce cours très intéressant est fondamental pour garantir la cohérence et l'intégrité des données, condition sine qua non pour réussir l'analyse des données. »<cite>Harouna <small>(French)</small></cite></blockquote>
+      </div>
+    </div>
     <div class="edu-grid">
       <div class="card reveal">
         <h3 class="sub-h" data-i18n="edu_h">Education</h3>
@@ -740,6 +785,7 @@ const AR = {
   pub_h: "المنشورات سنوياً", pub_s: "أوراق ومؤتمرات ورسائل معروفة السنة.", th_h: "المنشورات حسب المحور", th_s: "قد تنتمي الورقة لأكثر من محور.",
   tc_h: "الاقتباسات حسب المحور", tc_s: "مجموع اقتباسات Google Scholar لأوراق كل محور.", vn_h: "أبرز جهات النشر", vn_s: "مجلات ومؤتمرات نُشرت فيها ورقتان أو أكثر.",
   ca_h: "أكثر الباحثين المشاركين", ca_s: "أوراق مشتركة. قوائم المؤلفين الطويلة مختصرة في Scholar، فالأعداد حد أدنى.",
+  rv_p: "دورتي المنشورة للمهندسين والمحللين المنتقلين إلى العمل بالبيانات.", rv_n: "من 628 مراجعة",
   rm1: "اقتباس", rm1s: "1,783 منذ 2021", rm2s: "19 منذ 2021", rm3s: "24 منذ 2021", rm4: "منشور", rm4s: "منذ 2009",
   cit_h: "الاقتباسات سنوياً", cit_s: "قيم تقريبية مأخوذة من رسم Google Scholar.", top_h: "الأكثر اقتباساً", res_link: "الملف الكامل على Google Scholar ↗",
   skills_h: "المهارات", sk1: "علم البيانات والتحليلات", sk2: "الإحصاء", sk3: "الهندسة الصناعية", sk4: "التدريس والقيادة",
@@ -956,7 +1002,8 @@ const EXP = [
               { en: "Gave career guidance for data analytics and machine learning paths.", ar: "قدّمت توجيهاً مهنياً لمسارات تحليل البيانات وتعلم الآلة." }] },
   { org: "DataCamp", place: { en: "Remote", ar: "عن بعد" }, when: "Jan 2025 – May 2025",
     roles: [["Instructor", "مدرّب", ""]],
-    bullets: [{ en: "Developed and published the Data Validation with Excel course for engineers moving into data analytics.", ar: "طوّرت ونشرت دورة التحقق من البيانات باستخدام Excel للمهندسين المنتقلين إلى تحليل البيانات." },
+    bullets: [{ en: 'Developed and published the <a href="https://www.datacamp.com/courses/data-validation-in-excel" target="_blank" rel="noopener">Data Validation in Excel</a> course for engineers moving into data analytics.', ar: 'طوّرت ونشرت دورة <a href="https://www.datacamp.com/courses/data-validation-in-excel" target="_blank" rel="noopener">Data Validation in Excel</a> للمهندسين المنتقلين إلى تحليل البيانات.' },
+              { en: "Rated 4.8 out of 5 from 628 learner reviews. 83% of learners gave 5 stars.", ar: "تقييم 4.8 من 5 من 628 مراجعة، و83% من المتعلمين منحوها 5 نجوم." },
               { en: "Produced the video lessons and interactive exercises, aimed at MENA professionals.", ar: "أنتجت الدروس المرئية والتمارين التفاعلية، موجّهة لمهنيي الشرق الأوسط وشمال أفريقيا." }] },
   { org: "Udacity", place: { en: "Remote", ar: "عن بعد" }, when: "Jun 2020 – Jan 2023",
     roles: [["Session Lead", "قائد جلسات", ""]],
