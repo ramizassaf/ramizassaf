@@ -8,12 +8,14 @@ Personal CV website of Ramiz Assaf, Data Professional and Industrial Engineer ba
 
 ## Features
 
-- **Live demos.** A break-even calculator and a normal CDF approximation demo run in the browser.
-- **English and Arabic.** One click switches language and right-to-left layout.
-- **Dark mode.** Follows the system setting, with a manual toggle.
-- **Print to PDF.** The Download CV button prints a clean CV without demos or navigation.
-- **Link preview.** `og.png` shows as a card when the link is shared on LinkedIn, WhatsApp, or X.
-- **No build step.** One HTML file. No frameworks, no dependencies.
+- **App layout.** A home screen of boxes. Each box opens a section, with a bottom navigation bar and a back button. Links like `#research` open a section directly.
+- **ATS CV download.** "Download CV" builds `Ramiz_Assaf_CV.md`, a plain Markdown CV that applicant tracking systems read cleanly.
+- **Slides about me.** One click generates a 14-slide HTML deck from the same data. Arrow keys to move, F for full screen, Save to keep a copy.
+- **Services.** Training, online teaching, consulting, research collaboration, and more, each with a request button that fills the contact form.
+- **Research dashboard, thesis supervision, certificates, course reviews, and learning games.**
+- **Live demos.** A break-even calculator and a normal CDF approximation, in a pop-up window.
+- **English and Arabic, light and dark.** Theme matches the IE Program Guide site.
+- **No build step.** One HTML file, no frameworks.
 
 ## Files
 
@@ -27,7 +29,7 @@ Personal CV website of Ramiz Assaf, Data Professional and Industrial Engineer ba
 
 All content lives in `index.html`.
 
-- **Experience and education:** edit the `.t-item` blocks in the `#experience` section. Add one block per role, newest first.
+- **Experience, education, certificates, publications, theses:** edit the `EXP`, `EDU`, `CERTS`, `PUBS`, and `THESES` lists in the script. The CV download, slides, and dashboard update from these lists.
 - **Projects:** edit the `<article class="card proj">` blocks in the `#projects` section.
 - **Arabic text:** each element with `data-i18n="key"` has an Arabic version under the same key in the `AR` object inside the script.
 - **Contact form:** create a free form at [formspree.io](https://formspree.io) and paste its ID into `FORMSPREE_ID` near the top of the script. While the ID stays empty, the form opens the visitor's email app.

@@ -14,7 +14,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%231f6f5c'/><text x='32' y='42' font-family='Arial' font-weight='700' font-size='28' fill='white' text-anchor='middle'>RA</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Changa:wght@500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #f6f6f3;
@@ -345,13 +345,113 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
   .sec-head p, .sec-head .kicker { display: none; }
   .proj:hover { transform: none; }
 }
+
+/* ===== IE program theme + app layout ===== */
+:root {
+  --bg: #F3F6F8; --bg-2: #EAF0F4; --card: #FFFFFF; --text: #132A3E; --muted: #3E5A72; --line: #C9D6E1;
+  --accent: #1E5A8C; --accent-2: #C8402E; --accent-soft: #E3EDF6; --amber: #FFB020; --amber-deep: #E89400;
+  --edge: #132A3E; --grid: rgba(30,90,140,.075); --grid-strong: rgba(30,90,140,.14);
+  --s1: #1E5A8C; --s2: #E89400; --s3: #1E8C5A;
+  --shadow: 0 6px 24px rgba(19,42,62,.10); --shadow-lg: 0 18px 50px rgba(19,42,62,.16);
+  --nav-bg: #1C3448;
+}
+:root[data-theme="dark"] {
+  --bg: #0D1B28; --bg-2: #132637; --card: #15293B; --text: #E6EEF5; --muted: #9FB3C6; --line: #2A4157;
+  --accent: #7DB8E8; --accent-soft: #1B3550; --edge: #4A6A88; --grid: rgba(125,184,232,.06); --grid-strong: rgba(125,184,232,.11);
+  --s1: #7DB8E8; --s2: #FFB020; --s3: #4CC38A; --shadow: 0 6px 24px rgba(0,0,0,.35); --nav-bg: #0A1520;
+}
+body {
+  font-family: "IBM Plex Sans Arabic", system-ui, sans-serif;
+  background-color: var(--bg);
+  background-image: linear-gradient(var(--grid-strong) 1px, transparent 1px), linear-gradient(90deg, var(--grid-strong) 1px, transparent 1px),
+                    linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+  background-attachment: fixed;
+  padding-bottom: 96px;
+}
+html[lang="ar"] body { font-family: "IBM Plex Sans Arabic", sans-serif; }
+h1, h2, h3, .num, .logo b, .tt, .big, .rv-score .big, .stat .num { font-family: "Changa", "IBM Plex Sans Arabic", sans-serif; }
+.kicker, .when, .chart text, .pub .yr, code { font-family: "IBM Plex Mono", monospace !important; }
+.hero::before { display: none; }
+.hl { background: linear-gradient(transparent 62%, var(--amber) 62%, var(--amber) 92%, transparent 92%); padding: 0 .08em; }
+.card, .stat, .tile, .icon-btn, .btn { border: 2px solid var(--edge); }
+.card { box-shadow: var(--shadow); border-radius: 14px; }
+.stat, .tile { border-inline-start: 7px solid var(--amber); box-shadow: var(--shadow); }
+.btn { border-radius: 12px; font-weight: 700; }
+.btn.primary, :root[data-theme="dark"] .btn.primary { background: var(--amber); color: #132A3E; border-color: #132A3E; }
+.btn.primary:hover { background: var(--amber-deep); }
+.chip { border: 2px solid var(--line); }
+.chip.on, :root[data-theme="dark"] .chip.on { background: var(--amber); border-color: var(--edge); color: #132A3E; }
+.eyebrow { background: var(--nav-bg); color: #fff; }
+.eyebrow .dot { background: var(--amber); }
+.typed b { color: var(--accent); }
+.caret { background: var(--amber); }
+.tag { border-color: var(--line); }
+.role-badge, .badge-first { background: var(--amber); color: #132A3E; }
+.stars { color: var(--amber-deep); }
+section.alt, section.block { background: transparent; }
+a { color: var(--accent); }
+
+/* Floating header pill */
+nav:not(.appnav) { position: sticky; top: 12px; background: none; border: 0; backdrop-filter: none; z-index: 60; }
+nav:not(.appnav) .nav-inner { height: auto; padding-top: 0; }
+.nav-links { display: none !important; }
+.logo { display: inline-flex; align-items: center; gap: 10px; background: var(--nav-bg); color: #fff; padding: 8px 18px 8px 10px; border-radius: 999px; box-shadow: var(--shadow-lg); text-decoration: none; }
+.logo span { color: inherit; }
+.logo .logo-ic { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--amber); color: #132A3E; font-size: 1rem; }
+.logo b { display: block; font-size: 1rem; line-height: 1.1; letter-spacing: 0; }
+.logo small { display: block; font-size: .7rem; opacity: .75; font-weight: 400; }
+.nav-tools .icon-btn { box-shadow: var(--shadow); }
+
+/* Bottom app nav */
+.appnav { position: fixed; top: auto; bottom: 14px; border: 0; backdrop-filter: none; height: auto; left: 50%; transform: translateX(-50%); z-index: 70; display: flex; gap: 4px; padding: 6px; background: var(--nav-bg); border-radius: 999px; box-shadow: var(--shadow-lg); max-width: calc(100vw - 16px); overflow-x: auto; }
+.appnav a { display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 64px; padding: 7px 10px; border-radius: 999px; color: #C9D6E1; text-decoration: none; font-size: .68rem; }
+.appnav a span { font-size: 1.15rem; line-height: 1.1; }
+.appnav a b { font-weight: 600; }
+.appnav a.on { background: var(--amber); color: #132A3E; }
+@media (max-width: 480px) { .appnav a { min-width: 52px; padding: 6px 6px; } }
+
+/* Home tiles */
+.home-tiles { padding: 8px 0 40px; }
+.tiles-head h2 { margin: 0; font-size: 1.6rem; }
+.tiles-head p { margin: 2px 0 18px; color: var(--muted); }
+.tile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+.tile { position: relative; display: flex; flex-direction: column; gap: 4px; padding: 20px 20px 18px; background: var(--card); border-radius: 16px; color: var(--text); text-decoration: none; text-align: start; cursor: pointer; font: inherit; transition: transform .18s, box-shadow .18s; min-height: 150px; }
+.tile:hover, .tile:focus-visible { transform: translateY(-4px); box-shadow: var(--shadow-lg); outline: none; }
+.tile .ti { font-size: 1.9rem; }
+.tile .tt { font-size: 1.2rem; font-weight: 700; margin-top: 6px; }
+.tile .ts { color: var(--muted); font-size: .88rem; }
+.tile .ta { position: absolute; top: 16px; inset-inline-end: 18px; font-weight: 700; color: var(--accent); transition: transform .18s; }
+[dir="rtl"] .tile .ta { transform: scaleX(-1); }
+.tile:hover .ta { transform: translateX(4px); }
+
+/* View switching */
+body:not([data-view="home"]) header.hero, body:not([data-view="home"]) .home-tiles { display: none; }
+section.block { display: none; padding: 24px 0 40px; }
+section.block.active { display: block; animation: panelIn .32s ease; }
+@keyframes panelIn { from { opacity: 0; transform: translateY(14px) scale(.985); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { section.block.active { animation: none; } }
+.back { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 14px; padding: 7px 14px; border-radius: 999px; background: var(--card); border: 2px solid var(--edge); color: var(--text); text-decoration: none; font-weight: 700; font-size: .88rem; box-shadow: var(--shadow); }
+.back:hover { background: var(--amber); color: #132A3E; }
+.sec-head h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
+.hero { padding-top: 40px; }
+
+/* Services */
+.svc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.svc { display: flex; flex-direction: column; gap: 8px; border-inline-start: 7px solid var(--amber); }
+.svc-ic { font-size: 1.8rem; }
+.svc h3 { margin: 0; font-size: 1.12rem; }
+.svc p { margin: 0; color: var(--muted); font-size: .92rem; flex: 1; }
+.svc-note { font-family: "IBM Plex Mono", monospace; font-size: .78rem; color: var(--accent); background: var(--accent-soft); border-radius: 8px; padding: 6px 10px; }
+.svc .btn { justify-content: center; margin-top: 6px; }
+footer { border-top: 0; }
 </style>
 </head>
 <body>
 
 <nav>
   <div class="container nav-inner">
-    <a class="logo" href="#top">Ramiz<span>.</span>Assaf</a>
+    <a class="logo" href="#home"><span class="logo-ic">⚙</span><span><b>Dr. Ramiz Assaf</b><small data-i18n="logo_s">Industrial Engineering · Data Science</small></span></a>
     <div class="nav-links">
       <a href="#about" data-i18n="nav_about">About</a>
       <a href="#experience" data-i18n="nav_exp">Experience</a>
@@ -374,13 +474,14 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
     <div class="hero-grid">
       <div>
         <span class="eyebrow"><span class="dot"></span><span data-i18n="open">PhD, Politecnico di Milano</span></span>
-        <h1 data-i18n="name">Ramiz Assaf</h1>
+        <h1><span class="hl" data-i18n="name">Ramiz Assaf</span></h1>
         <div class="typed"><span data-i18n="iam">I am</span> <b id="typed"></b><span class="caret"></span></div>
         <p class="lead" data-i18n="lead">Assistant Professor of Industrial Engineering and Coordinator of the Master of Engineering Management program at An-Najah National University. I train engineers and professionals in data analytics with Excel, Python, SQL, Tableau, and Alteryx.</p>
         <div class="cta">
-          <button class="btn primary" onclick="window.print()"><span>↓</span> <span data-i18n="download">Download CV</span></button>
+          <button class="btn primary" type="button" id="cvBtn"><span>↓</span> <span data-i18n="download">Download CV</span></button>
+          <button class="btn" type="button" id="slidesBtn"><span>🖥</span> <span data-i18n="slides">Slides about me</span></button>
           <button class="btn" type="button" data-demo=""><span>▶</span> <span data-i18n="try">Try my live demos</span></button>
-          <a class="btn" href="#contact" data-i18n="hire">Get in touch</a>
+          
         </div>
       </div>
       <div class="avatar-wrap">
@@ -398,10 +499,29 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
   </div>
 </header>
 
+<div class="home-tiles" id="homeTiles">
+  <div class="container">
+    <div class="tiles-head"><h2 data-i18n="tiles_h">Explore</h2><p data-i18n="tiles_p">Tap a box to open a section.</p></div>
+    <div class="tile-grid">
+      <a class="tile reveal" href="#about"><span class="ti">👤</span><span class="tt" data-i18n="t_about">About me</span><span class="ts" data-i18n="t_about_s">Profile, roles, and languages</span><span class="ta">→</span></a>
+      <a class="tile reveal" href="#experience"><span class="ti">💼</span><span class="tt" data-i18n="t_exp">Experience</span><span class="ts" data-i18n="t_exp_s">14+ years in academia and training</span><span class="ta">→</span></a>
+      <a class="tile reveal" href="#research"><span class="ti">📊</span><span class="tt" data-i18n="t_res">Research</span><span class="ts" data-i18n="t_res_s">1,849 citations · h-index 20</span><span class="ta">→</span></a>
+      <a class="tile reveal" href="#supervision"><span class="ti">🎓</span><span class="tt" data-i18n="t_sup">Thesis supervision</span><span class="ts" data-i18n="t_sup_s">16 theses supervised</span><span class="ta">→</span></a>
+      <a class="tile reveal" href="#services"><span class="ti">🤝</span><span class="tt" data-i18n="t_svc">Services</span><span class="ts" data-i18n="t_svc_s">Training, consulting, collaboration</span><span class="ta">→</span></a>
+      <a class="tile reveal" href="#projects"><span class="ti">🧩</span><span class="tt" data-i18n="t_proj">Projects</span><span class="ts" data-i18n="t_proj_s">Open-source tools and web apps</span><span class="ta">→</span></a>
+      <a class="tile reveal" href="#games"><span class="ti">🎮</span><span class="tt" data-i18n="t_games">Learning games</span><span class="ts" data-i18n="t_games_s">3 gamified course labs</span><span class="ta">→</span></a>
+      <a class="tile reveal" href="#skills"><span class="ti">🛠</span><span class="tt" data-i18n="t_skills">Skills</span><span class="ts" data-i18n="t_skills_s">Data, engineering, teaching</span><span class="ta">→</span></a>
+      <a class="tile reveal" href="#contact"><span class="ti">✉️</span><span class="tt" data-i18n="t_contact">Contact</span><span class="ts" data-i18n="t_contact_s">Email, LinkedIn, Scholar</span><span class="ta">→</span></a>
+      <button class="tile reveal" type="button" data-demo=""><span class="ti">▶️</span><span class="tt" data-i18n="t_demo">Live demos</span><span class="ts" data-i18n="t_demo_s">Break-even and CDF tools</span><span class="ta">→</span></button>
+    </div>
+  </div>
+</div>
+
 <section class="block alt" id="about">
   <div class="container">
+    <a class="back" href="#home" data-i18n="back">← Home</a>
     <div class="sec-head reveal">
-      <div class="kicker">01 / about</div>
+      <div class="kicker">about</div>
       <h2 data-i18n="about_h">About me</h2>
     </div>
     <div class="about-grid">
@@ -426,8 +546,9 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
 
 <section class="block" id="experience">
   <div class="container">
+    <a class="back" href="#home" data-i18n="back">← Home</a>
     <div class="sec-head reveal">
-      <div class="kicker">02 / experience</div>
+      <div class="kicker">experience</div>
       <h2 data-i18n="exp_h">Experience and education</h2>
       <p data-i18n="exp_p">14+ years in university teaching and leadership in Palestine and Saudi Arabia, plus data analytics training for global platforms.</p>
     </div>
@@ -477,8 +598,9 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
 
 <section class="block alt" id="research">
   <div class="container">
+    <a class="back" href="#home" data-i18n="back">← Home</a>
     <div class="sec-head reveal">
-      <div class="kicker">03 / research</div>
+      <div class="kicker">research</div>
       <h2 data-i18n="res_h">Research</h2>
       <p data-i18n="res_p">Operations research, quality management, sustainability, and technology adoption, with a focus on industry in Palestine and the region.</p>
     </div>
@@ -515,8 +637,9 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
 
 <section class="block" id="supervision">
   <div class="container">
+    <a class="back" href="#home" data-i18n="back">← Home</a>
     <div class="sec-head reveal">
-      <div class="kicker">04 / supervision</div>
+      <div class="kicker">supervision</div>
       <h2 data-i18n="sup_h">Thesis supervision</h2>
       <p data-i18n="sup_p">Theses I supervised or co-supervised at An-Najah National University, in AI adoption, operations, quality, and sustainability.</p>
     </div>
@@ -530,10 +653,32 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
   </div>
 </section>
 
+<section class="block" id="services">
+  <div class="container">
+    <a class="back" href="#home" data-i18n="back">← Home</a>
+    <div class="sec-head reveal">
+      <div class="kicker">services</div>
+      <h2 data-i18n="svc_h">Services</h2>
+      <p data-i18n="svc_p">How I work with universities, companies, and researchers. Pick a service to send a request.</p>
+    </div>
+    <div class="svc-grid">
+      <article class="card svc reveal"><div class="svc-ic">🧑‍🏫</div><h3 data-i18n="sv1">Corporate data analytics training</h3><p data-i18n="sv1d">Hands-on workshops in Excel, SQL, Python, Tableau, and Alteryx for engineers and business teams, in Arabic or English.</p><div class="svc-note" data-i18n="sv1n">800+ professionals trained, 94% satisfaction</div><button class="btn primary" type="button" data-svc="Corporate data analytics training" data-i18n="svc_req">Request this service</button></article>
+      <article class="card svc reveal"><div class="svc-ic">💻</div><h3 data-i18n="sv2">Online teaching and course design</h3><p data-i18n="sv2d">Video courses, live online classes, and full course design with exercises and assessments.</p><div class="svc-note" data-i18n="sv2n">Published DataCamp course, rated 4.8/5</div><button class="btn primary" type="button" data-svc="Online teaching and course design" data-i18n="svc_req">Request this service</button></article>
+      <article class="card svc reveal"><div class="svc-ic">⚙️</div><h3 data-i18n="sv3">Operations and process improvement</h3><p data-i18n="sv3d">Lean, SMED, simulation, scheduling, and supply chain optimisation for factories and service firms.</p><div class="svc-note" data-i18n="sv3n">Industrial engineering PhD, Politecnico di Milano</div><button class="btn primary" type="button" data-svc="Operations and process improvement" data-i18n="svc_req">Request this service</button></article>
+      <article class="card svc reveal"><div class="svc-ic">💰</div><h3 data-i18n="sv4">Engineering economics and decision analysis</h3><p data-i18n="sv4d">Investment appraisal, break-even and cost studies, and multi-criteria decision models such as AHP.</p><div class="svc-note" data-i18n="sv4n">Interactive decision tools on request</div><button class="btn primary" type="button" data-svc="Engineering economics and decision analysis" data-i18n="svc_req">Request this service</button></article>
+      <article class="card svc reveal"><div class="svc-ic">✅</div><h3 data-i18n="sv5">Quality and accreditation consulting</h3><p data-i18n="sv5d">Quality management systems, course learning outcomes, and preparation for NCAAA and ABET reviews.</p><div class="svc-note" data-i18n="sv5n">Former NCAAA college quality coordinator</div><button class="btn primary" type="button" data-svc="Quality and accreditation consulting" data-i18n="svc_req">Request this service</button></article>
+      <article class="card svc reveal"><div class="svc-ic">🔬</div><h3 data-i18n="sv6">Research collaboration</h3><p data-i18n="sv6d">Joint studies using surveys and structural equation modelling, optimisation, simulation, and machine learning.</p><div class="svc-note" data-i18n="sv6n">1,849 citations, h-index 20</div><button class="btn primary" type="button" data-svc="Research collaboration" data-i18n="svc_req">Request this service</button></article>
+      <article class="card svc reveal"><div class="svc-ic">🎓</div><h3 data-i18n="sv7">Thesis and research mentoring</h3><p data-i18n="sv7d">Guidance on research design, data analysis, and writing for master’s and doctoral researchers.</p><div class="svc-note" data-i18n="sv7n">16 master’s theses supervised</div><button class="btn primary" type="button" data-svc="Thesis and research mentoring" data-i18n="svc_req">Request this service</button></article>
+      <article class="card svc reveal"><div class="svc-ic">🎮</div><h3 data-i18n="sv8">Gamified learning design</h3><p data-i18n="sv8d">Custom browser games and practice labs that turn course content into levels, points, and instant feedback.</p><div class="svc-note" data-i18n="sv8n">3 labs in use in my courses</div><button class="btn primary" type="button" data-svc="Gamified learning design" data-i18n="svc_req">Request this service</button></article>
+    </div>
+  </div>
+</section>
+
 <section class="block alt" id="projects">
   <div class="container">
+    <a class="back" href="#home" data-i18n="back">← Home</a>
     <div class="sec-head reveal">
-      <div class="kicker">05 / projects</div>
+      <div class="kicker">projects</div>
       <h2 data-i18n="proj_h">Selected projects</h2>
       <p data-i18n="proj_p">Open-source work in engineering economics, statistics, and data analysis.</p>
     </div>
@@ -587,8 +732,9 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
 
 <section class="block" id="games">
   <div class="container">
+    <a class="back" href="#home" data-i18n="back">← Home</a>
     <div class="sec-head reveal">
-      <div class="kicker">06 / gamification</div>
+      <div class="kicker">gamification</div>
       <h2 data-i18n="games_h">Gamified learning labs</h2>
       <p data-i18n="games_p">Browser games I designed for my courses. Students earn XP, unlock levels, and get instant feedback, with fresh numbers on every attempt.</p>
     </div>
@@ -690,8 +836,9 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
 
 <section class="block alt" id="skills">
   <div class="container">
+    <a class="back" href="#home" data-i18n="back">← Home</a>
     <div class="sec-head reveal">
-      <div class="kicker">07 / skills</div>
+      <div class="kicker">skills</div>
       <h2 data-i18n="skills_h">Skills</h2>
     </div>
     <div class="skill-grid">
@@ -706,8 +853,9 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
 
 <section class="block" id="contact">
   <div class="container">
+    <a class="back" href="#home" data-i18n="back">← Home</a>
     <div class="sec-head reveal">
-      <div class="kicker">08 / contact</div>
+      <div class="kicker">contact</div>
       <h2 data-i18n="contact_h">Let's work together</h2>
       <p data-i18n="contact_p">Send a message about training, research, thesis supervision, or collaboration.</p>
     </div>
@@ -730,6 +878,15 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
     </div>
   </div>
 </section>
+
+<nav class="appnav" aria-label="Sections">
+  <a href="#home" data-v="home"><span>🏠</span><b data-i18n="bn_home">Home</b></a>
+  <a href="#about" data-v="about"><span>👤</span><b data-i18n="bn_about">About</b></a>
+  <a href="#research" data-v="research"><span>📊</span><b data-i18n="bn_res">Research</b></a>
+  <a href="#services" data-v="services"><span>🤝</span><b data-i18n="bn_svc">Services</b></a>
+  <a href="#projects" data-v="projects"><span>🧩</span><b data-i18n="bn_proj">Projects</b></a>
+  <a href="#contact" data-v="contact"><span>✉️</span><b data-i18n="bn_contact">Contact</b></a>
+</nav>
 
 <footer>
   <div class="container">© <span id="yr"></span> Ramiz Assaf · <span data-i18n="foot">Built with HTML, CSS, and JavaScript. Hosted on GitHub Pages.</span></div>
@@ -786,6 +943,22 @@ const AR = {
   tc_h: "الاقتباسات حسب المحور", tc_s: "مجموع اقتباسات Google Scholar لأوراق كل محور.", vn_h: "أبرز جهات النشر", vn_s: "مجلات ومؤتمرات نُشرت فيها ورقتان أو أكثر.",
   ca_h: "أكثر الباحثين المشاركين", ca_s: "أوراق مشتركة. قوائم المؤلفين الطويلة مختصرة في Scholar، فالأعداد حد أدنى.",
   rv_p: "دورتي المنشورة للمهندسين والمحللين المنتقلين إلى العمل بالبيانات.", rv_n: "من 628 مراجعة",
+  slides: "شرائح تعريفية", back: "← الرئيسية", tiles_h: "استكشف", tiles_p: "اضغط على أي مربع لفتح القسم.", logo_s: "هندسة صناعية · علم البيانات",
+  t_about: "نبذة عني", t_about_s: "الملف الشخصي والأدوار واللغات", t_exp: "الخبرات", t_exp_s: "أكثر من 14 عاماً في الجامعات والتدريب",
+  t_res: "البحث العلمي", t_res_s: "1,849 اقتباس · h-index 20", t_sup: "الإشراف على الرسائل", t_sup_s: "16 رسالة بإشرافي",
+  t_svc: "الخدمات", t_svc_s: "تدريب واستشارات وتعاون بحثي", t_proj: "المشاريع", t_proj_s: "أدوات وتطبيقات مفتوحة المصدر",
+  t_games: "ألعاب التعلّم", t_games_s: "3 مختبرات تعلّم بأسلوب الألعاب", t_skills: "المهارات", t_skills_s: "البيانات والهندسة والتدريس",
+  t_contact: "تواصل", t_contact_s: "البريد وLinkedIn وScholar", t_demo: "عروض حية", t_demo_s: "أدوات نقطة التعادل والتوزيع الطبيعي",
+  bn_home: "الرئيسية", bn_about: "نبذة", bn_res: "البحث", bn_svc: "الخدمات", bn_proj: "المشاريع", bn_contact: "تواصل",
+  svc_h: "الخدمات", svc_p: "كيف أعمل مع الجامعات والشركات والباحثين. اختر خدمة لإرسال طلب.", svc_req: "اطلب هذه الخدمة",
+  sv1: "تدريب تحليل البيانات للمؤسسات", sv1d: "ورش عملية في Excel وSQL وPython وTableau وAlteryx للمهندسين وفرق الأعمال، بالعربية أو الإنجليزية.", sv1n: "أكثر من 800 متدرب، رضا 94%",
+  sv2: "التدريس الإلكتروني وتصميم المساقات", sv2d: "مساقات مرئية وحصص مباشرة عبر الإنترنت وتصميم مساقات كاملة بتمارين وتقييمات.", sv2n: "مساق منشور على DataCamp بتقييم 4.8/5",
+  sv3: "تحسين العمليات والإنتاج", sv3d: "الإنتاج الرشيق وSMED والمحاكاة والجدولة وتحسين سلاسل الإمداد للمصانع وشركات الخدمات.", sv3n: "دكتوراه من جامعة البوليتكنيك في ميلانو",
+  sv4: "الاقتصاد الهندسي وتحليل القرار", sv4d: "تقييم الاستثمارات ودراسات التكلفة ونقطة التعادل ونماذج القرار متعددة المعايير مثل AHP.", sv4n: "أدوات قرار تفاعلية عند الطلب",
+  sv5: "استشارات الجودة والاعتماد", sv5d: "أنظمة إدارة الجودة ومخرجات تعلّم المساقات والتحضير لمراجعات NCAAA وABET.", sv5n: "منسق جودة سابق لاعتماد NCAAA",
+  sv6: "التعاون البحثي", sv6d: "دراسات مشتركة باستخدام الاستبانات ونمذجة المعادلات الهيكلية والتحسين والمحاكاة وتعلّم الآلة.", sv6n: "1,849 اقتباس، h-index 20",
+  sv7: "الإرشاد البحثي والإشراف", sv7d: "توجيه في تصميم البحث وتحليل البيانات والكتابة لطلبة الماجستير والدكتوراه.", sv7n: "16 رسالة ماجستير بإشرافي",
+  sv8: "تصميم التعلّم بأسلوب الألعاب", sv8d: "ألعاب ومختبرات تدريب في المتصفح تحوّل محتوى المساق إلى مستويات ونقاط وتغذية راجعة فورية.", sv8n: "3 مختبرات مستخدمة في مساقاتي",
   rm1: "اقتباس", rm1s: "1,783 منذ 2021", rm2s: "19 منذ 2021", rm3s: "24 منذ 2021", rm4: "منشور", rm4s: "منذ 2009",
   cit_h: "الاقتباسات سنوياً", cit_s: "قيم تقريبية مأخوذة من رسم Google Scholar.", top_h: "الأكثر اقتباساً", res_link: "الملف الكامل على Google Scholar ↗",
   skills_h: "المهارات", sk1: "علم البيانات والتحليلات", sk2: "الإحصاء", sk3: "الهندسة الصناعية", sk4: "التدريس والقيادة",
@@ -1262,6 +1435,148 @@ document.getElementById("contactForm").addEventListener("submit", async ev => {
   } catch (e) { note.textContent = lang === "ar" ? "تعذّر الإرسال. راسلني عبر البريد." : "Sending failed. Email me directly."; }
 });
 
+/* ---------- App router ---------- */
+const VIEWS = [...document.querySelectorAll("section.block")].map(x => x.id);
+function route() {
+  const id = location.hash.slice(1), v = VIEWS.includes(id) ? id : "home";
+  document.body.dataset.view = v;
+  document.querySelectorAll("section.block").forEach(x => x.classList.toggle("active", x.id === v));
+  document.querySelectorAll(".appnav a").forEach(a => a.classList.toggle("on", a.dataset.v === v));
+  document.querySelectorAll(v === "home" ? "header.hero .reveal, .home-tiles .reveal" : `#${v} .reveal`).forEach(r => r.classList.add("in"));
+  scrollTo({ top: 0 });
+}
+addEventListener("hashchange", route);
+
+/* ---------- Services: request ---------- */
+document.querySelectorAll("[data-svc]").forEach(b => b.addEventListener("click", () => {
+  location.hash = "#contact";
+  const m = document.querySelector('#contactForm textarea[name="message"]');
+  m.value = (lang === "ar" ? "أرغب في خدمة: " : "I am interested in: ") + b.dataset.svc + "\n\n";
+  setTimeout(() => m.focus(), 350);
+}));
+
+/* ---------- ATS CV (Markdown) ---------- */
+const strip = h => String(h).replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+function cvMarkdown() {
+  const L = [];
+  L.push("# Dr. Ramiz Assaf", "",
+    "Assistant Professor of Industrial Engineering | Coordinator, Master of Engineering Management | Data Science Trainer", "",
+    "Nablus, Palestine | ramizassaf@najah.edu | ramizassaf@gmail.com", "",
+    "LinkedIn: https://www.linkedin.com/in/ramiz-assaf-529610353", "",
+    "Google Scholar: https://scholar.google.com/citations?user=yDDnd50AAAAJ", "",
+    "Website: https://ramizassaf.github.io/cv/", "",
+    "## Summary", "",
+    "Assistant Professor of Industrial Engineering at An-Najah National University and Coordinator of the Master of Engineering Management program, with 14+ years of university teaching and academic leadership in Palestine and Saudi Arabia. PhD in Mechanical Engineering (Politecnico di Milano). Data science trainer who has trained 800+ professionals across the MENA region with a 94% satisfaction score. Researcher with " + PUBS.length + " publications, 1,849 citations, and an h-index of 20 in operations research, quality management, sustainability, and technology adoption.", "",
+    "## Core Skills", "",
+    "- Data analytics: Python, SQL, Excel, Tableau, Alteryx, pandas, R, machine learning",
+    "- Statistics: hypothesis testing, A/B testing, regression, structural equation modelling, multi-criteria decision making",
+    "- Industrial engineering: engineering economics, engineering management, optimisation, simulation, lean, quality assurance",
+    "- Academic leadership: curriculum development, program coordination, NCAAA accreditation, ABET preparation, mentoring",
+    "- Teaching: online course production, training and development, gamified learning design", "",
+    "## Professional Experience", "");
+  EXP.forEach(e => {
+    L.push(`### ${e.org}, ${e.place.en}`, "", e.when, "");
+    e.roles.forEach(r => L.push(`- ${r[0]}${r[2] ? " (" + r[2] + ")" : ""}`));
+    e.bullets.forEach(b => L.push(`- ${strip(b.en)}`));
+    L.push("");
+  });
+  L.push("## Education", "");
+  EDU.forEach(e => L.push(`- ${e.d.en}, ${e.s.en} (${e.y.replace(/\s*–\s*/, "-")})`));
+  L.push("", "## Certifications", "");
+  CERTS.forEach(c => L.push(`- ${c.t}, ${c.i.en}${c.d ? " (" + c.d + ")" : ""}`));
+  L.push("", "## Research", "", `- Google Scholar: 1,849 citations, h-index 20, i10-index 26, ${PUBS.length} publications`, "", "### Selected Publications", "");
+  const sel = [...PUBS].sort((a, b) => b.c - a.c).slice(0, 10);
+  sel.forEach(x => L.push(`- ${x.a.replace(", ...", " et al.")} (${x.y || "n.d."}). ${x.t}. ${x.v}.`));
+  L.push("", "## Thesis Supervision", "", `- Supervised or co-supervised ${THESES.length} master's theses at An-Najah National University`);
+  THESES.slice(0, 8).forEach(t => L.push(`- ${t.t}${t.year ? " (" + t.year + ")" : ""}`));
+  L.push("", "## Teaching Innovation", "",
+    "- Data Validation in Excel, published course on DataCamp, rated 4.8/5 from 628 reviews",
+    "- Excel Skill Tree, Labor Analysis Lab, and Financial Decisions Lab: gamified browser labs for courses",
+    "- IE Program Guide: bilingual website for prospective industrial engineering students", "",
+    "## Languages", "", "- Arabic (Native)", "- English (Full professional)", "- Italian (Limited working)", "");
+  return L.join("\n");
+}
+document.getElementById("cvBtn").addEventListener("click", () => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([cvMarkdown()], { type: "text/markdown" }));
+  a.download = "Ramiz_Assaf_CV.md"; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+});
+
+/* ---------- Slides generator ---------- */
+const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+const startKey = w => { const m = w.match(/([A-Za-z]{3})?\s*(\d{4})/); return +m[2] * 12 + (m[1] ? MONTHS.indexOf(m[1].toLowerCase()) : 0); };
+function deckHTML() {
+  const e = t => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  let photo = new URL("photo.jpg", location.href).href;
+  try { const im = document.querySelector('img[src="photo.jpg"]'); const c = document.createElement("canvas"); c.width = im.naturalWidth; c.height = im.naturalHeight; c.getContext("2d").drawImage(im, 0, 0); photo = c.toDataURL("image/jpeg", 0.85); } catch (err) { /* keep URL */ }
+  const top = [...PUBS].sort((a, b) => b.c - a.c).slice(0, 3);
+  const themes = Object.keys(RTHEMES).map(k => [RTHEMES[k].en, PUBS.filter(p => p.th.includes(k)).length]).sort((a, b) => b[1] - a[1]).slice(0, 6);
+  const mx = themes[0][1];
+  const S = [];
+  S.push(`<section class="s title"><div class="tl"><div class="pill">Industrial Engineering · Data Science</div><h1><span class="hl">Dr. Ramiz Assaf</span></h1><p class="big">Assistant Professor of Industrial Engineering<br>Coordinator, Master of Engineering Management<br>An-Najah National University</p></div><img src="${photo}" alt=""></section>`);
+  S.push(`<section class="s"><h2>Who I am</h2><ul class="lst"><li>Industrial engineer and data science trainer based in Nablus, Palestine</li><li>PhD, Politecnico di Milano. MEng, Engineering Management. BSc, Industrial Engineering</li><li>14+ years teaching at universities in Palestine and Saudi Arabia</li><li>Goal: bridge engineering and data-driven decision making</li></ul></section>`);
+  S.push(`<section class="s"><h2>By the numbers</h2><div class="kp"><div><b>14+</b>years teaching</div><div><b>800+</b>professionals trained</div><div><b>94%</b>training satisfaction</div><div><b>1,849</b>citations</div><div><b>${PUBS.length}</b>publications</div><div><b>${THESES.length}</b>theses supervised</div></div></section>`);
+  S.push(`<section class="s"><h2>Career path</h2><div class="tline">${EXP.slice().sort((a, b) => startKey(a.when) - startKey(b.when)).map(x => `<div><span>${e(x.when)}</span><b>${e(x.org)}</b><small>${e(x.roles[0][0])}</small></div>`).join("")}</div></section>`);
+  S.push(`<section class="s"><h2>Academic leadership at An-Najah</h2><ul class="lst"><li>Assistant Professor, Industrial Engineering (2022 to present)</li><li>Coordinator, Master of Engineering Management: academic planning, advising, and program development</li><li>Associate Editor, An-Najah University Journal for Research B (Natural Sciences)</li><li>Former NCAAA quality coordinator at the University of Business and Technology, Jeddah</li></ul></section>`);
+  S.push(`<section class="s"><h2>Training impact</h2><div class="kp"><div><b>800+</b>Udacity learners, MENA</div><div><b>94%</b>post-training satisfaction</div><div><b>~200</b>Correlation One students</div><div><b>4.8/5</b>DataCamp course, 628 reviews</div></div><p class="note">Excel · SQL · Python · Tableau · Alteryx</p></section>`);
+  S.push(`<section class="s"><h2>Research at a glance</h2><div class="kp k3"><div><b>1,849</b>citations</div><div><b>20</b>h-index</div><div><b>26</b>i10-index</div></div><div class="bars">${themes.map(([n, v]) => `<div><span>${e(n)}</span><i style="width:${v / mx * 100}%"></i><b>${v}</b></div>`).join("")}</div></section>`);
+  S.push(`<section class="s"><h2>Most cited work</h2>${top.map(x => `<div class="pub"><b>${x.c}</b><div><strong>${e(x.t)}</strong><small>${e(x.v)}, ${x.y}</small></div></div>`).join("")}</section>`);
+  S.push(`<section class="s"><h2>Thesis supervision</h2><div class="kp k3"><div><b>${THESES.length}</b>theses</div><div><b>${THESES.filter(x => x.th.includes("ai")).length}</b>on AI and ML</div><div><b>2017</b>supervising since</div></div><ul class="lst sm">${THESES.slice(0, 4).map(x => `<li>${e(x.t)}</li>`).join("")}</ul></section>`);
+  S.push(`<section class="s"><h2>Teaching innovation</h2><div class="cards"><div><b>Excel Skill Tree</b>9 modules, 54 functions, XP and ranks</div><div><b>Labor Analysis Lab</b>10 levels with fading guidance</div><div><b>Financial Decisions Lab</b>5 classroom games on financial statements</div><div><b>IE Program Guide</b>Bilingual site for future IE students</div></div></section>`);
+  S.push(`<section class="s"><h2>Open-source tools</h2><ul class="lst"><li>Break-even location finder: cheapest option at every volume</li><li>Normal CDF piecewise-linear approximation with minimax optimisation</li><li>Engineering economy analysis: present, future, and annual worth, IRR</li><li>A/B test and exploratory data analysis notebooks</li></ul></section>`);
+  S.push(`<section class="s"><h2>Services</h2><div class="cards">${["Data analytics training", "Online teaching and course design", "Operations and process improvement", "Engineering economics and decision analysis", "Quality and accreditation consulting", "Research collaboration", "Thesis and research mentoring", "Gamified learning design"].map(x => `<div><b>${x}</b></div>`).join("")}</div></section>`);
+  S.push(`<section class="s"><h2>Education and certifications</h2><ul class="lst sm">${EDU.map(x => `<li><b>${e(x.d.en)}</b>, ${e(x.s.en)} (${e(x.y)})</li>`).join("")}${CERTS.filter(x => x.g === "teach").slice(0, 2).concat(CERTS.filter(x => x.v)).map(x => `<li>${e(x.t)}, ${e(x.i.en)}</li>`).join("")}</ul></section>`);
+  S.push(`<section class="s title end"><div class="tl"><h1><span class="hl">Let's work together</span></h1><p class="big">ramizassaf@najah.edu<br>linkedin.com/in/ramiz-assaf-529610353<br>ramizassaf.github.io/cv</p></div><img src="${photo}" alt=""></section>`);
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dr. Ramiz Assaf | Slides</title>
+<link href="https://fonts.googleapis.com/css2?family=Changa:wght@500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F3F6F8;--ink:#132A3E;--ink2:#3E5A72;--blue:#1E5A8C;--amber:#FFB020;--grid:rgba(30,90,140,.08)}
+*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:#0D1B28;font-family:"IBM Plex Sans Arabic",sans-serif;color:var(--ink)}
+.deck{position:fixed;inset:0;display:grid;place-items:center}
+.s{display:none;width:min(100vw,177.78vh);height:min(56.25vw,100vh);background:var(--bg);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;padding:5% 7% 8%;position:relative;border-left:14px solid var(--amber);font-size:min(2.1vw,3.7vh)}
+.s.on{display:block;animation:in .35s ease}@keyframes in{from{opacity:0;transform:translateY(12px)}}
+h1,h2{font-family:Changa,sans-serif;margin:0 0 .6em;line-height:1.1}h1{font-size:3.2em}h2{font-size:2.1em;color:var(--ink)}
+.hl{background:linear-gradient(transparent 60%,var(--amber) 60%,var(--amber) 92%,transparent 92%)}
+.title{display:flex!important;align-items:center;justify-content:space-between;gap:5%}.title:not(.on){display:none!important}
+.title img{height:78%;aspect-ratio:4/5;object-fit:cover;object-position:top;border-radius:20px;border:4px solid var(--ink);box-shadow:10px 10px 0 var(--amber)}
+.pill{display:inline-block;background:var(--ink);color:#fff;border-radius:999px;padding:.35em 1em;font-size:.8em;margin-bottom:1em}
+.big{font-size:1.15em;color:var(--ink2);line-height:1.5}
+.lst{font-size:1.15em;line-height:1.55;padding-left:1.1em}.lst li{margin:.35em 0}.lst li::marker{color:var(--amber)}.lst.sm{font-size:.95em}
+.kp{display:grid;grid-template-columns:repeat(3,1fr);gap:1em}.kp.k3{margin-bottom:1.2em}
+.kp div{background:#fff;border:3px solid var(--ink);border-left:10px solid var(--amber);border-radius:14px;padding:.8em 1em;color:var(--ink2)}
+.kp b{display:block;font-family:Changa;font-size:2.2em;color:var(--blue);line-height:1.1}
+.tline{display:grid;grid-template-columns:repeat(${EXP.length},1fr);gap:.6em;border-top:4px solid var(--ink);padding-top:1em;margin-top:2em}
+.tline div{position:relative;font-size:.78em}.tline div::before{content:"";position:absolute;top:-1.55em;left:0;width:1em;height:1em;border-radius:50%;background:var(--amber);border:3px solid var(--ink)}
+.tline span{font-family:"IBM Plex Mono";color:var(--blue);display:block}.tline b{display:block;font-size:1.05em}.tline small{color:var(--ink2)}
+.bars div{display:grid;grid-template-columns:38% 1fr 3em;gap:.6em;align-items:center;margin:.35em 0;font-size:.9em}.bars i{height:.8em;background:var(--blue);border-radius:0 6px 6px 0}.bars b{text-align:right}
+.pub{display:flex;gap:1em;align-items:flex-start;background:#fff;border:3px solid var(--ink);border-radius:14px;padding:.55em 1em;margin:.5em 0;font-size:.92em}
+.pub>b{font-family:Changa;font-size:2em;color:var(--blue);min-width:2.4em}.pub strong{display:block;font-size:.95em}.pub small{color:var(--ink2);font-size:.8em}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:.8em}.cards div{background:#fff;border:3px solid var(--ink);border-left:10px solid var(--amber);border-radius:14px;padding:.7em 1em;font-size:.9em;color:var(--ink2)}.cards b{display:block;color:var(--ink);font-size:1.1em}
+.note{font-family:"IBM Plex Mono";color:var(--blue);margin-top:1.4em}
+.ui{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;align-items:center;background:#1C3448;color:#fff;border-radius:999px;padding:6px;z-index:9;font:600 13px "IBM Plex Sans Arabic"}
+.ui button{border:0;background:transparent;color:#fff;font:inherit;padding:6px 12px;border-radius:999px;cursor:pointer}.ui button:hover{background:var(--amber);color:var(--ink)}
+.bar{position:fixed;top:0;left:0;height:4px;background:var(--amber);z-index:9;transition:width .3s}
+@media print{html,body{overflow:visible;height:auto;background:#fff}.deck{position:static;display:block}.s,.title{display:block!important;page-break-after:always;width:100%;height:auto;aspect-ratio:16/9}.title{display:flex!important}.ui,.bar{display:none}@page{size:landscape;margin:0}}
+</style></head><body><div class="bar" id="bar"></div><div class="deck">${S.join("")}</div>
+<div class="ui"><button id="pv">◀</button><span id="ct"></span><button id="nx">▶</button><button id="fs">⛶ Full screen</button><button id="sv">↓ Save</button></div>
+<script>
+const s=[...document.querySelectorAll(".s")];let i=0;
+function go(n){i=Math.max(0,Math.min(s.length-1,n));s.forEach((x,k)=>x.classList.toggle("on",k===i));ct.textContent=(i+1)+" / "+s.length;bar.style.width=((i+1)/s.length*100)+"%"}
+pv.onclick=()=>go(i-1);nx.onclick=()=>go(i+1);
+fs.onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();
+sv.onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["<!doctype html>"+document.documentElement.outerHTML],{type:"text/html"}));a.download="Ramiz_Assaf_Slides.html";a.click()};
+addEventListener("keydown",e=>{if(["ArrowRight","PageDown"," "].includes(e.key))go(i+1);if(["ArrowLeft","PageUp"].includes(e.key))go(i-1);if(e.key==="f")fs.onclick();if(e.key==="Home")go(0);if(e.key==="End")go(s.length-1)});
+document.querySelector(".deck").addEventListener("click",e=>go(e.clientX>innerWidth/2?i+1:i-1));
+go(0);
+<\/script></body></html>`;
+}
+document.getElementById("slidesBtn").addEventListener("click", () => {
+  const url = URL.createObjectURL(new Blob([deckHTML()], { type: "text/html" }));
+  const w = window.open(url, "_blank");
+  if (!w) location.href = url;
+});
+
 /* ---------- Init ---------- */
 document.getElementById("yr").textContent = new Date().getFullYear();
 addEventListener("beforeprint", () => {
@@ -1272,6 +1587,7 @@ setLang(store.get("lang") === "ar" ? "ar" : "en");
 drawCDF();
 drawCit();
 drawDash();
+route();
 tick();
 </script>
 </body>
