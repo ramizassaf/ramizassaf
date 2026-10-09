@@ -105,9 +105,9 @@ nav {
 .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
 :root[data-theme="dark"] .btn.primary { color: #0f1113; }
 .avatar-wrap { position: relative; }
-.avatar-wrap img { width: 220px; height: 220px; border-radius: 28px; object-fit: cover; box-shadow: var(--shadow); border: 4px solid var(--card); display: block; }
+.avatar-wrap img { width: 240px; height: 300px; object-position: center top; border-radius: 28px; object-fit: cover; box-shadow: var(--shadow); border: 4px solid var(--card); display: block; }
 .avatar-badge { position: absolute; bottom: -14px; inset-inline-start: -14px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 8px 12px; font-size: .82rem; font-weight: 600; box-shadow: var(--shadow); }
-@media (max-width: 760px) { .hero-grid { grid-template-columns: 1fr; } .avatar-wrap { order: -1; } .avatar-wrap img { width: 140px; height: 140px; } .hero { padding-top: 48px; } }
+@media (max-width: 760px) { .hero-grid { grid-template-columns: 1fr; } .avatar-wrap { order: -1; } .avatar-wrap img { width: 150px; height: 188px; } .hero { padding-top: 48px; } }
 
 /* Stats */
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 56px; }
@@ -231,6 +231,15 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 .role-badge { font-size: .76rem; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
 .role-badge.co { background: var(--bg-2); color: var(--muted); border: 1px solid var(--line); }
 
+/* Demos dialog */
+.demos-dlg { width: min(1080px, calc(100vw - 32px)); max-height: calc(100vh - 32px); padding: 0; border: 1px solid var(--line); border-radius: 20px; background: var(--bg); color: var(--text); box-shadow: 0 24px 60px rgba(0,0,0,.35); }
+.demos-dlg::backdrop { background: rgba(10,14,18,.55); backdrop-filter: blur(3px); }
+.dlg-head { position: sticky; top: 0; z-index: 2; display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; padding: 20px 24px 14px; background: var(--bg); border-bottom: 1px solid var(--line); }
+.dlg-head h2 { margin: 0 0 4px; font-size: 1.4rem; letter-spacing: -.02em; }
+.dlg-head p { margin: 0; color: var(--muted); font-size: .92rem; }
+.demos-dlg .lab { margin: 20px 24px; }
+@media (max-width: 600px) { .demos-dlg .lab { margin: 16px 12px; } .dlg-head { padding: 16px; } }
+
 /* Skills */
 .skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
 .skill-grid h3 { margin: 0 0 12px; font-size: 1rem; }
@@ -259,7 +268,7 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
   section.block { padding: 10px 0; background: none; }
   .hero { padding: 0; }
   .hero h1 { font-size: 26pt; margin: 0 0 4px; }
-  .avatar-wrap img { width: 90px; height: 90px; }
+  .avatar-wrap img { width: 90px; height: 112px; }
   .card, .stat { box-shadow: none; border: 1px solid #ddd; padding: 10px 12px; break-inside: avoid; }
   .stats { margin-top: 12px; }
   .sec-head { margin-bottom: 8px; }
@@ -280,7 +289,6 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
       <a href="#supervision" data-i18n="nav_sup">Supervision</a>
       <a href="#projects" data-i18n="nav_proj">Projects</a>
       <a href="#games" data-i18n="nav_games">Games</a>
-      <a href="#labs" data-i18n="nav_labs">Live demos</a>
       <a href="#skills" data-i18n="nav_skills">Skills</a>
       <a href="#contact" data-i18n="nav_contact">Contact</a>
     </div>
@@ -301,12 +309,12 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
         <p class="lead" data-i18n="lead">Assistant Professor of Industrial Engineering and Coordinator of the Master of Engineering Management program at An-Najah National University. I train engineers and professionals in data analytics with Excel, Python, SQL, Tableau, and Alteryx.</p>
         <div class="cta">
           <button class="btn primary" onclick="window.print()"><span>↓</span> <span data-i18n="download">Download CV</span></button>
-          <a class="btn" href="#labs"><span>▶</span> <span data-i18n="try">Try my live demos</span></a>
+          <button class="btn" type="button" data-demo=""><span>▶</span> <span data-i18n="try">Try my live demos</span></button>
           <a class="btn" href="#contact" data-i18n="hire">Get in touch</a>
         </div>
       </div>
       <div class="avatar-wrap">
-        <img src="https://avatars.githubusercontent.com/u/45326257?v=4" alt="Ramiz Assaf" width="220" height="220">
+        <img src="photo.jpg" alt="Dr. Ramiz Assaf" width="240" height="300">
         <div class="avatar-badge">📍 <span data-i18n="loc_short">Nablus, Palestine</span></div>
       </div>
     </div>
@@ -399,19 +407,27 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
       <p data-i18n="proj_p">Open-source work in engineering economics, statistics, and data analysis.</p>
     </div>
     <div class="proj-grid">
+      <article class="card proj reveal">
+        <div class="icon">🎓</div>
+        <h3 data-i18n="p4_t">IE Program Guide, An-Najah University</h3>
+        <p data-i18n="p4_d">Guide for high school students in Palestine who plan to join the Industrial Engineering program at An-Najah National University.</p>
+        <div class="tags"><span class="tag">Education</span><span class="tag">HTML</span><span class="tag">AI-assisted build</span><span class="tag">Netlify</span></div>
+        <a class="btn primary" style="margin-top:14px;justify-content:center" href="https://ie-program-guide-nnu-2026.netlify.app/" target="_blank" rel="noopener" data-i18n="visit">Visit the website ↗</a>
+        <div class="proj-links"><a href="https://github.com/ramizassaf/NNU-Industrial-Engineering-Guide" data-i18n="code">Code →</a></div>
+      </article>
       <article class="card proj featured reveal">
         <div class="icon">∫</div>
         <h3 data-i18n="p1_t">Normal CDF Piecewise-Linear Approximation</h3>
         <p data-i18n="p1_d">Accuracy versus complexity study of piecewise-linear approximations of the standard normal CDF. Includes minimax optimisation, a white paper written in LaTeX, and an interactive app.</p>
         <div class="tags"><span class="tag">Optimisation</span><span class="tag">Numerical methods</span><span class="tag">LaTeX</span><span class="tag">JavaScript</span></div>
-        <div class="proj-links"><a href="https://github.com/ramizassaf/normal-cdf-piecewise-linear" data-i18n="code">Code →</a><a href="#lab-cdf" data-i18n="demo">Live demo →</a></div>
+        <div class="proj-links"><a href="https://github.com/ramizassaf/normal-cdf-piecewise-linear" data-i18n="code">Code →</a><a href="#" data-demo="lab-cdf" data-i18n="demo">Live demo →</a></div>
       </article>
       <article class="card proj reveal">
         <div class="icon">⚖</div>
         <h3 data-i18n="p2_t">Break-Even Location Finder</h3>
         <p data-i18n="p2_d">Locational break-even analysis. Finds the cheapest alternative at every volume and the break-even quantities. Bilingual web app plus Python.</p>
         <div class="tags"><span class="tag">Operations</span><span class="tag">Python</span><span class="tag">Web app</span></div>
-        <div class="proj-links"><a href="https://github.com/ramizassaf/break-even-location-finder" data-i18n="code">Code →</a><a href="#lab-be" data-i18n="demo">Live demo →</a></div>
+        <div class="proj-links"><a href="https://github.com/ramizassaf/break-even-location-finder" data-i18n="code">Code →</a><a href="#" data-demo="lab-be" data-i18n="demo">Live demo →</a></div>
       </article>
       <article class="card proj reveal">
         <div class="icon">$</div>
@@ -419,13 +435,6 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
         <p data-i18n="p3_d">Ranks project alternatives by present, future, and annual worth, computes IRR, plots cash flow diagrams, and recommends the best option.</p>
         <div class="tags"><span class="tag">Python</span><span class="tag">NumPy</span><span class="tag">Matplotlib</span></div>
         <div class="proj-links"><a href="https://github.com/ramizassaf/Engineering-Economy" data-i18n="code">Code →</a></div>
-      </article>
-      <article class="card proj reveal">
-        <div class="icon">🎓</div>
-        <h3 data-i18n="p4_t">NNU Industrial Engineering Guide</h3>
-        <p data-i18n="p4_d">Guide for high school students in Palestine who plan to join the Industrial Engineering program at An-Najah National University.</p>
-        <div class="tags"><span class="tag">Education</span><span class="tag">HTML</span><span class="tag">AI-assisted build</span><span class="tag">Netlify</span></div>
-        <div class="proj-links"><a href="https://github.com/ramizassaf/NNU-Industrial-Engineering-Guide" data-i18n="code">Code →</a><a href="https://ie-program-guide-nnu-2026.netlify.app/" target="_blank" rel="noopener" data-i18n="site">Live site ↗</a></div>
       </article>
       <article class="card proj reveal">
         <div class="icon">A/B</div>
@@ -497,15 +506,12 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
   </div>
 </section>
 
-<section class="block" id="labs">
-  <div class="container">
-    <div class="sec-head reveal">
-      <div class="kicker">06 / live demos</div>
-      <h2 data-i18n="labs_h">Try my work, right here</h2>
-      <p data-i18n="labs_p">Two of my projects running live in your browser. Change the inputs and watch the results update.</p>
-    </div>
-
-    <div class="card lab reveal" id="lab-be">
+<dialog id="demos" class="demos-dlg" aria-labelledby="demosTitle">
+  <div class="dlg-head">
+    <div><h2 id="demosTitle" data-i18n="labs_h">Try my work, right here</h2><p data-i18n="labs_p">Two of my projects running live in your browser. Change the inputs and watch the results update.</p></div>
+    <button class="icon-btn" type="button" id="demosClose" aria-label="Close">✕</button>
+  </div>
+    <div class="card lab" id="lab-be">
       <h3 data-i18n="be_t">Break-even calculator</h3>
       <p class="sub" data-i18n="be_s">Total cost = fixed cost + variable cost × volume. Find the cheapest option at every volume.</p>
       <div class="lab-grid">
@@ -525,7 +531,7 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
       </div>
     </div>
 
-    <div class="card lab reveal" id="lab-cdf">
+    <div class="card lab" id="lab-cdf">
       <h3 data-i18n="cdf_t">Normal CDF approximation</h3>
       <p class="sub" data-i18n="cdf_s">Approximate Φ(x) with straight-line segments on [−4, 4]. More segments mean lower error. This demo uses equally spaced knots. My paper optimises the knots with a minimax method.</p>
       <div class="lab-grid">
@@ -549,13 +555,12 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
         </div>
       </div>
     </div>
-  </div>
-</section>
+</dialog>
 
-<section class="block alt" id="skills">
+<section class="block" id="skills">
   <div class="container">
     <div class="sec-head reveal">
-      <div class="kicker">07 / skills</div>
+      <div class="kicker">06 / skills</div>
       <h2 data-i18n="skills_h">Skills</h2>
     </div>
     <div class="skill-grid">
@@ -568,10 +573,10 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
   </div>
 </section>
 
-<section class="block" id="contact">
+<section class="block alt" id="contact">
   <div class="container">
     <div class="sec-head reveal">
-      <div class="kicker">08 / contact</div>
+      <div class="kicker">07 / contact</div>
       <h2 data-i18n="contact_h">Let's work together</h2>
       <p data-i18n="contact_p">Send a message about training, research, thesis supervision, or collaboration.</p>
     </div>
@@ -623,7 +628,7 @@ const AR = {
   p1_t: "تقريب دالة التوزيع الطبيعي التراكمية خطياً", p1_d: "دراسة الدقة مقابل التعقيد لتقريب دالة التوزيع الطبيعي التراكمية بقطع خطية، مع تحسين minimax وورقة بحثية بـ LaTeX وتطبيق تفاعلي.",
   p2_t: "أداة نقطة التعادل لاختيار الموقع", p2_d: "تحليل نقطة التعادل للمواقع: يحدد البديل الأرخص عند كل حجم إنتاج وكميات التعادل. تطبيق ويب ثنائي اللغة مع Python.",
   p3_t: "تحليل الاقتصاد الهندسي", p3_d: "يرتّب البدائل حسب القيمة الحالية والمستقبلية والسنوية، ويحسب معدل العائد الداخلي، ويرسم مخططات التدفق النقدي، ويوصي بالخيار الأفضل.",
-  p4_t: "دليل الهندسة الصناعية في جامعة النجاح", p4_d: "دليل لطلاب الثانوية في فلسطين الراغبين بدراسة الهندسة الصناعية في جامعة النجاح الوطنية.",
+  p4_t: "دليل برنامج الهندسة الصناعية، جامعة النجاح", visit: "زيارة الموقع ↗", p4_d: "دليل لطلاب الثانوية في فلسطين الراغبين بدراسة الهندسة الصناعية في جامعة النجاح الوطنية.",
   p5_t: "تحليل نتائج اختبار A/B", p5_d: "تحليل إحصائي لاختبار A/B: اختبار الفرضيات والانحدار وتوصية بالإطلاق.",
   p6_t: "تحليل بيانات كرة القدم الأوروبية", p6_d: "تحليل استكشافي لبيانات كرة القدم الأوروبية: تنظيف البيانات واستكشاف الخصائص ونتائج مرئية.",
   code: "الكود ←", demo: "عرض حي ←",
@@ -936,6 +941,18 @@ function drawSup() {
       </div>
     </article>`).join("");
 }
+
+/* ---------- Demos dialog ---------- */
+const demos = document.getElementById("demos");
+document.addEventListener("click", ev => {
+  const t = ev.target.closest("[data-demo]"); if (!t) return;
+  ev.preventDefault();
+  demos.showModal(); drawBE(); drawCDF();
+  const id = t.dataset.demo;
+  if (id) document.getElementById(id).scrollIntoView({ block: "start" }); else demos.scrollTop = 0;
+});
+document.getElementById("demosClose").onclick = () => demos.close();
+demos.addEventListener("click", ev => { if (ev.target === demos) demos.close(); });
 
 /* ---------- Contact ---------- */
 document.getElementById("contactForm").addEventListener("submit", async ev => {
