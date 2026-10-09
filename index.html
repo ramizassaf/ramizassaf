@@ -464,6 +464,15 @@ section.block.active { display: block; animation: panelIn .32s ease; }
 .cmp.on { border: 2px solid var(--edge); border-inline-start: 6px solid var(--amber); }
 .cmp.on span { color: var(--accent); font-weight: 600; }
 
+/* Live slides demo card */
+.demo-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 24px; align-items: center; margin-top: 16px; border-inline-start: 7px solid var(--amber); }
+@media (max-width: 860px) { .demo-card { grid-template-columns: 1fr; } }
+.demo-shot img { width: 100%; height: auto; display: block; border-radius: 12px; border: 2px solid var(--edge); transition: transform .2s; }
+.demo-shot:hover img { transform: scale(1.02); }
+.demo-card h3 { margin: 8px 0 6px; font-size: 1.25rem; }
+.demo-card p { color: var(--muted); margin: 0 0 14px; }
+.demo-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+
 /* Services */
 .svc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
 .svc { display: flex; flex-direction: column; gap: 8px; border-inline-start: 7px solid var(--amber); }
@@ -790,6 +799,19 @@ footer { border-top: 0; }
         <div class="cmp on"><span data-i18n="ds_c6a">HTML slides</span><b data-i18n="ds_c6b">Unlimited practice questions</b></div>
       </div>
     </article>
+    <article class="card demo-card reveal">
+      <a class="demo-shot" href="slides/live-slides-demo.html" target="_blank" rel="noopener"><img src="slides/live-slides-demo.png" alt="Live slides demo: a loan problem with new numbers on every click" loading="lazy" width="1200" height="627"></a>
+      <div>
+        <div class="ds-tag" data-i18n="lv_tag">5-slide demo · try it in 1 minute</div>
+        <h3 data-i18n="lv_t">Live slides: same method, new numbers</h3>
+        <p data-i18n="lv_d">A short demo of the idea behind my lectures. Press New numbers and watch the loan payment, the NPV solution, and the quiz change. Students learn the method because the answer never stays the same.</p>
+        <div class="demo-btns">
+          <a class="btn primary" href="slides/live-slides-demo.html" target="_blank" rel="noopener" data-i18n="lv_open">Try the demo ↗</a>
+          <a class="btn" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Framizassaf.github.io%2Fcv%2Fslides%2Flive-slides-demo.html" target="_blank" rel="noopener" data-i18n="lv_share">Share on LinkedIn</a>
+          <button class="btn" type="button" id="copyDemo" data-url="https://ramizassaf.github.io/cv/slides/live-slides-demo.html" data-i18n="lv_copy">Copy link</button>
+        </div>
+      </div>
+    </article>
     <h3 class="sub-h reveal" style="margin-top:26px" data-i18n="gl_h">Learning games</h3>
     <div class="game-grid">
       <article class="card game g1 reveal">
@@ -1018,7 +1040,9 @@ const AR = {
   ds_m1: "29 شريحة عن PV وFV وPMT وRATE وNPV وIRR", ds_m2: "10 أمثلة محلولة بخطوات تظهر تدريجياً وأوراق Excel حية", ds_m3: "5 شرائح اختبار تعتمد على 15 مولّد أسئلة", ds_m4: "تحكم بلوحة المفاتيح وقائمة محتويات وملاحظات للمحاضر",
   ds_open: "افتح المحاضرة ↗", ds_wh: "لماذا تتفوق شرائح HTML على الشرائح الثابتة", ds_c1a: "شرائح ثابتة", ds_c1b: "مثال واحد ثابت", ds_c2a: "شرائح HTML", ds_c2b: "أرقام جديدة مع كل نقرة",
   ds_c3a: "شرائح ثابتة", ds_c3b: "الإجابة تظهر فوراً", ds_c4a: "شرائح HTML", ds_c4b: "الخطوات تظهر واحدة تلو الأخرى", ds_c5a: "شرائح ثابتة", ds_c5b: "اختبار مكتوب مرة واحدة", ds_c6a: "شرائح HTML", ds_c6b: "أسئلة تدريب بلا حدود",
-  gl_h: "ألعاب التعلّم",
+  gl_h: "ألعاب التعلّم", lv_tag: "عرض من 5 شرائح · جرّبه في دقيقة", lv_t: "شرائح حية: الطريقة نفسها، أرقام جديدة",
+  lv_d: "عرض قصير للفكرة وراء محاضراتي. اضغط أرقام جديدة وشاهد قسط القرض وحل NPV والاختبار تتغير. يتعلم الطلاب الطريقة لأن الإجابة لا تبقى نفسها.",
+  lv_open: "جرّب العرض ↗", lv_share: "شارك على LinkedIn", lv_copy: "انسخ الرابط",
   rm1: "اقتباس", rm1s: "1,783 منذ 2021", rm2s: "19 منذ 2021", rm3s: "24 منذ 2021", rm4: "منشور", rm4s: "منذ 2009",
   cit_h: "الاقتباسات سنوياً", cit_s: "قيم تقريبية مأخوذة من رسم Google Scholar.", top_h: "الأكثر اقتباساً", res_link: "الملف الكامل على Google Scholar ↗",
   skills_h: "المهارات", sk1: "علم البيانات والتحليلات", sk2: "الإحصاء", sk3: "الهندسة الصناعية", sk4: "التدريس والقيادة",
@@ -1636,6 +1660,14 @@ document.getElementById("slidesBtn").addEventListener("click", () => {
   const url = URL.createObjectURL(new Blob([deckHTML()], { type: "text/html" }));
   const w = window.open(url, "_blank");
   if (!w) location.href = url;
+});
+
+/* ---------- Copy demo link ---------- */
+document.getElementById("copyDemo").addEventListener("click", async e => {
+  const b = e.currentTarget, old = b.textContent;
+  try { await navigator.clipboard.writeText(b.dataset.url); b.textContent = lang === "ar" ? "تم النسخ ✓" : "Link copied ✓"; }
+  catch (err) { prompt(lang === "ar" ? "انسخ الرابط:" : "Copy this link:", b.dataset.url); }
+  setTimeout(() => b.textContent = old, 1800);
 });
 
 /* ---------- Init ---------- */
