@@ -12,7 +12,9 @@ Personal CV website of Ramiz Assaf, Data Professional and Industrial Engineer ba
 - **ATS CV download.** "Download CV" builds `Ramiz_Assaf_CV.md`, a plain Markdown CV that applicant tracking systems read cleanly.
 - **Slides about me.** One click generates a 14-slide HTML deck from the same data. Arrow keys to move, F for full screen, Save to keep a copy.
 - **Services.** Training, online teaching, consulting, research collaboration, and more, each with a request button that fills the contact form.
-- **Research dashboard, thesis supervision, certificates, course reviews, and learning games.**
+- **Interactive teaching.** Dynamic HTML lecture slides (`slides/`) and three learning games (`games/`).
+- **Social sidebar.** LinkedIn, Google Scholar, YouTube, GitHub, DataCamp, and email.
+- **Research dashboard, thesis supervision, certificates, and course reviews.**
 - **Live demos.** A break-even calculator and a normal CDF approximation, in a pop-up window.
 - **English and Arabic, light and dark.** Theme matches the IE Program Guide site.
 - **No build step.** One HTML file, no frameworks.

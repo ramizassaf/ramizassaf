@@ -436,6 +436,34 @@ section.block.active { display: block; animation: panelIn .32s ease; }
 .sec-head h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
 .hero { padding-top: 40px; }
 
+
+/* Social sidebar */
+.social { position: fixed; left: 14px; top: 50%; transform: translateY(-50%); z-index: 65; display: flex; flex-direction: column; gap: 6px; padding: 8px 6px; background: var(--nav-bg); border-radius: 999px; box-shadow: var(--shadow-lg); }
+.social a { position: relative; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; color: #C9D6E1; text-decoration: none; transition: background .15s, color .15s; }
+.social a:hover, .social a:focus-visible { background: var(--amber); color: #132A3E; outline: none; }
+.social a span { position: absolute; left: 50px; white-space: nowrap; background: var(--nav-bg); color: #fff; font-size: .78rem; font-weight: 600; padding: 5px 10px; border-radius: 8px; opacity: 0; pointer-events: none; transform: translateX(-4px); transition: opacity .15s, transform .15s; }
+.social a:hover span, .social a:focus-visible span { opacity: 1; transform: none; }
+[dir="rtl"] .social { left: auto; right: 14px; }
+[dir="rtl"] .social a span { left: auto; right: 50px; }
+.social-row { display: none; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+.social-row a { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px; border: 2px solid var(--edge); background: var(--card); color: var(--text); }
+.social-row a span { display: none; }
+@media (max-width: 1180px) { .social { display: none; } .social-row { display: flex; } }
+
+/* Dynamic slides card */
+.dslide { display: grid; grid-template-columns: 1.3fr 1fr; gap: 26px; border-inline-start: 7px solid var(--amber); margin-bottom: 8px; }
+@media (max-width: 860px) { .dslide { grid-template-columns: 1fr; } }
+.dslide h3 { margin: 6px 0; font-size: 1.35rem; }
+.dslide p { color: var(--muted); margin: 0 0 12px; }
+.ds-tag { display: inline-block; font-family: "IBM Plex Mono", monospace; font-size: .76rem; background: var(--nav-bg); color: #fff; border-radius: 999px; padding: 4px 12px; }
+.dslide .btn { margin-top: 4px; }
+.ds-why { background: var(--bg-2); border-radius: 14px; padding: 16px; display: grid; gap: 6px; align-content: start; }
+.ds-why h4 { margin: 0 0 6px; font-family: "Changa", sans-serif; font-size: 1rem; }
+.cmp { display: grid; grid-template-columns: 110px 1fr; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 10px; background: var(--card); border: 1px solid var(--line); font-size: .88rem; }
+.cmp span { font-family: "IBM Plex Mono", monospace; font-size: .74rem; color: var(--muted); }
+.cmp.on { border: 2px solid var(--edge); border-inline-start: 6px solid var(--amber); }
+.cmp.on span { color: var(--accent); font-weight: 600; }
+
 /* Services */
 .svc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
 .svc { display: flex; flex-direction: column; gap: 8px; border-inline-start: 7px solid var(--amber); }
@@ -481,8 +509,8 @@ footer { border-top: 0; }
           <button class="btn primary" type="button" id="cvBtn"><span>↓</span> <span data-i18n="download">Download CV</span></button>
           <button class="btn" type="button" id="slidesBtn"><span>🖥</span> <span data-i18n="slides">Slides about me</span></button>
           <button class="btn" type="button" data-demo=""><span>▶</span> <span data-i18n="try">Try my live demos</span></button>
-          
         </div>
+        <div class="social-row"><a href="https://www.linkedin.com/in/ramiz-assaf-529610353" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></svg><span>LinkedIn</span></a><a href="https://scholar.google.com/citations?user=yDDnd50AAAAJ&amp;hl=en" target="_blank" rel="noopener" aria-label="Google Scholar" title="Google Scholar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 2 9.5l10 5.5 10-5.5z"/><path d="M6 11.7v4.3c0 1.7 2.7 3 6 3s6-1.3 6-3v-4.3"/></svg><span>Google Scholar</span></a><a href="https://www.youtube.com/@RamizAssaf-E" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="m10 9.5 5 2.5-5 2.5z" fill="currentColor"/></svg><span>YouTube</span></a><a href="https://github.com/ramizassaf" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4 1.3-4-2-6-2.5M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg><span>GitHub</span></a><a href="https://www.datacamp.com/courses/data-validation-in-excel" target="_blank" rel="noopener" aria-label="DataCamp course" title="DataCamp course"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h11a3 3 0 0 1 3 3v11H7a3 3 0 0 1-3-3z"/><path d="M8 9h6M8 13h4"/></svg><span>DataCamp course</span></a><a href="mailto:ramizassaf@najah.edu" target="_blank" rel="noopener" aria-label="Email" title="Email"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span>Email</span></a></div>
       </div>
       <div class="avatar-wrap">
         <img src="photo.jpg" alt="Dr. Ramiz Assaf" width="240" height="300">
@@ -509,7 +537,7 @@ footer { border-top: 0; }
       <a class="tile reveal" href="#supervision"><span class="ti">🎓</span><span class="tt" data-i18n="t_sup">Thesis supervision</span><span class="ts" data-i18n="t_sup_s">16 theses supervised</span><span class="ta">→</span></a>
       <a class="tile reveal" href="#services"><span class="ti">🤝</span><span class="tt" data-i18n="t_svc">Services</span><span class="ts" data-i18n="t_svc_s">Training, consulting, collaboration</span><span class="ta">→</span></a>
       <a class="tile reveal" href="#projects"><span class="ti">🧩</span><span class="tt" data-i18n="t_proj">Projects</span><span class="ts" data-i18n="t_proj_s">Open-source tools and web apps</span><span class="ta">→</span></a>
-      <a class="tile reveal" href="#games"><span class="ti">🎮</span><span class="tt" data-i18n="t_games">Learning games</span><span class="ts" data-i18n="t_games_s">3 gamified course labs</span><span class="ta">→</span></a>
+      <a class="tile reveal" href="#games"><span class="ti">🎮</span><span class="tt" data-i18n="t_games">Interactive teaching</span><span class="ts" data-i18n="t_games_s">Dynamic HTML slides and 3 learning games</span><span class="ta">→</span></a>
       <a class="tile reveal" href="#skills"><span class="ti">🛠</span><span class="tt" data-i18n="t_skills">Skills</span><span class="ts" data-i18n="t_skills_s">Data, engineering, teaching</span><span class="ta">→</span></a>
       <a class="tile reveal" href="#contact"><span class="ti">✉️</span><span class="tt" data-i18n="t_contact">Contact</span><span class="ts" data-i18n="t_contact_s">Email, LinkedIn, Scholar</span><span class="ta">→</span></a>
       <button class="tile reveal" type="button" data-demo=""><span class="ti">▶️</span><span class="tt" data-i18n="t_demo">Live demos</span><span class="ts" data-i18n="t_demo_s">Break-even and CDF tools</span><span class="ta">→</span></button>
@@ -734,10 +762,35 @@ footer { border-top: 0; }
   <div class="container">
     <a class="back" href="#home" data-i18n="back">← Home</a>
     <div class="sec-head reveal">
-      <div class="kicker">gamification</div>
-      <h2 data-i18n="games_h">Gamified learning labs</h2>
-      <p data-i18n="games_p">Browser games I designed for my courses. Students earn XP, unlock levels, and get instant feedback, with fresh numbers on every attempt.</p>
+      <div class="kicker">interactive teaching</div>
+      <h2 data-i18n="games_h">Interactive teaching</h2>
+      <p data-i18n="games_p">Dynamic HTML lecture slides and browser games I build for my courses. Every example draws fresh numbers, so students practise the method, not the answer.</p>
     </div>
+    <h3 class="sub-h reveal" data-i18n="ds_h">Dynamic lecture slides</h3>
+    <article class="card dslide reveal">
+      <div class="ds-text">
+        <div class="ds-tag" data-i18n="ds_tag">Built with Claude · replaces static slides</div>
+        <h3>Week 1: Excel for Engineering Economy</h3>
+        <p data-i18n="ds_d">A full lecture as one HTML file. Students see each problem solved by hand and in Excel, step by step. One key press draws new numbers, so every example and quiz question is new.</p>
+        <ul class="mech">
+          <li data-i18n="ds_m1">29 slides on PV, FV, PMT, RATE, NPV, and IRR</li>
+          <li data-i18n="ds_m2">10 worked-example labs with step-by-step reveal and live Excel sheets</li>
+          <li data-i18n="ds_m3">5 quiz slides drawing from 15 question generators</li>
+          <li data-i18n="ds_m4">Keyboard control, contents menu, and speaker notes</li>
+        </ul>
+        <a class="btn primary" href="slides/week1-excel-engineering-economy.html" target="_blank" rel="noopener" data-i18n="ds_open">Open the lecture ↗</a>
+      </div>
+      <div class="ds-why">
+        <h4 data-i18n="ds_wh">Why HTML slides beat static slides</h4>
+        <div class="cmp"><span data-i18n="ds_c1a">Static slides</span><b data-i18n="ds_c1b">One fixed example</b></div>
+        <div class="cmp on"><span data-i18n="ds_c2a">HTML slides</span><b data-i18n="ds_c2b">New numbers on every click</b></div>
+        <div class="cmp"><span data-i18n="ds_c3a">Static slides</span><b data-i18n="ds_c3b">Answer shown at once</b></div>
+        <div class="cmp on"><span data-i18n="ds_c4a">HTML slides</span><b data-i18n="ds_c4b">Steps revealed one at a time</b></div>
+        <div class="cmp"><span data-i18n="ds_c5a">Static slides</span><b data-i18n="ds_c5b">Quiz written once</b></div>
+        <div class="cmp on"><span data-i18n="ds_c6a">HTML slides</span><b data-i18n="ds_c6b">Unlimited practice questions</b></div>
+      </div>
+    </article>
+    <h3 class="sub-h reveal" style="margin-top:26px" data-i18n="gl_h">Learning games</h3>
     <div class="game-grid">
       <article class="card game g1 reveal">
         <div class="game-top"><div class="gi">fx</div><h3>Excel Skill Tree</h3><div class="course" data-i18n="g1_c">Data analytics training</div></div>
@@ -879,6 +932,8 @@ footer { border-top: 0; }
   </div>
 </section>
 
+<aside class="social" aria-label="Profiles and social media"><a href="https://www.linkedin.com/in/ramiz-assaf-529610353" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></svg><span>LinkedIn</span></a><a href="https://scholar.google.com/citations?user=yDDnd50AAAAJ&amp;hl=en" target="_blank" rel="noopener" aria-label="Google Scholar" title="Google Scholar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 2 9.5l10 5.5 10-5.5z"/><path d="M6 11.7v4.3c0 1.7 2.7 3 6 3s6-1.3 6-3v-4.3"/></svg><span>Google Scholar</span></a><a href="https://www.youtube.com/@RamizAssaf-E" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="m10 9.5 5 2.5-5 2.5z" fill="currentColor"/></svg><span>YouTube</span></a><a href="https://github.com/ramizassaf" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4 1.3-4-2-6-2.5M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg><span>GitHub</span></a><a href="https://www.datacamp.com/courses/data-validation-in-excel" target="_blank" rel="noopener" aria-label="DataCamp course" title="DataCamp course"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h11a3 3 0 0 1 3 3v11H7a3 3 0 0 1-3-3z"/><path d="M8 9h6M8 13h4"/></svg><span>DataCamp course</span></a><a href="mailto:ramizassaf@najah.edu" target="_blank" rel="noopener" aria-label="Email" title="Email"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span>Email</span></a></aside>
+
 <nav class="appnav" aria-label="Sections">
   <a href="#home" data-v="home"><span>🏠</span><b data-i18n="bn_home">Home</b></a>
   <a href="#about" data-v="about"><span>👤</span><b data-i18n="bn_about">About</b></a>
@@ -928,7 +983,7 @@ const AR = {
   approx: "التقريب الخطي", error: "الخطأ",
   nav_sup: "الإشراف", sup_h: "الإشراف على الرسائل", sup_p: "رسائل أشرفت أو شاركت في الإشراف عليها في جامعة النجاح الوطنية، في تبني الذكاء الاصطناعي والعمليات والجودة والاستدامة.",
   ss1: "رسالة بإشرافي", ss2: "عن الذكاء الاصطناعي وتعلم الآلة", ss3: "أشرف منذ عام",
-  nav_games: "الألعاب", games_h: "مختبرات تعلّم بأسلوب الألعاب", games_p: "ألعاب تعليمية صممتها لمساقاتي تعمل في المتصفح. يجمع الطلاب نقاط الخبرة ويفتحون المستويات ويحصلون على تغذية راجعة فورية، بأرقام جديدة في كل محاولة.",
+  nav_games: "الألعاب", games_h: "التدريس التفاعلي", games_p: "شرائح محاضرات HTML تفاعلية وألعاب في المتصفح أبنيها لمساقاتي. كل مثال يولّد أرقاماً جديدة، فيتدرب الطلاب على الطريقة لا على الإجابة.",
   play: "العب ↗", games_note: "كل لعبة ملف HTML واحد. يُحفظ التقدم في متصفح اللاعب فقط.",
   g1_c: "تدريب تحليل البيانات", g1_d: "شجرة مهارات تنقل المتعلم من VLOOKUP إلى المصفوفات الديناميكية والتواريخ. 9 وحدات تغطي 54 دالة في Excel على أوراق عمل حية.",
   g1_m1: "عقد مقفلة تُفتح مع إتمام الدروس", g1_m2: "نقاط خبرة ومكافآت تتابع ورتب من متدرب إلى قائد محللين", g1_m3: "وسائل مساعدة: حذف إجابتين أو طلب تلميح", g1_m4: "شهادة عند 80% وتميّز عند 100%",
@@ -947,7 +1002,7 @@ const AR = {
   t_about: "نبذة عني", t_about_s: "الملف الشخصي والأدوار واللغات", t_exp: "الخبرات", t_exp_s: "أكثر من 14 عاماً في الجامعات والتدريب",
   t_res: "البحث العلمي", t_res_s: "1,849 اقتباس · h-index 20", t_sup: "الإشراف على الرسائل", t_sup_s: "16 رسالة بإشرافي",
   t_svc: "الخدمات", t_svc_s: "تدريب واستشارات وتعاون بحثي", t_proj: "المشاريع", t_proj_s: "أدوات وتطبيقات مفتوحة المصدر",
-  t_games: "ألعاب التعلّم", t_games_s: "3 مختبرات تعلّم بأسلوب الألعاب", t_skills: "المهارات", t_skills_s: "البيانات والهندسة والتدريس",
+  t_games: "التدريس التفاعلي", t_games_s: "شرائح HTML تفاعلية و3 ألعاب تعلّم", t_skills: "المهارات", t_skills_s: "البيانات والهندسة والتدريس",
   t_contact: "تواصل", t_contact_s: "البريد وLinkedIn وScholar", t_demo: "عروض حية", t_demo_s: "أدوات نقطة التعادل والتوزيع الطبيعي",
   bn_home: "الرئيسية", bn_about: "نبذة", bn_res: "البحث", bn_svc: "الخدمات", bn_proj: "المشاريع", bn_contact: "تواصل",
   svc_h: "الخدمات", svc_p: "كيف أعمل مع الجامعات والشركات والباحثين. اختر خدمة لإرسال طلب.", svc_req: "اطلب هذه الخدمة",
@@ -959,6 +1014,11 @@ const AR = {
   sv6: "التعاون البحثي", sv6d: "دراسات مشتركة باستخدام الاستبانات ونمذجة المعادلات الهيكلية والتحسين والمحاكاة وتعلّم الآلة.", sv6n: "1,849 اقتباس، h-index 20",
   sv7: "الإرشاد البحثي والإشراف", sv7d: "توجيه في تصميم البحث وتحليل البيانات والكتابة لطلبة الماجستير والدكتوراه.", sv7n: "16 رسالة ماجستير بإشرافي",
   sv8: "تصميم التعلّم بأسلوب الألعاب", sv8d: "ألعاب ومختبرات تدريب في المتصفح تحوّل محتوى المساق إلى مستويات ونقاط وتغذية راجعة فورية.", sv8n: "3 مختبرات مستخدمة في مساقاتي",
+  ds_h: "شرائح محاضرات تفاعلية", ds_tag: "صُممت بمساعدة Claude · بديل للشرائح الثابتة", ds_d: "محاضرة كاملة في ملف HTML واحد. يرى الطلاب حل كل مسألة يدوياً وفي Excel خطوة بخطوة. بضغطة زر تظهر أرقام جديدة، فكل مثال وكل سؤال جديد.",
+  ds_m1: "29 شريحة عن PV وFV وPMT وRATE وNPV وIRR", ds_m2: "10 أمثلة محلولة بخطوات تظهر تدريجياً وأوراق Excel حية", ds_m3: "5 شرائح اختبار تعتمد على 15 مولّد أسئلة", ds_m4: "تحكم بلوحة المفاتيح وقائمة محتويات وملاحظات للمحاضر",
+  ds_open: "افتح المحاضرة ↗", ds_wh: "لماذا تتفوق شرائح HTML على الشرائح الثابتة", ds_c1a: "شرائح ثابتة", ds_c1b: "مثال واحد ثابت", ds_c2a: "شرائح HTML", ds_c2b: "أرقام جديدة مع كل نقرة",
+  ds_c3a: "شرائح ثابتة", ds_c3b: "الإجابة تظهر فوراً", ds_c4a: "شرائح HTML", ds_c4b: "الخطوات تظهر واحدة تلو الأخرى", ds_c5a: "شرائح ثابتة", ds_c5b: "اختبار مكتوب مرة واحدة", ds_c6a: "شرائح HTML", ds_c6b: "أسئلة تدريب بلا حدود",
+  gl_h: "ألعاب التعلّم",
   rm1: "اقتباس", rm1s: "1,783 منذ 2021", rm2s: "19 منذ 2021", rm3s: "24 منذ 2021", rm4: "منشور", rm4s: "منذ 2009",
   cit_h: "الاقتباسات سنوياً", cit_s: "قيم تقريبية مأخوذة من رسم Google Scholar.", top_h: "الأكثر اقتباساً", res_link: "الملف الكامل على Google Scholar ↗",
   skills_h: "المهارات", sk1: "علم البيانات والتحليلات", sk2: "الإحصاء", sk3: "الهندسة الصناعية", sk4: "التدريس والقيادة",
@@ -1490,6 +1550,7 @@ function cvMarkdown() {
   L.push("", "## Thesis Supervision", "", `- Supervised or co-supervised ${THESES.length} master's theses at An-Najah National University`);
   THESES.slice(0, 8).forEach(t => L.push(`- ${t.t}${t.year ? " (" + t.year + ")" : ""}`));
   L.push("", "## Teaching Innovation", "",
+    "- Dynamic HTML lecture slides (built with Claude): Week 1, Excel for Engineering Economy, 29 slides with worked examples and quizzes that generate new numbers on demand",
     "- Data Validation in Excel, published course on DataCamp, rated 4.8/5 from 628 reviews",
     "- Excel Skill Tree, Labor Analysis Lab, and Financial Decisions Lab: gamified browser labs for courses",
     "- IE Program Guide: bilingual website for prospective industrial engineering students", "",
@@ -1523,7 +1584,7 @@ function deckHTML() {
   S.push(`<section class="s"><h2>Research at a glance</h2><div class="kp k3"><div><b>1,849</b>citations</div><div><b>20</b>h-index</div><div><b>26</b>i10-index</div></div><div class="bars">${themes.map(([n, v]) => `<div><span>${e(n)}</span><i style="width:${v / mx * 100}%"></i><b>${v}</b></div>`).join("")}</div></section>`);
   S.push(`<section class="s"><h2>Most cited work</h2>${top.map(x => `<div class="pub"><b>${x.c}</b><div><strong>${e(x.t)}</strong><small>${e(x.v)}, ${x.y}</small></div></div>`).join("")}</section>`);
   S.push(`<section class="s"><h2>Thesis supervision</h2><div class="kp k3"><div><b>${THESES.length}</b>theses</div><div><b>${THESES.filter(x => x.th.includes("ai")).length}</b>on AI and ML</div><div><b>2017</b>supervising since</div></div><ul class="lst sm">${THESES.slice(0, 4).map(x => `<li>${e(x.t)}</li>`).join("")}</ul></section>`);
-  S.push(`<section class="s"><h2>Teaching innovation</h2><div class="cards"><div><b>Excel Skill Tree</b>9 modules, 54 functions, XP and ranks</div><div><b>Labor Analysis Lab</b>10 levels with fading guidance</div><div><b>Financial Decisions Lab</b>5 classroom games on financial statements</div><div><b>IE Program Guide</b>Bilingual site for future IE students</div></div></section>`);
+  S.push(`<section class="s"><h2>Teaching innovation</h2><div class="cards"><div><b>Excel Skill Tree</b>9 modules, 54 functions, XP and ranks</div><div><b>Labor Analysis Lab</b>10 levels with fading guidance</div><div><b>Financial Decisions Lab</b>5 classroom games on financial statements</div><div><b>Dynamic HTML lecture slides</b>New numbers on every click, step-by-step solutions</div><div><b>IE Program Guide</b>Bilingual site for future IE students</div></div></section>`);
   S.push(`<section class="s"><h2>Open-source tools</h2><ul class="lst"><li>Break-even location finder: cheapest option at every volume</li><li>Normal CDF piecewise-linear approximation with minimax optimisation</li><li>Engineering economy analysis: present, future, and annual worth, IRR</li><li>A/B test and exploratory data analysis notebooks</li></ul></section>`);
   S.push(`<section class="s"><h2>Services</h2><div class="cards">${["Data analytics training", "Online teaching and course design", "Operations and process improvement", "Engineering economics and decision analysis", "Quality and accreditation consulting", "Research collaboration", "Thesis and research mentoring", "Gamified learning design"].map(x => `<div><b>${x}</b></div>`).join("")}</div></section>`);
   S.push(`<section class="s"><h2>Education and certifications</h2><ul class="lst sm">${EDU.map(x => `<li><b>${e(x.d.en)}</b>, ${e(x.s.en)} (${e(x.y)})</li>`).join("")}${CERTS.filter(x => x.g === "teach").slice(0, 2).concat(CERTS.filter(x => x.v)).map(x => `<li>${e(x.t)}, ${e(x.i.en)}</li>`).join("")}</ul></section>`);

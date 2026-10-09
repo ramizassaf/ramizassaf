@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="generator" content="html-slides v0.9.4">
+<title>Week 1: Excel for Engineering Economy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   TOKENS
+   Ledger paper, ink, olive (gain / approval), red ink (loss)
+   ========================================================= */
+:root{
+  --paper:#F8F6F1;
+  --paper-2:#EFEBE1;
+  --card:#FFFFFF;
+  --ink:#16243A;
+  --ink-2:#4B5568;
+  --ink-3:#7D8595;
+  --olive:#9A6512;
+  --olive-2:#F6ECD8;
+  --red:#B3261E;
+  --red-2:#F7E1DE;
+  --green:#2E6A39;
+  --green-2:#DCEADD;
+  --amber:#E0B158;
+  --amber-2:#FBF1DB;
+  --rule:#E3DED2;
+  --rule-2:#EEEAE0;
+  --navy:#16243A;
+  --font-head:'Libre Baskerville', Georgia, 'Times New Roman', serif;
+  --font-body:'IBM Plex Sans', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono:'IBM Plex Mono', Consolas, 'Courier New', monospace;
+  --font-ar: serif;
+  --margin-x: clamp(1.2rem, 6.5vw, 6.5rem);
+  --top-pad: clamp(0.8rem, 5vh, 3.2rem);
+  --bot-pad: clamp(2.6rem, 8vh, 4.6rem);
+}
+
+/* Root type scale is driven by both viewport axes so every slide fits 100vh */
+html{ font-size: clamp(11.5px, 0.66vw + 0.9vh, 24px); }
+html, body{ height:100%; margin:0; overflow:hidden; }
+body{
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-variant-numeric: tabular-nums lining-nums;
+  -webkit-font-smoothing: antialiased;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  box-sizing: border-box;
+}
+*{ box-sizing: border-box; }
+
+/* =========================================================
+   DECK + SLIDES
+   ========================================================= */
+.deck{ position:fixed; inset:0; }
+.slide{
+  position:absolute; inset:0;
+  width:100vw; height:100vh; height:100dvh;
+  overflow:hidden;
+  display:flex; flex-direction:column;
+  padding: var(--top-pad) var(--margin-x) var(--bot-pad) var(--margin-x);
+  opacity:0; visibility:hidden;
+  transition: opacity .35s ease, visibility 0s linear .35s;
+  background: var(--paper);
+}
+.slide.active{ opacity:1; visibility:visible; transition: opacity .35s ease; }
+
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
+.sec{
+  font-family: var(--font-body);
+  font-weight:600; font-size: 0.8rem; color: var(--olive);
+  letter-spacing: .14em; text-transform: uppercase; margin:0 0 .45rem 0;
+  display:flex; gap:.6rem; align-items:baseline;
+}
+.sec .lec{ color: var(--ink-3); font-weight:500; }
+h1, h2, h3{ font-family: var(--font-head); margin:0; color: var(--ink); }
+h1{ font-size: 3.9rem; line-height: 1.08; font-weight: 700; }
+h2{ font-size: 2.05rem; line-height: 1.15; font-weight: 700; }
+h3{ font-size: 1.08rem; line-height:1.25; font-weight:600; font-family: var(--font-body); }
+.sub{ font-size: 1.05rem; color: var(--ink-2); margin:.45rem 0 0 0; max-width: 68ch; line-height:1.45; }
+p{ margin:0; line-height:1.5; }
+.ar{ font-family: var(--font-ar); direction: rtl; unicode-bidi: isolate; }
+.muted{ color: var(--ink-2); }
+.small{ font-size: .86rem; }
+.tiny{ font-size: .76rem; color: var(--ink-3); }
+b, strong{ font-weight: 700; }
+i.v{ font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-weight: 500; }
+sub{ font-size: .72em; }
+.math{ font-size: 1.02rem; }
+.head{ flex: 0 0 auto; margin-bottom: clamp(.5rem, 2.2vh, 1.4rem); }
+.body{ flex: 1 1 auto; min-height:0; display:flex; flex-direction:column; justify-content:flex-start; padding-top: clamp(.3rem, 2.5vh, 2rem); }
+.body.top{ justify-content:flex-start; }
+
+/* =========================================================
+   LAYOUT HELPERS
+   ========================================================= */
+.cols{ display:grid; grid-template-columns: 1fr 1fr; gap: clamp(1rem, 3vw, 3rem); align-items:start; }
+.cols.c3{ grid-template-columns: repeat(3, 1fr); }
+.cols.wide-left{ grid-template-columns: 1.35fr 1fr; }
+.stack > * + *{ margin-top: .8rem; }
+
+ul.plain{ list-style:none; padding:0; margin:0; }
+ul.plain li{ position:relative; padding-left:1.25rem; font-size:1.18rem; line-height:1.45; margin:.55rem 0; }
+ul.plain li::before{ content:""; position:absolute; left:0; top:.62em; width:.55rem; height:2px; background: var(--olive); }
+
+.panel{
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 1rem 1.15rem;
+}
+.panel.olive{ border-left: 4px solid var(--olive); }
+.panel.red{ border-left: 4px solid var(--red); }
+.panel h3{ margin-bottom:.45rem; }
+.panel p{ font-size: .98rem; color: var(--ink-2); }
+
+/* Legal citation chip */
+.cite{
+  display:inline-block; font-size:.74rem; color: var(--ink-2);
+  border:1px solid var(--rule); background: var(--paper-2);
+  padding:.08rem .45rem; border-radius:2px; margin-top:.5rem;
+}
+
+/* =========================================================
+   TABLES (ledger style)
+   ========================================================= */
+table.ledger{ border-collapse: collapse; width:100%; font-size: .9rem; background: var(--card); }
+table.ledger th{
+  text-align:right; font-family: var(--font-body); font-weight:700; 
+  color: var(--ink); border-bottom: 2px solid var(--ink); padding:.32rem .55rem; font-size:.84rem;
+}
+table.ledger td{ text-align:right; padding:.26rem .55rem; border-bottom:1px solid var(--rule-2); }
+table.ledger th:first-child, table.ledger td:first-child{ text-align:left; }
+table.ledger td.l, table.ledger th.l{ text-align:left; }
+table.ledger tr.hl td{ background: var(--amber-2); }
+table.ledger tr.tot td{ border-top: 2px solid var(--ink); font-weight:700; }
+table.ledger tr.gap td{ color: var(--ink-3); text-align:center; }
+table.ledger td.neg{ color: var(--red); }
+table.ledger td.rate{ font-weight:700; color: var(--olive); width: 4.5rem; }
+table.rates td{ padding:.2rem .55rem; }
+table.rates tr.grp td{ font-family: var(--font-head); font-weight:700; color: var(--ink); background: var(--paper-2); border-bottom: 1px solid var(--rule); font-size:.82rem; }
+
+/* =========================================================
+   LAB (interactive problem + step-by-step solution)
+   ========================================================= */
+.lab{ display:grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); gap: clamp(.9rem, 2.4vw, 2.4rem); flex:1 1 auto; min-height:0; }
+.lab-left{ display:flex; flex-direction:column; min-height:0; gap:.7rem; }
+.lab-right{ display:flex; flex-direction:column; min-height:0; }
+.given{
+  background: var(--card); border:1px solid var(--rule); border-top: 3px solid var(--ink);
+  padding:.65rem .9rem .7rem; border-radius:2px;
+}
+.given .gt{ font-family: var(--font-head); font-weight:700; font-size:.84rem; color: var(--ink-2); margin-bottom:.3rem; }
+.given .g{ display:flex; justify-content:space-between; gap:1rem; padding:.16rem 0; border-bottom:1px dashed var(--rule-2); font-size:.95rem; }
+.given .g:last-child{ border-bottom:0; }
+.given .g span{ color: var(--ink-2); }
+.given .g b{ white-space:nowrap; }
+.given .find{ margin-top:.4rem; font-size:.9rem; color: var(--ink); }
+.given .find b{ color: var(--olive); }
+.ctrl{ display:flex; flex-wrap:wrap; gap:.4rem .5rem; align-items:center; }
+.ctrl label{ font-size:.82rem; color: var(--ink-2); display:flex; align-items:center; gap:.4rem; }
+.ctrl select{
+  font: inherit; font-size:.85rem; color: var(--ink); background: var(--card);
+  border:1px solid var(--rule); border-radius:2px; padding:.22rem .4rem; max-width: 100%;
+}
+.ctrl label{ max-width:100%; }
+.ctrl select[data-key="c"]{ max-width: min(24rem, 100%); }
+.btns{ display:flex; flex-wrap:wrap; gap:.4rem; }
+.btn{
+  font-family: var(--font-body); font-weight:650;  font-size:.86rem;
+  border:1.5px solid var(--ink); background: var(--card); color: var(--ink);
+  padding:.32rem .75rem; border-radius:2px; cursor:pointer; line-height:1.2;
+}
+.btn:hover{ background: var(--paper-2); }
+.btn.primary{ background: var(--ink); color: var(--card); }
+.btn.primary:hover{ background:#24385c; }
+.btn.go{ background: var(--olive); border-color: var(--olive); color:#fff; }
+.btn.go:hover{ background:#255a2f; }
+.btn:focus-visible, select:focus-visible{ outline: 3px solid var(--amber); outline-offset: 2px; }
+.btn kbd{ font-family: var(--font-body); font-size:.7rem; opacity:.7; margin-left:.3rem; }
+.tablebox{ flex:1 1 auto; min-height:0; overflow:hidden; }
+.tablebox table.ledger td{ padding-top:.2rem; padding-bottom:.2rem; }
+.tablebox .cap{ font-family: var(--font-head); font-weight:700; font-size:.82rem; color: var(--ink-2); margin:.1rem 0 .3rem; }
+
+.steps-head{ display:flex; justify-content:space-between; align-items:baseline; border-bottom:2px solid var(--ink); padding-bottom:.25rem; margin-bottom:.35rem; }
+.steps-head h3{ font-size:1rem; }
+.steps-head .count{ font-size:.82rem; color: var(--ink-3); }
+ol.steps{ list-style:none; margin:0; padding:0; counter-reset: st; flex:0 1 auto; min-height:0; overflow:hidden; }
+.lab-right > .btns{ margin-top:auto !important; padding-top:.6rem; }
+ol.steps li{
+  counter-increment: st; position:relative;
+  padding:.38rem .3rem .38rem 2.1rem; border-bottom:1px solid var(--rule-2);
+  font-size:.95rem; line-height:1.38;
+}
+ol.steps li::before{
+  content: counter(st); position:absolute; left:.1rem; top:.4rem;
+  width:1.45rem; height:1.45rem; border-radius:50%;
+  background: var(--paper-2); color: var(--ink); font-family: var(--font-head); font-weight:700;
+  font-size:.78rem; display:flex; align-items:center; justify-content:center;
+}
+ol.steps li.hidden{ display:none; }
+ol.steps li.latest{ background: linear-gradient(90deg, var(--amber-2), transparent 85%); }
+ol.steps li.latest::before{ background: var(--amber); }
+ol.steps li .m{ display:block; margin-top:.12rem; color: var(--ink); font-weight:600; }
+ol.steps li.show{ animation: write .35s ease both; }
+@keyframes write{ from{ opacity:0; transform: translateX(-6px);} to{ opacity:1; transform:none; } }
+.answer{
+  margin-top:.5rem; padding:.5rem .75rem; border:2px solid var(--olive); background: var(--olive-2);
+  font-size:.98rem; border-radius:2px; display:none;
+}
+.answer.on{ display:block; animation: write .35s ease both; }
+.answer b{ color: var(--olive); }
+.pos{ color: var(--olive); font-weight:700; }
+.neg{ color: var(--red); font-weight:700; }
+.hintkeys{ font-size:.74rem; color: var(--ink-3); }
+
+/* =========================================================
+   SPECIAL SLIDES
+   ========================================================= */
+.title-slide .body, .divider .body{ justify-content:center; padding-top:0; }
+.title-slide h1{ font-size: 5.4rem; max-width: 15ch; }
+.title-slide .ar{ font-size: 1.9rem; color: var(--olive); margin-top: .9rem; display:block; text-align:left; direction: rtl; }
+.title-slide .meta{ margin-top: 1.6rem; font-size: 1rem; color: var(--ink-2); line-height:1.6; }
+.title-strip{
+  margin-top: 1.8rem; display:inline-flex; gap: 1.6rem; align-items:baseline;
+  font-family: var(--font-body); 
+  border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); padding:.55rem 0;
+}
+.title-strip span{ font-size:1.25rem; }
+.title-strip b{ font-size:1.55rem; color: var(--olive); }
+
+.divider h1{ font-size: 5rem; }
+.divider .big-letter{
+  font-family: var(--font-head); font-weight:800; 
+  font-size: 15rem; line-height:.8; color: var(--olive); opacity:.92;
+}
+.divider .row{ display:flex; gap: 3rem; align-items:flex-end; }
+.divider .list{ margin-top:1.2rem; font-size:1.1rem; color: var(--ink-2); line-height:1.7; }
+
+.roadmap{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 1.6rem; }
+.roadmap .part{ border-top: 4px solid var(--ink); padding-top:.8rem; }
+.roadmap .part .n{ font-family: var(--font-head); font-weight:800;  font-size: 4rem; line-height:.9; color: var(--olive); }
+.roadmap .part h3{ font-size: 1.35rem; margin:.4rem 0 .3rem; }
+.roadmap .part p{ color: var(--ink-2); font-size:.98rem; }
+
+.flow{ display:flex; flex-direction:column; gap:.3rem; max-width: 34rem; }
+.flow .fr{ display:flex; justify-content:space-between; padding:.38rem .7rem; background: var(--card); border:1px solid var(--rule); font-size:1.02rem; }
+.flow .fr.minus{ margin-left:1.6rem; color: var(--ink-2); }
+.flow .fr.res{ border:2px solid var(--ink); font-weight:700; }
+.flow .fr.dep{ border-color: var(--olive); background: var(--olive-2); }
+.flow .fr.tax{ border-color: var(--red); background: var(--red-2); }
+
+.timeline{ display:flex; align-items:flex-end; gap:.5rem; height: 16rem; border-bottom:2px solid var(--ink); padding: 0 .5rem; }
+.timeline .bar{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; }
+.timeline .bar i{ display:block; width:70%; background: var(--olive); border-radius:1px 1px 0 0; }
+.timeline .bar.capex i{ background: var(--red); }
+.timeline .bar span{ font-size:.75rem; color: var(--ink-2); margin-bottom:.2rem; white-space:nowrap; }
+.timeline-x{ display:flex; gap:.5rem; padding: .25rem .5rem 0; }
+.timeline-x span{ flex:1; text-align:center; font-size:.8rem; color: var(--ink-3); }
+
+.legal-card{ background: var(--card); border:1px solid var(--rule); padding: .9rem 1.1rem; border-radius:2px; }
+.legal-card .ar{ font-size: 1.15rem; display:block; text-align:right; color: var(--ink); line-height:1.6; }
+.legal-card h3{ margin-top:.35rem; }
+.legal-card p{ font-size:.93rem; color: var(--ink-2); margin-top:.3rem; }
+
+.rules{ counter-reset: r; display:grid; grid-template-columns: 1fr 1fr; gap: .7rem 2rem; }
+.rules .rl{ counter-increment: r; position:relative; padding: .55rem .2rem .55rem 2.6rem; border-bottom:1px solid var(--rule); }
+.rules .rl::before{ content: counter(r); position:absolute; left:0; top:.35rem; font-family: var(--font-head); font-weight:800;  font-size: 1.9rem; color: var(--olive); line-height:1; }
+.rules .rl b{ display:block; font-size:1.05rem; }
+.rules .rl span{ font-size:.93rem; color: var(--ink-2); }
+
+.mini-svg{ width:100%; height:auto; max-height: 26vh; }
+
+/* =========================================================
+   CHROME: progress, counter, nav, dots, contents
+   ========================================================= */
+.chrome{
+  position:fixed; left:0; right:0; bottom:0; z-index:10;
+  height: var(--bot-pad);
+  display:flex; align-items:center; gap: 1rem;
+  padding: 0 var(--margin-x) 0 var(--margin-x);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  pointer-events:none;
+}
+.chrome > *{ pointer-events:auto; }
+.progress-track{ position:fixed; left:0; right:0; bottom:0; height:4px; background: var(--rule-2); z-index:11; }
+.progress-bar{ height:100%; width:0; background: var(--olive); transition: width .35s ease; }
+.chrome .where{ font-size:.8rem; color: var(--ink-3); flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.chrome .counter{ font-family: var(--font-head); font-weight:700; font-size:.9rem; color: var(--ink-2); min-width:4.5rem; text-align:right; }
+.chrome .navbtn{ border:1.5px solid var(--ink); background: var(--card); color: var(--ink); width:2.1rem; height:2.1rem; border-radius:2px; cursor:pointer; font-size:1rem; line-height:1; display:flex; align-items:center; justify-content:center; }
+.chrome .navbtn:hover{ background: var(--paper-2); }
+.chrome .navbtn:focus-visible{ outline: 3px solid var(--amber); outline-offset: 2px; }
+.chrome .tocbtn{ width:auto; padding: 0 .7rem; font-family: var(--font-head); font-weight:650; font-size:.85rem; }
+
+.slide-nav{ position:fixed; right: clamp(.4rem, 1.2vw, 1.2rem); top:50%; transform: translateY(-50%); display:flex; flex-direction:column; gap: .28rem; z-index:9; }
+.slide-nav-dot{ width:.42rem; height:.42rem; border-radius:50%; background: var(--rule); cursor:pointer; }
+.slide-nav-dot.sec-start{ margin-top:.5rem; }
+.slide-nav-dot.active{ background: var(--olive); transform: scale(1.5); }
+.slide-nav-dot:hover{ background: var(--ink-2); }
+
+.toc{ position:fixed; inset:0; background: rgba(21,35,59,.55); z-index:20; display:none; align-items:center; justify-content:center; }
+.toc.open{ display:flex; }
+.toc .inner{ background: var(--paper); width: min(92vw, 70rem); max-height: 86vh; padding: 1.2rem 1.6rem; border-top: 4px solid var(--olive); display:grid; grid-template-columns: repeat(3, 1fr); gap: .2rem 1.6rem; overflow:hidden; }
+.toc .inner h3{ grid-column: 1 / -1; margin-bottom:.4rem; }
+.toc a{ display:block; font-size:.82rem; color: var(--ink); text-decoration:none; padding:.14rem 0; border-bottom:1px solid var(--rule-2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer; }
+.toc a:hover, .toc a:focus-visible{ color: var(--olive); outline:none; }
+.toc a .n{ display:inline-block; width:1.9rem; color: var(--ink-3); }
+
+
+/* =========================================================
+   WEEK 1 ADDITIONS: dark slides, Excel visuals, MCQ, footer
+   ========================================================= */
+.slide.dark{ background: var(--navy); color: #F4EFE6; }
+.slide.dark h1, .slide.dark h2{ color:#F4EFE6; }
+.slide.dark .sec{ color: var(--amber); }
+.slide.dark .list, .slide.dark .sub, .slide.dark .meta{ color:#B8C2D3; }
+.slide.dark .big-letter{ color: var(--amber); }
+.gold-rule{ width: 5.5rem; height: 4px; background: var(--amber); margin: 1.1rem 0 1rem; }
+.slide.dark ul.plain li::before{ background: var(--amber); }
+.slide.dark ul.plain li{ color:#F4EFE6; }
+.title-slide h1{ font-size: 4.6rem; max-width: 18ch; }
+.title-slide .meta{ margin-top: 2.2rem; font-size: .95rem; }
+
+.foot{ position:absolute; left: var(--margin-x); right: calc(var(--margin-x) + 15rem); bottom: calc(var(--bot-pad) * .38); font-size:.78rem; color: var(--ink-3); pointer-events:none; }
+.slide.dark .foot{ color:#8E9AB0; }
+
+code.xl, .xl{
+  font-family: var(--font-mono); font-size: .92em; font-weight:500;
+  background: #EAF3EC; color: #1D5E30; border: 1px solid #C9DECF;
+  padding: .05rem .38rem; border-radius: 3px; white-space: nowrap;
+}
+.fx-card{ background: var(--card); border:1px solid var(--rule); border-radius: 8px; padding: .8rem 1rem; }
+.fx-card h3{ font-family: var(--font-mono); color: var(--green); font-size: 1.15rem; }
+.fx-card .syn{ font-family: var(--font-mono); font-size:.88rem; color: var(--ink); margin:.35rem 0; }
+.fx-card p{ font-size:.92rem; color: var(--ink-2); }
+
+/* mini spreadsheet */
+.sheet{ border:1px solid #C9CDD3; background:#fff; font-family: var(--font-body); font-size:.82rem; border-radius:3px; overflow:hidden; }
+.sheet .fbar{ display:flex; align-items:center; gap:.5rem; border-bottom:1px solid #C9CDD3; padding:.25rem .5rem; background:#F7F8FA; }
+.sheet .fbar .nm{ font-family: var(--font-mono); font-size:.78rem; color:#555; min-width:2.4rem; border-right:1px solid #D5D8DD; padding-right:.4rem; }
+.sheet .fbar .fx{ font-style:italic; color:#777; font-family: Georgia, serif; }
+.sheet .fbar code{ font-family: var(--font-mono); font-size:.8rem; color:#1D5E30; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sheet table{ border-collapse:collapse; width:100%; }
+.sheet th{ background:#EEF0F3; color:#555; font-weight:500; font-size:.72rem; border:1px solid #D5D8DD; padding:.12rem .3rem; text-align:center; }
+.sheet td{ border:1px solid #E1E4E8; padding:.16rem .45rem; text-align:right; white-space:nowrap; }
+.sheet td.rn{ background:#EEF0F3; color:#555; text-align:center; font-size:.72rem; width:1.8rem; }
+.sheet td.lbl{ text-align:left; color: var(--ink-2); }
+.sheet td.sel{ outline: 2px solid #217346; outline-offset:-2px; background:#EAF3EC; font-weight:700; }
+.sheet td.neg{ color: var(--red); }
+
+/* MCQ */
+.mcq{ flex:1 1 auto; display:grid; grid-template-columns: minmax(0,1.25fr) minmax(0,1fr); gap: clamp(1rem,3vw,3rem); min-height:0; }
+.mcq .q{ font-size:1.18rem; line-height:1.5; }
+.mcq .q .xl{ font-size:.95em; }
+.mcq .opts{ display:flex; flex-direction:column; gap:.55rem; margin-top:1rem; }
+.mcq .opt{
+  text-align:left; font: inherit; font-size:1.02rem; background: var(--card); color: var(--ink);
+  border:1.5px solid var(--rule); border-radius:8px; padding:.6rem .9rem; cursor:pointer; display:flex; gap:.8rem; align-items:center;
+}
+.mcq .opt:hover{ border-color: var(--ink-3); }
+.mcq .opt .k{ font-weight:700; color: var(--olive); width:1.4rem; }
+.mcq .opt.right{ border-color: var(--green); background: var(--green-2); }
+.mcq .opt.wrong{ border-color: var(--red); background: var(--red-2); }
+.mcq .opt:disabled{ cursor:default; }
+.mcq .fb{ display:none; border-left:4px solid var(--green); background: var(--card); padding:.8rem 1rem; border-radius: 0 8px 8px 0; font-size:.98rem; line-height:1.5; }
+.mcq .fb.on{ display:block; animation: write .35s ease both; }
+.mcq .fb.bad{ border-left-color: var(--red); }
+.mcq .fb b.v{ display:block; font-size:1.05rem; margin-bottom:.3rem; }
+.mcq .score{ font-size:.85rem; color: var(--ink-3); margin-top:.8rem; }
+.mcq .side{ display:flex; flex-direction:column; gap:.8rem; }
+.mcq .topic{ font-size:.82rem; color: var(--ink-3); margin-bottom:.4rem; }
+body.on-dark .chrome .counter{ color:#B8C2D3; }
+
+/* PW profile chart */
+.prof{ width:100%; height:auto; max-height: 30vh; background:#fff; border:1px solid var(--rule); border-radius:4px; }
+
+.panel{ border-radius: 8px; }
+.given{ border-radius: 8px; border-top: 3px solid var(--navy); }
+.btn{ border-radius: 6px; }
+.btn.go{ background: var(--green); border-color: var(--green); }
+.btn.go:hover{ background:#255a2f; }
+.answer{ border-color: var(--green); background: var(--green-2); border-radius: 6px; }
+.answer b{ color: var(--green); }
+.pos{ color: var(--green); }
+table.ledger td.rate{ color: var(--green); }
+.progress-bar{ background: var(--amber); }
+.slide-nav-dot.active{ background: var(--olive); }
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-height: 700px){
+  :root{ --top-pad: clamp(.5rem, 3vh, 1.5rem); }
+  .divider .big-letter{ font-size: 11rem; }
+}
+@media (max-height: 600px){
+  .slide-nav{ display:none; }
+  ol.steps li{ padding-top:.25rem; padding-bottom:.25rem; }
+}
+@media (max-height: 500px){
+  html{ font-size: 10px; }
+}
+@media (max-width: 760px){
+  :root{ --margin-x: 1rem; }
+  html{ font-size: clamp(9px, 1.6vw + .4vh, 14px); }
+  .lab, .cols, .cols.wide-left, .roadmap, .rules{ grid-template-columns: 1fr; }
+  .cols.c3{ grid-template-columns: 1fr; }
+  .slide-nav{ display:none; }
+  .title-slide h1{ font-size: 3.4rem; }
+  .divider .big-letter{ font-size: 7rem; }
+  .chrome .where{ display:none; }
+  .slide{ overflow-y:auto; }
+}
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+<div class="slide active title-slide dark" data-slide="0" data-sec="Week 1" data-title="Week 1: Excel for engineering economy" data-secstart="1">
+
+<div class="body">
+ <div class="sec">Week 1 · Spreadsheet session</div>
+ <h1>Solving engineering economy problems in Excel</h1>
+ <div class="gold-rule"></div>
+ <p class="sub" style="color:#B8C2D3;font-size:1.2rem;max-width:56ch">PV, FV, PMT, RATE, NPV, and IRR. Each function solved by hand and in Excel, with fresh numbers on every click.</p>
+ <p class="meta">Based on Blank &amp; Tarquin, Chapters 1 to 4</p>
+</div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "Week 1: Excel for engineering economy", "script": "This week we take the factors from Chapters 1 to 4 and solve them with six Excel functions. Every example on the slides generates new numbers, so you practice the method, not the answer.", "notes": ["Six functions: PV, FV, PMT, RATE, NPV, IRR", "Hand solution and Excel side by side", "Every example draws new numbers"]}</script>
+</div>
+<div class="slide" data-slide="1" data-sec="Week 1" data-title="Plan for the session">
+<div class="head"><div class="sec">What we cover</div><h2>Plan for the session</h2></div>
+<div class="body">
+ <div class="roadmap" style="grid-template-columns:repeat(4,1fr)">
+  <div class="part"><div class="n">A</div><h3>Excel setup</h3><p>Sign convention, the factor-to-function map, argument rules.</p></div>
+  <div class="part"><div class="n">B</div><h3>PV, FV, PMT, RATE</h3><p>Single amounts and uniform series, including monthly compounding.</p></div>
+  <div class="part"><div class="n">C</div><h3>NPV and IRR</h3><p>Uneven cash flows, the NPV time-0 trap, rate of return.</p></div>
+  <div class="part"><div class="n">D</div><h3>Comparing alternatives</h3><p>The session sheet: study period and LCM with NPV and PMT.</p></div>
+ </div>
+ <div class="panel olive" style="margin-top:2rem;max-width:60rem">
+  <h3>How the example and question slides work</h3>
+  <p><b>Example slides:</b> N next step, A all steps, H hide steps, R new numbers, L lecture values.<br><b>Question slides:</b> keys 1 to 4 answer, R draws a new question. Arrow keys change slides. T opens the contents.</p>
+ </div>
+</div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "Plan for the session", "script": "Four parts. We set up Excel conventions first, then the single-value functions, then series functions, and finish with the comparison sheet from the session file.", "notes": ["Part A: conventions", "Part B: PV, FV, PMT, RATE", "Part C: NPV, IRR", "Part D: alternatives"]}</script>
+</div>
+<div class="slide divider dark" data-slide="2" data-sec="Part A, Excel setup" data-title="Excel setup" data-secstart="1">
+<div class="body"><div class="big-letter">A</div>
+<h1>Excel setup</h1><div class="gold-rule"></div><div class="list">Sign convention, the factor-to-function map, and argument rules.</div></div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "Excel setup", "script": "Before any calculation, two habits prevent most spreadsheet errors: the sign convention and matching the rate to the period.", "notes": ["Sign convention", "Factor to function map", "Arguments"]}</script>
+</div>
+<div class="slide" data-slide="3" data-sec="Part A, Excel setup" data-title="The sign convention">
+<div class="head"><div class="sec">Part A, Excel setup</div><h2>The sign convention</h2></div>
+<div class="body">
+ <div class="cols">
+  <div class="stack">
+   <ul class="plain">
+    <li>Excel reads every amount as a <b>cash flow</b> with a sign.</li>
+    <li>Money you pay out is <b>negative</b>. Money you receive is <b>positive</b>.</li>
+    <li>PV, FV, and PMT return the amount on the <b>other side</b> of the deal, so the result carries the opposite sign.</li>
+    <li>A negative result means an outflow. Read the sign, do not delete it.</li>
+   </ul>
+  </div>
+  <div class="stack">
+   <div class="fx-card"><h3>=FV(10%, 1, 0, -100)</h3><p>You deposit $100 today (outflow, negative). Excel returns <b>110.00</b>: the $110 you receive in one year.</p></div>
+   <div class="fx-card"><h3>=PV(10%, 1, 0, 110)</h3><p>You want $110 in one year (inflow). Excel returns <b>−100.00</b>: the $100 you deposit today.</p></div>
+   <div class="fx-card"><h3>=PMT(10%, 5, 10000)</h3><p>You borrow $10,000 (inflow). Excel returns <b>−2,637.97</b>: the payment you make each year.</p></div>
+  </div>
+ </div>
+</div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "The sign convention", "script": "Excel treats inputs as cash flows. Deposit 100, receive 110. Borrow 10 thousand, pay 2,638 each year. The sign tells you the direction of the money.", "notes": ["Out = negative, in = positive", "Results carry the opposite sign", "$100 now equals $110 in one year at 10%"]}</script>
+</div>
+<div class="slide" data-slide="4" data-sec="Part A, Excel setup" data-title="From factor to function">
+<div class="head"><div class="sec">Chapter 2 in Excel</div><h2>From factor to function</h2></div>
+<div class="body">
+ <table class="ledger" style="font-size:1rem">
+  <tr><th class="l">Factor</th><th class="l">Find, given</th><th class="l">Excel function</th><th class="l">Example</th></tr>
+  <tr><td>(P/F, i, n)</td><td class="l">P given F</td><td class="l"><code class="xl">PV</code></td><td class="l"><code class="xl">=PV(i, n, 0, F)</code></td></tr>
+  <tr><td>(P/A, i, n)</td><td class="l">P given A</td><td class="l"><code class="xl">PV</code></td><td class="l"><code class="xl">=PV(i, n, A)</code></td></tr>
+  <tr><td>(F/P, i, n)</td><td class="l">F given P</td><td class="l"><code class="xl">FV</code></td><td class="l"><code class="xl">=FV(i, n, 0, P)</code></td></tr>
+  <tr><td>(F/A, i, n)</td><td class="l">F given A</td><td class="l"><code class="xl">FV</code></td><td class="l"><code class="xl">=FV(i, n, A)</code></td></tr>
+  <tr><td>(A/P, i, n)</td><td class="l">A given P</td><td class="l"><code class="xl">PMT</code></td><td class="l"><code class="xl">=PMT(i, n, P)</code></td></tr>
+  <tr><td>(A/F, i, n)</td><td class="l">A given F</td><td class="l"><code class="xl">PMT</code></td><td class="l"><code class="xl">=PMT(i, n, 0, F)</code></td></tr>
+  <tr><td>Unknown i</td><td class="l">i given P, A, F, n</td><td class="l"><code class="xl">RATE</code></td><td class="l"><code class="xl">=RATE(n, A, P, F)</code></td></tr>
+  <tr><td>Uneven series</td><td class="l">PW, rate of return</td><td class="l"><code class="xl">NPV</code>, <code class="xl">IRR</code></td><td class="l"><code class="xl">=NPV(i, years 1..n) + year 0</code></td></tr>
+ </table>
+</div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "From factor to function", "script": "Each factor from Chapter 2 has an Excel equivalent. PV covers both P over F and P over A, FV covers both F factors, and PMT covers both A factors.", "notes": ["PV replaces P/F and P/A", "FV replaces F/P and F/A", "PMT replaces A/P and A/F", "RATE, NPV, IRR for unknown rates and uneven flows"]}</script>
+</div>
+<div class="slide" data-slide="5" data-sec="Part A, Excel setup" data-title="The arguments and two rules">
+<div class="head"><div class="sec">Arguments</div><h2>The arguments and two rules</h2></div>
+<div class="body">
+ <div class="cols wide-left">
+  <table class="ledger" style="font-size:1rem">
+   <tr><th class="l">Argument</th><th class="l">Meaning</th></tr>
+   <tr><td><code class="xl">rate</code></td><td class="l">Interest rate per period, i</td></tr>
+   <tr><td><code class="xl">nper</code></td><td class="l">Number of periods, n</td></tr>
+   <tr><td><code class="xl">pmt</code></td><td class="l">Uniform amount each period, A (0 if none)</td></tr>
+   <tr><td><code class="xl">pv</code></td><td class="l">Present amount at time 0, P</td></tr>
+   <tr><td><code class="xl">fv</code></td><td class="l">Future amount at time n, F</td></tr>
+   <tr><td><code class="xl">type</code></td><td class="l">0 or omitted: end of period (the textbook convention). 1: start of period</td></tr>
+  </table>
+  <div class="stack">
+   <div class="panel olive"><h3>Rule 1: match rate and nper to the period</h3><p>Monthly payments at 9% per year compounded monthly: <code class="xl">rate = 9%/12</code>, <code class="xl">nper = years*12</code>.</p></div>
+   <div class="panel red"><h3>Rule 2: NPV starts at period 1</h3><p><code class="xl">NPV</code> discounts its first value one full period. Add the time-0 cash flow outside the function.</p></div>
+  </div>
+ </div>
+</div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "The arguments and two rules", "script": "Six argument names cover all functions. Two rules prevent most errors: rate and nper must use the same period, and NPV never includes time zero inside the range.", "notes": ["rate, nper, pmt, pv, fv, type", "Match rate and nper to the payment period", "Add year 0 outside NPV"]}</script>
+</div>
+<div class="slide mcq-slide" data-slide="6" data-sec="Part A, Excel setup" data-title="Sign convention and function map">
+<div class="head"><div class="sec">Check your understanding</div><h2>Sign convention and function map</h2></div><div class="mcq" data-mcq="sign,map,period"></div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "Sign convention and function map", "script": "Quick check on signs, the factor map, and the period rule.", "notes": ["Answer before revealing", "New question draws new numbers", "Keys 1 to 4 answer, R draws a new question"]}</script>
+</div>
+<div class="slide divider dark" data-slide="7" data-sec="Part B, Single-value functions" data-title="PV, FV, PMT, RATE" data-secstart="1">
+<div class="body"><div class="big-letter">B</div>
+<h1>PV, FV, PMT, RATE</h1><div class="gold-rule"></div><div class="list">One amount in, one amount out. Single payments, uniform series, and the unknown rate.</div></div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "PV, FV, PMT, RATE", "script": "Part B covers the four functions that solve a single unknown from P, F, A, i, and n.", "notes": ["PV", "FV", "PMT", "RATE"]}</script>
+</div>
+<div class="slide lab-slide" data-slide="8" data-sec="Part B, Single-value functions" data-title="PV: present worth of a future amount or a series">
+<div class="head"><div class="sec">Part B, Single-value functions</div><h2>PV: present worth of a future amount or a series</h2><p class="sub">Find P. Choose a single future amount, a uniform series, or both.</p></div><div class="lab" data-lab="pv"></div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "PV: present worth of a future amount or a series", "script": "We find the present worth by hand with the factor, then confirm with Excel's PV function. Watch the sign of the result.", "notes": ["P = F(P/F,i,n) and P = A(P/A,i,n)", "=PV(rate, nper, pmt, fv)", "Result sign is opposite to the inputs"]}</script>
+</div>
+<div class="slide lab-slide" data-slide="9" data-sec="Part B, Single-value functions" data-title="FV: future worth of a deposit or a series">
+<div class="head"><div class="sec">Part B, Single-value functions</div><h2>FV: future worth of a deposit or a series</h2><p class="sub">Find F. A deposit now, equal deposits each year, or both.</p></div><div class="lab" data-lab="fv"></div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "FV: future worth of a deposit or a series", "script": "Future worth compounds each amount forward. The F over A factor handles the series, F over P handles the deposit.", "notes": ["F = P(F/P,i,n) + A(F/A,i,n)", "=FV(rate, nper, pmt, pv)", "Deposits entered as negative return a positive F"]}</script>
+</div>
+<div class="slide lab-slide" data-slide="10" data-sec="Part B, Single-value functions" data-title="PMT: capital recovery and sinking fund">
+<div class="head"><div class="sec">Part B, Single-value functions</div><h2>PMT: capital recovery and sinking fund</h2><p class="sub">Find A. Repay a loan (A/P) or save toward a target (A/F). Monthly compounding links to Chapter 3.</p></div><div class="lab" data-lab="pmt"></div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "PMT: capital recovery and sinking fund", "script": "PMT replaces both A factors. For a loan, P is the amount borrowed. For a sinking fund, F is the target. With monthly payments, rate and nper switch to months.", "notes": ["A = P(A/P,i,n) or A = F(A/F,i,n)", "=PMT(rate, nper, pv, fv)", "Monthly: rate = r/12, nper = 12n"]}</script>
+</div>
+<div class="slide lab-slide" data-slide="11" data-sec="Part B, Single-value functions" data-title="RATE: the unknown interest rate">
+<div class="head"><div class="sec">Part B, Single-value functions</div><h2>RATE: the unknown interest rate</h2><p class="sub">Find i. A single amount that grows, or an investment that returns a uniform series.</p></div><div class="lab" data-lab="rate"></div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "RATE: the unknown interest rate", "script": "When the rate is unknown, set up the factor equation, bracket the answer with two trial rates, interpolate, and confirm with RATE.", "notes": ["Single amount: i = (F/P)^(1/n) − 1", "Series: trial and error with (P/A,i,n)", "=RATE(nper, pmt, pv, fv)"]}</script>
+</div>
+<div class="slide mcq-slide" data-slide="12" data-sec="Part B, Single-value functions" data-title="PV, FV, PMT, RATE">
+<div class="head"><div class="sec">Check your understanding</div><h2>PV, FV, PMT, RATE</h2></div><div class="mcq" data-mcq="pv,fv,pmt,monthly,rate"></div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "PV, FV, PMT, RATE", "script": "Each question draws new numbers. Compute the value or pick the right formula.", "notes": ["Answer before revealing", "New question draws new numbers", "Keys 1 to 4 answer, R draws a new question"]}</script>
+</div>
+<div class="slide divider dark" data-slide="13" data-sec="Part C, Cash-flow series" data-title="NPV and IRR" data-secstart="1">
+<div class="body"><div class="big-letter">C</div>
+<h1>NPV and IRR</h1><div class="gold-rule"></div><div class="list">Uneven cash flows in one formula, and the rate that makes present worth zero.</div></div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "NPV and IRR", "script": "Real projects have uneven cash flows. NPV and IRR handle the whole series.", "notes": ["NPV", "Time-0 rule", "IRR"]}</script>
+</div>
+<div class="slide" data-slide="14" data-sec="Part C, Cash-flow series" data-title="NPV in Excel: the time-0 rule">
+<div class="head"><div class="sec">Section 4.6</div><h2>NPV in Excel: the time-0 rule</h2></div>
+<div class="body">
+ <div class="cols">
+  <div class="stack">
+   <p style="font-size:1.1rem">Excel's <code class="xl">NPV(rate, value1, value2, ...)</code> assumes the first value occurs at the <b>end of period 1</b>.</p>
+   <p style="font-size:1.1rem">Engineering PW includes the time-0 investment, which needs no discounting.</p>
+   <div class="panel olive"><h3>Correct</h3><p><code class="xl">=NPV(i, B3:B7) + B2</code><br>B2 holds year 0. B3:B7 hold years 1 to 5.</p></div>
+   <div class="panel red"><h3>Wrong</h3><p><code class="xl">=NPV(i, B2:B7)</code><br>Shifts every flow one year late. The result equals the correct PW divided by (1 + i).</p></div>
+  </div>
+  <div class="sheet" style="align-self:start">
+   <div class="fbar"><span class="nm">B9</span><span class="fx">fx</span><code>=NPV(E1, B3:B7) + B2</code></div>
+   <table>
+    <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr>
+    <tr><td class="rn">1</td><td class="lbl">Year</td><td class="lbl">Cash flow</td><td></td><td class="lbl">MARR</td><td>10%</td></tr>
+    <tr><td class="rn">2</td><td>0</td><td class="neg">−50,000</td><td></td><td></td><td></td></tr>
+    <tr><td class="rn">3</td><td>1</td><td>12,000</td><td></td><td></td><td></td></tr>
+    <tr><td class="rn">4</td><td>2</td><td>14,000</td><td></td><td></td><td></td></tr>
+    <tr><td class="rn">5</td><td>3</td><td>16,000</td><td></td><td></td><td></td></tr>
+    <tr><td class="rn">6</td><td>4</td><td>16,000</td><td></td><td></td><td></td></tr>
+    <tr><td class="rn">7</td><td>5</td><td>18,000</td><td></td><td></td><td></td></tr>
+    <tr><td class="rn">8</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="rn">9</td><td class="lbl">PW</td><td class="sel">6,605.17</td><td></td><td></td><td></td></tr>
+   </table>
+  </div>
+ </div>
+</div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "NPV in Excel: the time-0 rule", "script": "NPV in Excel is not the textbook present worth. It discounts its first value one period. Put year zero outside the function and add it.", "notes": ["NPV discounts the first value one period", "Correct: NPV of years 1 to n, plus year 0", "Wrong version is too small by a factor (1 + i)"]}</script>
+</div>
+<div class="slide lab-slide" data-slide="15" data-sec="Part C, Cash-flow series" data-title="NPV: present worth of uneven cash flows">
+<div class="head"><div class="sec">Part C, Cash-flow series</div><h2>NPV: present worth of uneven cash flows</h2><p class="sub">A project with an investment at year 0 and uneven returns. Accept if PW ≥ 0 at the MARR.</p></div><div class="lab" data-lab="npv"></div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "NPV: present worth of uneven cash flows", "script": "We discount each year with the P over F factor and sum. Excel does the same with one NPV call plus the year-0 amount.", "notes": ["PW = Σ CF_t (P/F,i,t)", "=NPV(MARR, years 1..n) + year 0", "Accept if PW ≥ 0"]}</script>
+</div>
+<div class="slide lab-slide" data-slide="16" data-sec="Part C, Cash-flow series" data-title="The NPV trap: year 0 inside the range">
+<div class="head"><div class="sec">Part C, Cash-flow series</div><h2>The NPV trap: year 0 inside the range</h2><p class="sub">Same project, two formulas. See exactly how far off the wrong formula lands.</p></div><div class="lab" data-lab="npvtrap"></div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "The NPV trap: year 0 inside the range", "script": "Putting year zero inside NPV shifts every flow one year later. The answer shrinks by the factor one plus i, and the investment gets discounted when it should not be.", "notes": ["Wrong formula = correct PW / (1 + i)", "The error grows with i", "The sign can stay the same, so the error hides"]}</script>
+</div>
+<div class="slide" data-slide="17" data-sec="Part C, Cash-flow series" data-title="IRR: the rate of return of a project">
+<div class="head"><div class="sec">Rate of return</div><h2>IRR: the rate of return of a project</h2></div>
+<div class="body">
+ <div class="cols">
+  <div class="stack">
+   <ul class="plain">
+    <li>The <b>internal rate of return</b> is the interest rate that makes PW = 0.</li>
+    <li>By hand: trial rates, then linear interpolation between a positive and a negative PW.</li>
+    <li>In Excel: <code class="xl">=IRR(B2:B7)</code>. Unlike NPV, the range <b>includes year 0</b>.</li>
+    <li>Optional guess: <code class="xl">=IRR(B2:B7, 10%)</code>.</li>
+    <li>Decision: IRR ≥ MARR means accept. This matches PW ≥ 0 at the MARR.</li>
+   </ul>
+  </div>
+  <div class="stack">
+   <div class="fx-card"><h3>0 = Σ CF<sub>t</sub> (1 + i*)<sup>−t</sup></h3><p>Solve for i*. For a project with one investment followed by returns, PW falls as i rises and crosses zero once.</p></div>
+   <div class="panel"><h3>NPV versus IRR ranges</h3><p><code class="xl">=NPV(i, B3:B7) + B2</code> excludes year 0.<br><code class="xl">=IRR(B2:B7)</code> includes year 0.</p></div>
+  </div>
+ </div>
+</div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "IRR: the rate of return of a project", "script": "IRR is the rate that drives present worth to zero. Excel's IRR includes year zero in its range, the opposite of NPV.", "notes": ["IRR: rate where PW = 0", "IRR range includes year 0", "Accept if IRR ≥ MARR"]}</script>
+</div>
+<div class="slide lab-slide" data-slide="18" data-sec="Part C, Cash-flow series" data-title="IRR: trial, interpolation, and Excel">
+<div class="head"><div class="sec">Part C, Cash-flow series</div><h2>IRR: trial, interpolation, and Excel</h2><p class="sub">Find the rate of return. Compare with the MARR.</p></div><div class="lab" data-lab="irr"></div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "IRR: trial, interpolation, and Excel", "script": "We compute PW at two trial rates that bracket zero, interpolate, then confirm with IRR. The PW profile shows where the curve crosses zero.", "notes": ["Bracket PW = 0 with two trial rates", "Interpolate for an estimate", "=IRR(range incl. year 0)", "Accept if IRR ≥ MARR"]}</script>
+</div>
+<div class="slide mcq-slide" data-slide="19" data-sec="Part C, Cash-flow series" data-title="NPV and IRR">
+<div class="head"><div class="sec">Check your understanding</div><h2>NPV and IRR</h2></div><div class="mcq" data-mcq="npvf,npvv,irrdec,irrrange"></div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "NPV and IRR", "script": "Formula choice and decision questions on NPV and IRR.", "notes": ["Answer before revealing", "New question draws new numbers", "Keys 1 to 4 answer, R draws a new question"]}</script>
+</div>
+<div class="slide divider dark" data-slide="20" data-sec="Part D, Comparing alternatives" data-title="Comparing alternatives" data-secstart="1">
+<div class="body"><div class="big-letter">D</div>
+<h1>Comparing alternatives</h1><div class="gold-rule"></div><div class="list">The session sheet: two machines, a 5-year study period, and the LCM of lives.</div></div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "Comparing alternatives", "script": "Part D rebuilds the session spreadsheet: machine A versus machine B, by study period and by least common multiple.", "notes": ["Study period", "LCM", "Different answers"]}</script>
+</div>
+<div class="slide lab-slide" data-slide="21" data-sec="Part D, Comparing alternatives" data-title="Study period: PW and AW with NPV and PMT">
+<div class="head"><div class="sec">Part D, Comparing alternatives</div><h2>Study period: PW and AW with NPV and PMT</h2><p class="sub">Two cost alternatives over a 5-year study period. B is valued at its market value at year 5. MARR 6%.</p></div><div class="lab" data-lab="study"></div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "Study period: PW and AW with NPV and PMT", "script": "Each machine gets a cash-flow column. NPV plus year zero gives PW. PMT turns PW into an equivalent annual worth. For cost alternatives, choose the less negative value.", "notes": ["=NPV(6%, years 1..5) + year 0", "=PMT(6%, 5, −PW) gives AW", "Choose the least negative PW"]}</script>
+</div>
+<div class="slide lab-slide" data-slide="22" data-sec="Part D, Comparing alternatives" data-title="Unequal lives: PW over the LCM">
+<div class="head"><div class="sec">Part D, Comparing alternatives</div><h2>Unequal lives: PW over the LCM</h2><p class="sub">A and B have different lives. Repeat each one over the least common multiple, then compare PW.</p></div><div class="lab" data-lab="lcm"></div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "Unequal lives: PW over the LCM", "script": "Over the LCM each machine repeats its cycle. The NPV formula covers all years. The annual worth of one cycle gives the same ranking with much less work.", "notes": ["LCM of lives sets the horizon", "Repurchase at each life end, salvage each cycle", "PW_LCM = AW × (P/A, i, LCM)"]}</script>
+</div>
+<div class="slide" data-slide="23" data-sec="Part D, Comparing alternatives" data-title="Same machines, different answers">
+<div class="head"><div class="sec">Session sheet results</div><h2>Same machines, different answers</h2></div>
+<div class="body">
+ <div class="cols">
+  <table class="ledger" style="font-size:1.02rem">
+   <tr><th class="l">Session sheet, MARR 6%</th><th>Machine A</th><th>Machine B</th></tr>
+   <tr><td>First cost</td><td>$300,000</td><td>$400,000</td></tr>
+   <tr><td>Annual maintenance</td><td>$25,000</td><td>$15,000</td></tr>
+   <tr><td>Life, salvage</td><td>5 yrs, $60,000</td><td>6 yrs, $92,000</td></tr>
+   <tr class="hl"><td>PW, 5-year study period</td><td><b>−$360,474</b></td><td>−$388,460</td></tr>
+   <tr class="hl"><td>PW, LCM = 30 years</td><td>−$1,177,927</td><td><b>−$1,144,624</b></td></tr>
+  </table>
+  <div class="stack">
+   <p style="font-size:1.1rem">The study period favors <b>A</b>. The LCM favors <b>B</b>.</p>
+   <ul class="plain">
+    <li>The study period values B at $100,000 after 5 of its 6 years. B's extra service life beyond year 5 is reduced to one market value.</li>
+    <li>The LCM assumes both machines repeat identically for 30 years.</li>
+    <li>Pick the method that matches the real planning horizon, then state the assumption.</li>
+   </ul>
+  </div>
+ </div>
+</div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "Same machines, different answers", "script": "The session sheet gives two different decisions. The study period favors A, the LCM favors B. The method carries an assumption about the future, and the analyst has to state it.", "notes": ["Study period: A wins", "LCM: B wins", "Choose the method that matches the planning horizon"]}</script>
+</div>
+<div class="slide mcq-slide" data-slide="24" data-sec="Part D, Comparing alternatives" data-title="Comparing alternatives">
+<div class="head"><div class="sec">Check your understanding</div><h2>Comparing alternatives</h2></div><div class="mcq" data-mcq="lcmn,costpick,aw"></div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "Comparing alternatives", "script": "Questions on LCM, choosing cost alternatives, and annual worth.", "notes": ["Answer before revealing", "New question draws new numbers", "Keys 1 to 4 answer, R draws a new question"]}</script>
+</div>
+<div class="slide" data-slide="25" data-sec="Part D, Comparing alternatives" data-title="Spreadsheet checklist">
+<div class="head"><div class="sec">Avoid common errors</div><h2>Spreadsheet checklist</h2></div>
+<div class="body">
+ <div class="rules">
+  <div class="rl"><b>Signs</b><span>Outflows negative, inflows positive. Read the sign of every result.</span></div>
+  <div class="rl"><b>Period match</b><span>Rate and nper in the same unit: months with months, years with years.</span></div>
+  <div class="rl"><b>Year 0 outside NPV</b><span><code class="xl">=NPV(i, years 1..n) + year 0</code></span></div>
+  <div class="rl"><b>Year 0 inside IRR</b><span><code class="xl">=IRR(years 0..n)</code></span></div>
+  <div class="rl"><b>Rates in one cell</b><span>Put the MARR in its own cell and reference it, so a sensitivity test takes one edit.</span></div>
+  <div class="rl"><b>Check by hand once</b><span>Verify one factor with the formula or table. A spreadsheet repeats a wrong setup perfectly.</span></div>
+ </div>
+</div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "Spreadsheet checklist", "script": "Six checks before you trust a spreadsheet answer.", "notes": ["Signs", "Period match", "NPV excludes year 0", "IRR includes year 0", "MARR in one cell", "Hand check"]}</script>
+</div>
+<div class="slide mcq-slide" data-slide="26" data-sec="Review" data-title="Mixed review quiz" data-secstart="1">
+<div class="head"><div class="sec">Review quiz</div><h2>Mixed review quiz</h2></div><div class="mcq" data-mcq="sign,map,period,pv,fv,pmt,monthly,rate,npvf,npvv,irrdec,irrrange,lcmn,costpick,aw"></div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "Mixed review quiz", "script": "A mixed quiz across all six functions. Keep drawing questions until the class gets five in a row.", "notes": ["Answer before revealing", "New question draws new numbers", "Keys 1 to 4 answer, R draws a new question"]}</script>
+</div>
+<div class="slide lab-slide" data-slide="27" data-sec="Review" data-title="Practice generator">
+<div class="head"><div class="sec">Practice</div><h2>Practice generator</h2><p class="sub">Choose a problem type, draw numbers, and solve before revealing each step.</p></div><div class="lab" data-lab="practice"></div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "Practice generator", "script": "Use this slide for drills. Pick a topic, give students a minute, then reveal step by step.", "notes": ["All example types", "New numbers each draw"]}</script>
+</div>
+<div class="slide" data-slide="28" data-sec="Review" data-title="Six functions on one card">
+<div class="head"><div class="sec">Summary</div><h2>Six functions on one card</h2></div>
+<div class="body">
+ <div class="cols c3" style="gap:1rem">
+  <div class="fx-card"><h3>PV</h3><div class="syn">=PV(rate, nper, pmt, [fv])</div><p>P from F or A. Replaces P/F, P/A.</p></div>
+  <div class="fx-card"><h3>FV</h3><div class="syn">=FV(rate, nper, pmt, [pv])</div><p>F from P or A. Replaces F/P, F/A.</p></div>
+  <div class="fx-card"><h3>PMT</h3><div class="syn">=PMT(rate, nper, pv, [fv])</div><p>A from P or F. Replaces A/P, A/F.</p></div>
+  <div class="fx-card"><h3>RATE</h3><div class="syn">=RATE(nper, pmt, pv, [fv])</div><p>Unknown i from P, A, F, n.</p></div>
+  <div class="fx-card"><h3>NPV</h3><div class="syn">=NPV(rate, yr1..yrn) + yr0</div><p>PW of an uneven series. Year 0 outside.</p></div>
+  <div class="fx-card"><h3>IRR</h3><div class="syn">=IRR(yr0..yrn, [guess])</div><p>Rate where PW = 0. Year 0 inside.</p></div>
+ </div>
+ <p class="sub" style="margin-top:1.2rem">Signs: out negative, in positive. Rate and nper: same period. Next week: annual worth and rate of return in depth.</p>
+</div><div class="foot">Week 1 · Excel for Engineering Economy</div>
+<script type="application/json" class="slide-notes">{"title": "Six functions on one card", "script": "Six functions, two sign rules, and the period rule. These cover every calculation from Chapters 1 to 4.", "notes": ["PV, FV, PMT, RATE", "NPV excludes year 0", "IRR includes year 0"]}</script>
+</div>
+</div>
+<nav class="slide-nav" id="slideNav" aria-label="Slides"></nav>
+<div class="progress-track"><div class="progress-bar" id="progress"></div></div>
+<div class="chrome">
+  <span style="flex:1"></span>
+  <button class="navbtn tocbtn" id="btnToc" aria-label="Contents">Contents <kbd style="font-size:.7rem;opacity:.7;margin-left:.3rem">T</kbd></button>
+  <button class="navbtn" id="btnPrev" aria-label="Previous slide">&#8249;</button>
+  <span class="counter" id="counter"></span>
+  <button class="navbtn" id="btnNext" aria-label="Next slide">&#8250;</button>
+</div>
+<div class="toc" id="toc" role="dialog" aria-label="Contents"><div class="inner"><h3>Contents</h3></div></div>
+<script>
+/* =========================================================
+   HELPERS
+   ========================================================= */
+const nf = (x, d = 0) => Number(x).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+const usd = (x, d = 2) => (x < 0 ? '−$' : '$') + nf(Math.abs(x), d);
+const xn = (x, d = 2) => (x < 0 ? '−' : '') + nf(Math.abs(x), d);
+const pc = (x, d = 2) => nf(x * 100, d) + '%';
+const px = x => { let s = (Math.round(x * 100000) / 1000).toFixed(3); s = s.replace(/\.?0+$/, ''); return s + '%'; };
+const rnd = (a, b, step = 1) => a + step * Math.floor(Math.random() * (Math.floor((b - a) / step) + 1));
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const r2 = (x, step) => Math.round(x / step) * step;
+const XL = s => `<code class="xl">${s}</code>`;
+const V = s => `<i class="v">${s}</i>`;
+const gcd = (a, b) => b ? gcd(b, a % b) : a;
+const lcm = (a, b) => a * b / gcd(a, b);
+
+/* Excel financial functions (end-of-period, type 0) */
+const XPV = (r, n, pmt, fv = 0) => r === 0 ? -(fv + pmt * n) : -(fv + pmt * (Math.pow(1 + r, n) - 1) / r) / Math.pow(1 + r, n);
+const XFV = (r, n, pmt, pv = 0) => r === 0 ? -(pv + pmt * n) : -(pv * Math.pow(1 + r, n) + pmt * (Math.pow(1 + r, n) - 1) / r);
+const XPMT = (r, n, pv, fv = 0) => r === 0 ? -(pv + fv) / n : -r * (pv * Math.pow(1 + r, n) + fv) / (Math.pow(1 + r, n) - 1);
+const XNPV = (r, arr) => arr.reduce((s, v, k) => s + v / Math.pow(1 + r, k + 1), 0);
+const PW = (r, cf) => cf.reduce((s, v, k) => s + v / Math.pow(1 + r, k), 0);
+function bisect(f, lo, hi) { let flo = f(lo); for (let k = 0; k < 200; k++) { const m = (lo + hi) / 2, fm = f(m); if ((fm > 0) === (flo > 0)) { lo = m; flo = fm; } else hi = m; } return (lo + hi) / 2; }
+const XIRR = cf => bisect(r => PW(r, cf), -0.9, 5);
+const XRATE = (n, pmt, pv, fv = 0) => bisect(r => pv * Math.pow(1 + r, n) + pmt * (Math.pow(1 + r, n) - 1) / r + fv, 1e-7, 3);
+
+/* Factors */
+const fPF = (i, n) => Math.pow(1 + i, -n);
+const fFP = (i, n) => Math.pow(1 + i, n);
+const fPA = (i, n) => (Math.pow(1 + i, n) - 1) / (i * Math.pow(1 + i, n));
+const fAP = (i, n) => 1 / fPA(i, n);
+const fFA = (i, n) => (Math.pow(1 + i, n) - 1) / i;
+const fAF = (i, n) => 1 / fFA(i, n);
+const f4 = x => nf(x, 4);
+
+/* Mini spreadsheet: rows of [label, value...]; sel = [row, col] (0-based, data cols) */
+function sheetHTML(sh) {
+  const ncol = Math.max(...sh.rows.map(r => r.length));
+  const letters = 'ABCDEFGH'.slice(0, ncol).split('');
+  let h = `<div class="sheet"><div class="fbar"><span class="nm">${sh.name}</span><span class="fx">fx</span><code>${sh.formula}</code></div><table><tr><th></th>${letters.map(l => `<th>${l}</th>`).join('')}</tr>`;
+  sh.rows.forEach((r, ri) => {
+    h += `<tr><td class="rn">${(sh.start || 1) + ri}</td>`;
+    for (let c = 0; c < ncol; c++) {
+      const v = r[c] === undefined ? '' : r[c];
+      const cls = [];
+      if (sh.sel && sh.sel[0] === ri && sh.sel[1] === c) cls.push('sel');
+      if (typeof v === 'string' && /^[A-Za-z]/.test(v) && !/^=/.test(v)) cls.push('lbl');
+      if (typeof v === 'string' && v.startsWith('−')) cls.push('neg');
+      h += `<td${cls.length ? ` class="${cls.join(' ')}"` : ''}>${v}</td>`;
+    }
+    h += '</tr>';
+  });
+  return h + '</table></div>';
+}
+
+/* PW profile chart (SVG) */
+function profileSVG(cf, irr, mr) {
+  const hi = Math.max(0.3, Math.min(1, Math.max(irr, mr) * 1.8)), N = 60, pts = [];
+  for (let k = 0; k <= N; k++) { const r = hi * k / N; pts.push([r, PW(r, cf)]); }
+  const ys = pts.map(p => p[1]), ymax = Math.max(...ys), ymin = Math.min(...ys, 0);
+  const W = 420, H = 190, L = 48, R = 12, T = 12, B = 30;
+  const X = r => L + (W - L - R) * r / hi, Y = v => T + (H - T - B) * (ymax - v) / (ymax - ymin || 1);
+  const path = pts.map((p, k) => (k ? 'L' : 'M') + X(p[0]).toFixed(1) + ',' + Y(p[1]).toFixed(1)).join(' ');
+  let ticks = '';
+  for (let t = 0; t <= hi + 1e-9; t += hi > 0.5 ? 0.1 : 0.05) ticks += `<text x="${X(t)}" y="${H - 10}" font-size="10" text-anchor="middle" fill="#4B5568">${Math.round(t * 100)}%</text>`;
+  return `<svg class="prof" viewBox="0 0 ${W} ${H}">
+  <line x1="${L}" y1="${Y(0)}" x2="${W - R}" y2="${Y(0)}" stroke="#16243A" stroke-width="1"/>
+  <line x1="${L}" y1="${T}" x2="${L}" y2="${H - B}" stroke="#16243A" stroke-width="1"/>
+  <text x="6" y="${T + 8}" font-size="10" fill="#4B5568">PW</text>
+  <path d="${path}" fill="none" stroke="#2E6A39" stroke-width="2.5"/>
+  <line x1="${X(mr)}" y1="${T}" x2="${X(mr)}" y2="${H - B}" stroke="#9A6512" stroke-dasharray="4 3"/>
+  <text x="${X(mr) + 4}" y="${T + 10}" font-size="10" fill="#9A6512">MARR ${px(mr)}</text>
+  <circle cx="${X(irr)}" cy="${Y(0)}" r="4.5" fill="#B3261E"/>
+  <text x="${X(irr) + 6}" y="${Y(0) - 7}" font-size="10" fill="#B3261E">IRR ${pc(irr)}</text>
+  ${ticks}</svg>`;
+}
+
+/* =========================================================
+   LABS
+   ========================================================= */
+const LABS = {};
+const modeSel = (key, val, opts) => `<label>${opts.label} <select data-key="${key}">${opts.items.map(([v, t]) => `<option value="${v}"${v === val ? ' selected' : ''}>${t}</option>`).join('')}</select></label>`;
+
+/* ---------- PV ---------- */
+LABS.pv = {
+  name: 'PV: present worth',
+  defaults: () => ({ mode: 'series', i: 0.08, n: 10, A: 10000, F: 5000 }),
+  random() { return { mode: pick(['series', 'single', 'both']), i: rnd(4, 15) / 100, n: rnd(4, 20), A: rnd(2, 40) * 500, F: rnd(2, 60) * 1000 }; },
+  controls: p => modeSel('mode', p.mode, { label: 'Cash flow', items: [['single', 'Single future amount F'], ['series', 'Uniform series A'], ['both', 'Series A plus F at year n']] }),
+  solve(p) {
+    const useA = p.mode !== 'single', useF = p.mode !== 'series';
+    const A = useA ? p.A : 0, F = useF ? p.F : 0;
+    const pa = fPA(p.i, p.n), pf = fPF(p.i, p.n), P = A * pa + F * pf, xl = XPV(p.i, p.n, A, F);
+    const given = [['Interest rate, i', px(p.i) + ' per year'], ['Periods, n', p.n + ' years']];
+    if (useA) given.push(['Uniform amount, A (years 1 to ' + p.n + ')', usd(A, 0)]);
+    if (useF) given.push(['Future amount, F (year ' + p.n + ')', usd(F, 0)]);
+    const steps = [{ h: 'Present worth equation.', m: [useA ? `${V('A')}(P/A, ${px(p.i)}, ${p.n})` : '', useF ? `${V('F')}(P/F, ${px(p.i)}, ${p.n})` : ''].filter(Boolean).join(' + ').replace(/^/, `${V('P')} = `) }];
+    if (useA) steps.push({ h: 'Uniform-series present worth factor.', m: `(P/A) = [(1 + i)<sup>n</sup> − 1] ÷ [i(1 + i)<sup>n</sup>] = ${f4(pa)}` });
+    if (useF) steps.push({ h: 'Single-payment present worth factor.', m: `(P/F) = (1 + ${nf(p.i, 3)})<sup>−${p.n}</sup> = ${f4(pf)}` });
+    steps.push({ h: 'Present worth by hand.', m: [useA ? `${nf(A)} × ${f4(pa)}` : '', useF ? `${nf(F)} × ${f4(pf)}` : ''].filter(Boolean).join(' + ') + ` = ${usd(P)}` });
+    const formula = `=PV(B1, B2, B3, B4)`;
+    steps.push({ h: 'Excel: one PV call.', m: `${XL(`=PV(${px(p.i)}, ${p.n}, ${A}, ${F})`)} returns ${xn(xl)}`,
+      table: { cap: 'In Excel', sheet: { name: 'B6', formula, rows: [['Rate (i)', px(p.i)], ['Periods (n)', p.n], ['Payment (A)', xn(A, 0)], ['Future (F)', xn(F, 0)], ['', ''], ['P', xn(xl)]], sel: [5, 1] } } });
+    steps.push({ h: 'Read the sign.', m: `Receipts entered positive, so PV returns ${xn(xl)}: you pay ${usd(P)} today for these receipts.` });
+    return { given, find: 'Present worth P', steps, answer: `${V('P')} = <b>${usd(P)}</b>. Excel: ${XL(`=PV(${px(p.i)}, ${p.n}, ${A}, ${F})`)} = ${xn(xl)}.` };
+  }
+};
+
+/* ---------- FV ---------- */
+LABS.fv = {
+  name: 'FV: future worth',
+  defaults: () => ({ mode: 'series', i: 0.06, n: 15, A: 2000, P: 5000 }),
+  random() { return { mode: pick(['series', 'single', 'both']), i: rnd(3, 12) / 100, n: rnd(5, 30), A: rnd(2, 40) * 250, P: rnd(1, 50) * 1000 }; },
+  controls: p => modeSel('mode', p.mode, { label: 'Deposits', items: [['single', 'Single deposit P now'], ['series', 'Uniform deposits A'], ['both', 'Deposit P now plus A each year']] }),
+  solve(p) {
+    const useA = p.mode !== 'single', useP = p.mode !== 'series';
+    const A = useA ? p.A : 0, P = useP ? p.P : 0;
+    const fa = fFA(p.i, p.n), fp = fFP(p.i, p.n), F = A * fa + P * fp, xl = XFV(p.i, p.n, -A, -P);
+    const given = [['Interest rate, i', px(p.i) + ' per year'], ['Periods, n', p.n + ' years']];
+    if (useP) given.push(['Deposit now, P', usd(P, 0)]);
+    if (useA) given.push(['Deposit each year, A', usd(A, 0)]);
+    const steps = [{ h: 'Future worth equation.', m: `${V('F')} = ` + [useP ? `${V('P')}(F/P, ${px(p.i)}, ${p.n})` : '', useA ? `${V('A')}(F/A, ${px(p.i)}, ${p.n})` : ''].filter(Boolean).join(' + ') }];
+    if (useP) steps.push({ h: 'Single-payment compound amount factor.', m: `(F/P) = (1 + ${nf(p.i, 3)})<sup>${p.n}</sup> = ${f4(fp)}` });
+    if (useA) steps.push({ h: 'Uniform-series compound amount factor.', m: `(F/A) = [(1 + i)<sup>n</sup> − 1] ÷ i = ${f4(fa)}` });
+    steps.push({ h: 'Future worth by hand.', m: [useP ? `${nf(P)} × ${f4(fp)}` : '', useA ? `${nf(A)} × ${f4(fa)}` : ''].filter(Boolean).join(' + ') + ` = ${usd(F)}` });
+    steps.push({ h: 'Excel: deposits are outflows, so enter them negative.', m: `${XL(`=FV(${px(p.i)}, ${p.n}, ${-A}, ${-P})`)} returns ${xn(xl)}`,
+      table: { cap: 'In Excel', sheet: { name: 'B6', formula: '=FV(B1, B2, B3, B4)', rows: [['Rate (i)', px(p.i)], ['Periods (n)', p.n], ['Payment (A)', xn(-A, 0)], ['Present (P)', xn(-P, 0)], ['', ''], ['F', xn(xl)]], sel: [5, 1] } } });
+    steps.push({ h: 'Interest earned.', m: `${usd(F)} − total deposited ${usd(P + A * p.n, 0)} = ${usd(F - P - A * p.n)}` });
+    return { given, find: 'Future worth F at year ' + p.n, steps, answer: `${V('F')} = <b>${usd(F)}</b>, of which <b>${usd(F - P - A * p.n)}</b> is interest.` };
+  }
+};
+
+/* ---------- PMT ---------- */
+LABS.pmt = {
+  name: 'PMT: capital recovery and sinking fund',
+  defaults: () => ({ mode: 'ap', comp: 'monthly', r: 0.09, yrs: 5, P: 250000, F: 100000 }),
+  random() { return { mode: pick(['ap', 'af']), comp: pick(['monthly', 'annual']), r: rnd(8, 30) / 200, yrs: rnd(3, 20), P: rnd(10, 100) * 5000, F: rnd(10, 100) * 5000 }; },
+  controls: p => modeSel('mode', p.mode, { label: 'Type', items: [['ap', 'Loan payment (A/P)'], ['af', 'Sinking fund (A/F)']] }) + modeSel('comp', p.comp, { label: 'Payments', items: [['monthly', 'Monthly, compounded monthly'], ['annual', 'Annual']] }),
+  solve(p) {
+    const m = p.comp === 'monthly' ? 12 : 1, i = p.r / m, n = p.yrs * m, per = m === 12 ? 'month' : 'year';
+    const ap = p.mode === 'ap', fac = ap ? fAP(i, n) : fAF(i, n), base = ap ? p.P : p.F, A = base * fac;
+    const xl = ap ? XPMT(i, n, p.P) : XPMT(i, n, 0, p.F);
+    const rateArg = m === 12 ? 'B1/12' : 'B1', nArg = m === 12 ? 'B2*12' : 'B2';
+    const formula = ap ? `=PMT(${rateArg}, ${nArg}, B3)` : `=PMT(${rateArg}, ${nArg}, 0, B3)`;
+    const numF = ap ? `=PMT(${px(p.r)}${m === 12 ? '/12' : ''}, ${p.yrs}${m === 12 ? '*12' : ''}, ${p.P})` : `=PMT(${px(p.r)}${m === 12 ? '/12' : ''}, ${p.yrs}${m === 12 ? '*12' : ''}, 0, ${p.F})`;
+    const steps = [
+      { h: m === 12 ? 'Chapter 3: match the rate to the monthly payment period.' : 'Annual payments with annual compounding.', m: m === 12 ? `${V('i')} = ${px(p.r)} ÷ 12 = ${px(i)} per month, ${V('n')} = ${p.yrs} × 12 = ${n} months` : `${V('i')} = ${px(i)}, ${V('n')} = ${n} years` },
+      { h: ap ? 'Capital recovery factor.' : 'Sinking fund factor.', m: ap ? `(A/P) = i(1 + i)<sup>n</sup> ÷ [(1 + i)<sup>n</sup> − 1] = ${nf(fac, 6)}` : `(A/F) = i ÷ [(1 + i)<sup>n</sup> − 1] = ${nf(fac, 6)}` },
+      { h: `Payment per ${per} by hand.`, m: `${V('A')} = ${nf(base)} × ${nf(fac, 6)} = ${usd(A)}` },
+      { h: 'Excel: one PMT call.', m: `${XL(numF)} returns ${xn(xl)}`, table: { cap: 'In Excel', sheet: { name: 'B5', formula, rows: [['Nominal rate', px(p.r)], ['Years', p.yrs], [ap ? 'Loan (P)' : 'Target (F)', xn(base, 0)], ['', ''], ['A', xn(xl)]], sel: [4, 1] } } },
+      { h: 'Read the sign.', m: ap ? `You receive ${usd(p.P, 0)} (positive), so the payment comes back negative: ${xn(xl)} per ${per}.` : `The target is money you will receive (positive), so each deposit is negative: ${xn(xl)} per ${per}.` },
+      ap ? { h: 'Total interest paid.', m: `${n} × ${nf(A, 2)} − ${nf(p.P)} = ${usd(n * A - p.P)}` } : { h: 'Interest earned in the fund.', m: `${nf(p.F)} − ${n} × ${nf(A, 2)} = ${usd(p.F - n * A)}` },
+    ];
+    return {
+      given: [[ap ? 'Loan amount, P' : 'Target amount, F', usd(base, 0)], ['Interest', px(p.r) + ' per year' + (m === 12 ? ', compounded monthly' : '')], ['Term', p.yrs + ' years'], ['Payments', m === 12 ? 'Monthly' : 'Annual']],
+      find: (ap ? 'Payment' : 'Deposit') + ' per ' + per, steps,
+      answer: `${ap ? 'Payment' : 'Deposit'} <b>${usd(A)}</b> per ${per}. Excel: ${XL(numF)}.`
+    };
+  }
+};
+
+/* ---------- RATE ---------- */
+LABS.rate = {
+  name: 'RATE: unknown interest rate',
+  defaults: () => ({ mode: 'single', n: 9, P: 10000, F: 25000, A: 3500, P2: 20000, n2: 8 }),
+  random() {
+    const mode = pick(['single', 'series']);
+    const i = rnd(4, 18) / 100, j = rnd(4, 18) / 100;
+    const n = rnd(3, 15), P = rnd(2, 50) * 1000, n2 = rnd(4, 12), P2 = rnd(10, 100) * 1000;
+    return { mode, n, P, F: r2(P * fFP(i, n), 500), n2, P2, A: r2(P2 * fAP(j, n2), 50) };
+  },
+  controls: p => modeSel('mode', p.mode, { label: 'Problem', items: [['single', 'Single amount grows to F'], ['series', 'Investment returns a series A']] }),
+  solve(p) {
+    if (p.mode !== 'series') {
+      const P = p.P || 10000, F = p.F || 25000, n = p.n || 9;
+      const i = Math.pow(F / P, 1 / n) - 1, xl = XRATE(n, 0, -P, F);
+      return {
+        given: [['Invested now, P', usd(P, 0)], ['Received at year ' + n + ', F', usd(F, 0)], ['Periods, n', n + ' years']],
+        find: 'Interest rate i per year',
+        steps: [
+          { h: 'Equivalence equation.', m: `${nf(F)} = ${nf(P)}(1 + ${V('i')})<sup>${n}</sup>` },
+          { h: 'Isolate the factor.', m: `(F/P, ${V('i')}, ${n}) = ${nf(F)} ÷ ${nf(P)} = ${f4(F / P)}` },
+          { h: 'Solve directly.', m: `${V('i')} = (${f4(F / P)})<sup>1/${n}</sup> − 1 = ${pc(i, 3)}` },
+          { h: 'Excel: P is an outflow, F an inflow.', m: `${XL(`=RATE(${n}, 0, ${-P}, ${F})`)} returns ${pc(xl, 3)}`, table: { cap: 'In Excel', sheet: { name: 'B5', formula: '=RATE(B1, 0, B2, B3)', rows: [['Periods (n)', n], ['Present (P)', xn(-P, 0)], ['Future (F)', xn(F, 0)], ['', ''], ['i', pc(xl, 2)]], sel: [4, 1] } } },
+          { h: 'Check with FV.', m: `${XL(`=FV(${pc(xl, 3)}, ${n}, 0, ${-P})`)} = ${xn(XFV(xl, n, 0, -P))} ✓` },
+          { h: 'Rule of 72 sense check.', m: `Doubling time ≈ 72 ÷ ${nf(i * 100, 2)} = ${nf(72 / (i * 100), 1)} years` },
+        ],
+        answer: `${V('i')} = <b>${pc(i, 2)}</b> per year.`
+      };
+    }
+    const P = p.P2, A = p.A, n = p.n2, target = P / A, i = XRATE(n, A, -P, 0);
+    const i1 = Math.max(0.01, Math.floor(i * 100) / 100), i2 = i1 + 0.01, f1 = fPA(i1, n), f2 = fPA(i2, n);
+    const est = i1 + 0.01 * (f1 - target) / (f1 - f2);
+    return {
+      given: [['Investment now, P', usd(P, 0)], ['Annual return, A', usd(A, 0)], ['Life, n', n + ' years']],
+      find: 'Rate of return i per year',
+      steps: [
+        { h: 'Equivalence equation.', m: `${nf(P)} = ${nf(A)}(P/A, ${V('i')}, ${n}) → (P/A, ${V('i')}, ${n}) = ${f4(target)}` },
+        { h: `Trial at ${px(i1)}.`, m: `(P/A, ${px(i1)}, ${n}) = ${f4(f1)} (above ${f4(target)}, so i is higher)` },
+        { h: `Trial at ${px(i2)}.`, m: `(P/A, ${px(i2)}, ${n}) = ${f4(f2)} (below ${f4(target)}, so i is lower)` },
+        { h: 'Linear interpolation.', m: `${V('i')} ≈ ${px(i1)} + 1% × (${f4(f1)} − ${f4(target)}) ÷ (${f4(f1)} − ${f4(f2)}) = ${pc(est, 3)}` },
+        { h: 'Excel gives the exact rate.', m: `${XL(`=RATE(${n}, ${A}, ${-P})`)} returns ${pc(i, 3)}`, table: { cap: 'In Excel', sheet: { name: 'B5', formula: '=RATE(B1, B2, B3)', rows: [['Periods (n)', n], ['Payment (A)', xn(A, 0)], ['Present (P)', xn(-P, 0)], ['', ''], ['i', pc(i, 2)]], sel: [4, 1] } } },
+        { h: 'Interpolation error.', m: `${pc(est, 3)} − ${pc(i, 3)} = ${nf((est - i) * 100, 3)} percentage points` },
+      ],
+      answer: `Rate of return <b>${pc(i, 2)}</b> per year.`
+    };
+  }
+};
+
+/* ---------- NPV ---------- */
+function randFlows() {
+  const n = rnd(4, 7), inv = rnd(20, 200) * 1000, cf = [-inv];
+  for (let k = 1; k <= n; k++) cf.push(r2(inv / n * rnd(70, 165) / 100, 500));
+  return cf;
+}
+function npvSheet(cf, i, wrong) {
+  const last = cf.length + 1, rows = [['Year', 'Cash flow', '', 'MARR', px(i)]];
+  cf.forEach((v, t) => rows.push([t, xn(v, 0)]));
+  rows.push(['', '']);
+  const rv = wrong ? XNPV(i, cf) : XNPV(i, cf.slice(1)) + cf[0];
+  rows.push([wrong ? 'Wrong' : 'PW', xn(rv)]);
+  const f = wrong ? `=NPV(E1, B2:B${last})` : `=NPV(E1, B3:B${last}) + B2`;
+  return { name: 'B' + (last + 2), formula: f, rows, sel: [rows.length - 1, 1] };
+}
+LABS.npv = {
+  name: 'NPV: uneven cash flows',
+  defaults: () => ({ i: 0.10, cf: [-50000, 12000, 14000, 16000, 16000, 18000] }),
+  random() { return { i: rnd(5, 15) / 100, cf: randFlows() }; },
+  solve(p) {
+    const pw = PW(p.i, p.cf), last = p.cf.length + 1;
+    const rows = p.cf.map((v, t) => ({ cells: [t, xn(v, 0), f4(fPF(p.i, t)), xn(v * fPF(p.i, t))] }));
+    rows.push({ cells: ['PW', '', '', xn(pw)], tot: true });
+    return {
+      given: [['MARR', px(p.i)], ['Cash flows, years 0 to ' + (p.cf.length - 1), p.cf.map(v => nf(v)).join(', ')]],
+      find: 'PW at the MARR, accept or reject',
+      steps: [
+        { h: 'Discount each year with (P/F, i, t).', m: `PW = Σ CF<sub>t</sub> × (1 + ${nf(p.i, 2)})<sup>−t</sup>` },
+        { h: 'Year 1 as an example.', m: `${nf(p.cf[1])} × ${f4(fPF(p.i, 1))} = ${xn(p.cf[1] * fPF(p.i, 1))}`, table: { cap: 'Discounting table', head: ['t', 'CF', '(P/F)', 'PW'], rows } },
+        { h: 'Sum all years, year 0 undiscounted.', m: `PW = ${usd(pw)}` },
+        { h: 'Excel: NPV over years 1 to n, plus year 0.', m: `${XL(`=NPV(E1, B3:B${last}) + B2`)} returns ${xn(pw)}`, table: { cap: 'In Excel', sheet: npvSheet(p.cf, p.i, false) } },
+        { h: 'Decision.', m: pw >= 0 ? `PW ≥ 0: the project earns at least ${px(p.i)}. <span class="pos">Accept.</span>` : `PW < 0: the project earns less than ${px(p.i)}. <span class="neg">Reject.</span>` },
+      ],
+      answer: `PW = <b>${usd(pw)}</b>. ${pw >= 0 ? 'Accept' : 'Reject'}.`
+    };
+  }
+};
+
+LABS.npvtrap = {
+  name: 'NPV trap: year 0 inside',
+  defaults: LABS.npv.defaults,
+  random: LABS.npv.random,
+  solve(p) {
+    const pw = PW(p.i, p.cf), wrong = XNPV(p.i, p.cf), last = p.cf.length + 1;
+    return {
+      given: [['MARR', px(p.i)], ['Cash flows, years 0 to ' + (p.cf.length - 1), p.cf.map(v => nf(v)).join(', ')]],
+      find: 'Compare the correct and the wrong NPV formula',
+      steps: [
+        { h: 'Correct formula.', m: `${XL(`=NPV(E1, B3:B${last}) + B2`)} = ${xn(pw)}`, table: { cap: 'Correct', sheet: npvSheet(p.cf, p.i, false) } },
+        { h: 'Wrong formula: year 0 inside the range.', m: `${XL(`=NPV(E1, B2:B${last})`)} = ${xn(wrong)}`, table: { cap: 'Wrong', sheet: npvSheet(p.cf, p.i, true) } },
+        { h: 'Excel discounted every flow one extra year, including the investment.', m: `${nf(p.cf[0])} became ${nf(p.cf[0])} ÷ ${nf(1 + p.i, 2)} = ${xn(p.cf[0] / (1 + p.i))}` },
+        { h: 'The relationship.', m: `Wrong = correct ÷ (1 + i) → ${xn(pw)} ÷ ${nf(1 + p.i, 2)} = ${xn(pw / (1 + p.i))} ✓` },
+        { h: 'Size of the error.', m: `${xn(pw)} − (${xn(wrong)}) = ${usd(pw - wrong)}` },
+      ],
+      answer: `Correct PW <b>${usd(pw)}</b>. Wrong formula gives <b>${usd(wrong)}</b>, off by ${usd(Math.abs(pw - wrong))}.`
+    };
+  }
+};
+
+/* ---------- IRR ---------- */
+LABS.irr = {
+  name: 'IRR: rate of return',
+  defaults: () => ({ mr: 0.12, cf: [-80000, 20000, 25000, 30000, 30000, 25000] }),
+  random() { let cf; do { cf = randFlows(); } while (cf.slice(1).reduce((a, b) => a + b, 0) < -cf[0] * 1.08); return { mr: rnd(6, 18) / 100, cf }; },
+  solve(p) {
+    const irr = XIRR(p.cf), i1 = Math.floor(irr * 100) / 100, i2 = i1 + 0.01, w1 = PW(i1, p.cf), w2 = PW(i2, p.cf);
+    const est = i1 + 0.01 * w1 / (w1 - w2), last = p.cf.length + 1, pwm = PW(p.mr, p.cf), ok = irr >= p.mr;
+    const rows = [['Year', 'Cash flow', '', 'MARR', px(p.mr)]]; p.cf.forEach((v, t) => rows.push([t, xn(v, 0)])); rows.push(['', '']); rows.push(['IRR', pc(irr, 2)]);
+    return {
+      given: [['MARR', px(p.mr)], ['Cash flows, years 0 to ' + (p.cf.length - 1), p.cf.map(v => nf(v)).join(', ')]],
+      find: 'IRR and the decision',
+      steps: [
+        { h: 'Set PW equal to zero.', m: `0 = ${p.cf.map((v, t) => t === 0 ? nf(v) : `${nf(v)}(P/F, i*, ${t})`).slice(0, 3).join(' + ')} + …` },
+        { h: `Trial at ${px(i1)}.`, m: `PW = ${xn(w1)} (positive, so i* is higher)` },
+        { h: `Trial at ${px(i2)}.`, m: `PW = ${xn(w2)} (negative, so i* is lower)` },
+        { h: 'Interpolate.', m: `i* ≈ ${px(i1)} + 1% × ${nf(w1, 0)} ÷ (${nf(w1, 0)} − (${nf(w2, 0)})) = ${pc(est, 3)}` },
+        { h: 'Excel: the IRR range includes year 0.', m: `${XL(`=IRR(B2:B${last})`)} returns ${pc(irr, 3)}`, table: { cap: 'In Excel', sheet: { name: 'B' + (last + 2), formula: `=IRR(B2:B${last})`, rows, sel: [rows.length - 1, 1] } } },
+        { h: 'PW profile and decision.', m: `IRR ${pc(irr, 2)} ${ok ? '≥' : '<'} MARR ${px(p.mr)}; PW at MARR = ${xn(pwm)}. ${ok ? '<span class="pos">Accept.</span>' : '<span class="neg">Reject.</span>'}`, table: { cap: 'PW versus interest rate', svg: profileSVG(p.cf, irr, p.mr) } },
+      ],
+      answer: `IRR = <b>${pc(irr, 2)}</b>. ${ok ? 'Accept' : 'Reject'} at MARR ${px(p.mr)}.`
+    };
+  }
+};
+
+/* ---------- Study period (session sheet) ---------- */
+LABS.study = {
+  name: 'Study period comparison',
+  defaults: () => ({ i: 0.06, T: 5, A: { ic: 300000, m: 25000, s: 60000 }, B: { ic: 400000, m: 15000, s: 100000 } }),
+  random() {
+    const ic = rnd(15, 40) * 10000, icB = r2(ic * rnd(115, 150) / 100, 10000), m = rnd(15, 40) * 1000;
+    return { i: rnd(5, 12) / 100, T: 5, A: { ic, m, s: r2(ic * rnd(10, 25) / 100, 1000) }, B: { ic: icB, m: r2(m * rnd(40, 80) / 100, 1000), s: r2(icB * rnd(18, 35) / 100, 1000) } };
+  },
+  solve(p) {
+    const T = p.T, col = X => { const c = [-X.ic]; for (let t = 1; t <= T; t++) c.push(-X.m + (t === T ? X.s : 0)); return c; };
+    const a = col(p.A), b = col(p.B), pa = PW(p.i, a), pb = PW(p.i, b), aa = XPMT(p.i, T, -pa), ab = XPMT(p.i, T, -pb);
+    const rows = [['Year', 'A', 'B']]; for (let t = 0; t <= T; t++) rows.push([t, xn(a[t], 0), xn(b[t], 0)]);
+    rows.push(['PW', xn(pa), xn(pb)]); rows.push(['AW', xn(aa), xn(ab)]);
+    const win = pa >= pb ? 'A' : 'B';
+    return {
+      given: [['MARR', px(p.i)], ['A: first cost, maintenance, value at year 5', `${nf(p.A.ic)}, ${nf(p.A.m)}, ${nf(p.A.s)}`], ['B: first cost, maintenance, value at year 5', `${nf(p.B.ic)}, ${nf(p.B.m)}, ${nf(p.B.s)}`], ['Study period', T + ' years']],
+      find: 'PW and AW of each machine, the choice',
+      steps: [
+        { h: 'Build one column per machine. Year 5 nets maintenance and salvage.', m: `A year 5: −${nf(p.A.m)} + ${nf(p.A.s)} = ${xn(a[T], 0)}. B year 5: ${xn(b[T], 0)}`, table: { cap: 'Session sheet layout', sheet: { name: 'B9', formula: `=NPV(${px(p.i)}, B3:B${T + 2}) + B2`, rows, sel: [T + 2, 1] } } },
+        { h: 'PW of A.', m: `${XL(`=NPV(${px(p.i)}, B3:B${T + 2}) + B2`)} = ${xn(pa)}` },
+        { h: 'PW of B.', m: `${XL(`=NPV(${px(p.i)}, C3:C${T + 2}) + C2`)} = ${xn(pb)}` },
+        { h: 'Annual worth with PMT (as in the session sheet).', m: `${XL(`=PMT(${px(p.i)}, ${T}, -B9)`)} = ${xn(aa)} and ${xn(ab)}` },
+        { h: 'Choose the least negative PW (cost alternatives).', m: `${win}: ${xn(win === 'A' ? pa : pb)} vs ${xn(win === 'A' ? pb : pa)}. Difference ${usd(Math.abs(pa - pb))}` },
+      ],
+      answer: `Select <b>machine ${win}</b>. PW: A ${usd(pa, 0)}, B ${usd(pb, 0)}.`
+    };
+  }
+};
+
+/* ---------- LCM ---------- */
+const LIFE_PAIRS = [[5, 6], [3, 4], [4, 6], [2, 3], [3, 5], [4, 5], [2, 5], [6, 10], [5, 10], [3, 8]];
+LABS.lcm = {
+  name: 'LCM comparison',
+  defaults: () => ({ i: 0.06, nA: 5, nB: 6, A: { ic: 300000, m: 25000, s: 60000 }, B: { ic: 400000, m: 15000, s: 92000 } }),
+  random() {
+    const [nA, nB] = pick(LIFE_PAIRS), ic = rnd(15, 40) * 10000, icB = r2(ic * rnd(115, 150) / 100, 10000), m = rnd(15, 40) * 1000;
+    return { i: rnd(5, 12) / 100, nA, nB, A: { ic, m, s: r2(ic * rnd(10, 25) / 100, 1000) }, B: { ic: icB, m: r2(m * rnd(40, 80) / 100, 1000), s: r2(icB * rnd(15, 30) / 100, 1000) } };
+  },
+  solve(p) {
+    const L = lcm(p.nA, p.nB);
+    const col = (X, n) => { const c = new Array(L + 1).fill(0); for (let t = 0; t <= L; t++) { if (t % n === 0 && t < L) c[t] -= X.ic; if (t > 0) c[t] -= X.m; if (t > 0 && t % n === 0) c[t] += X.s; } return c; };
+    const a = col(p.A, p.nA), b = col(p.B, p.nB), pa = PW(p.i, a), pb = PW(p.i, b);
+    const awA = XPMT(p.i, p.nA, -PW(p.i, a.slice(0, p.nA + 1).map((v, t) => t === p.nA ? -p.A.m + p.A.s : v)));
+    const awB = XPMT(p.i, p.nB, -PW(p.i, b.slice(0, p.nB + 1).map((v, t) => t === p.nB ? -p.B.m + p.B.s : v)));
+    const keyYears = [...new Set([0, 1, ...Array.from({ length: L + 1 }, (_, t) => t).filter(t => t > 0 && (t % p.nA === 0 || t % p.nB === 0))])].sort((x, y) => x - y);
+    let shown = keyYears; if (shown.length > 9) shown = [...shown.slice(0, 6), null, ...shown.slice(-2)];
+    const rows = shown.map(t => t === null ? { gap: true, cells: ['…'] } : { cells: [t, xn(a[t], 0), xn(b[t], 0)], hl: t === p.nA || t === p.nB });
+    const win = pa >= pb ? 'A' : 'B', paL = fPA(p.i, L);
+    return {
+      given: [['MARR', px(p.i)], [`A: cost, maint., salvage, life`, `${nf(p.A.ic)}, ${nf(p.A.m)}, ${nf(p.A.s)}, ${p.nA} yrs`], [`B: cost, maint., salvage, life`, `${nf(p.B.ic)}, ${nf(p.B.m)}, ${nf(p.B.s)}, ${p.nB} yrs`]],
+      find: 'PW over the LCM and the choice',
+      steps: [
+        { h: 'Common horizon.', m: `LCM(${p.nA}, ${p.nB}) = ${L} years: A repeats ${L / p.nA} times, B ${L / p.nB} times` },
+        { h: 'Build the columns: repurchase at each life end, salvage each cycle.', m: `At year ${p.nA}, A shows −${nf(p.A.ic)} − ${nf(p.A.m)} + ${nf(p.A.s)} = ${xn(a[p.nA], 0)}`, table: { cap: 'Key years (others: maintenance only)', head: ['Year', 'A', 'B'], rows } },
+        { h: 'PW of A over the LCM.', m: `${XL(`=NPV(${px(p.i)}, K4:K${L + 3}) + K3`)} = ${xn(pa)}` },
+        { h: 'PW of B over the LCM.', m: `${XL(`=NPV(${px(p.i)}, Q4:Q${L + 3}) + Q3`)} = ${xn(pb)}` },
+        { h: 'Shortcut check: AW of one cycle × (P/A, i, LCM).', m: `A: ${xn(awA)} × ${f4(paL)} = ${xn(awA * paL)}. B: ${xn(awB)} × ${f4(paL)} = ${xn(awB * paL)}` },
+        { h: 'Choose the least negative PW.', m: `${win}, by ${usd(Math.abs(pa - pb))}` },
+      ],
+      answer: `Over ${L} years select <b>machine ${win}</b>. PW: A ${usd(pa, 0)}, B ${usd(pb, 0)}.`
+    };
+  }
+};
+
+const PRACTICE = ['pv', 'fv', 'pmt', 'rate', 'npv', 'npvtrap', 'irr', 'study', 'lcm'];
+
+/* =========================================================
+   MCQ GENERATORS: return {topic, q, opts:[correct, d1, d2, d3], why}
+   ========================================================= */
+const MCQ = {};
+MCQ.sign = () => {
+  const i = rnd(4, 12) / 100, n = rnd(2, 12), P = rnd(2, 40) * 500, F = P * fFP(i, n);
+  return { topic: 'Sign convention', q: `You deposit ${usd(P, 0)} today at ${px(i)} per year. What does ${XL(`=FV(${px(i)}, ${n}, 0, ${-P})`)} return?`,
+    opts: [xn(F), xn(-F), xn(P * (1 + i * n)), xn(F / (1 + i))], why: `The deposit is an outflow (negative), so FV returns the inflow you receive: ${nf(P)}(1 + ${nf(i, 2)})<sup>${n}</sup> = ${xn(F)}.` };
+};
+MCQ.map = () => {
+  const m = pick([['(A/P, i, n)', 'PMT', 'A given P is a uniform payment.'], ['(A/F, i, n)', 'PMT', 'A given F is a uniform deposit.'], ['(P/A, i, n)', 'PV', 'P given A is a present value.'], ['(P/F, i, n)', 'PV', 'P given F is a present value.'], ['(F/A, i, n)', 'FV', 'F given A is a future value.'], ['(F/P, i, n)', 'FV', 'F given P is a future value.']]);
+  const others = ['PV', 'FV', 'PMT', 'RATE', 'NPV'].filter(x => x !== m[1]);
+  const d = others.sort(() => Math.random() - .5).slice(0, 3);
+  return { topic: 'Factor to function', q: `Which Excel function replaces the factor ${m[0]}?`, opts: [XL(m[1]), ...d.map(XL)], why: `${m[2]} ${XL(m[1])} handles it.` };
+};
+MCQ.period = () => {
+  const r = rnd(6, 15), y = rnd(2, 10);
+  return { topic: 'Rate and period', q: `A loan at ${r}% per year compounded monthly is repaid with monthly payments over ${y} years. Which arguments go into PMT?`,
+    opts: [`rate = ${r}%/12, nper = ${y * 12}`, `rate = ${r}%, nper = ${y}`, `rate = ${r}%/12, nper = ${y}`, `rate = ${r}%, nper = ${y * 12}`], why: `Rate and nper must use the payment period: ${r}%/12 per month for ${y} × 12 = ${y * 12} months.` };
+};
+MCQ.pv = () => {
+  const i = rnd(5, 14) / 100, n = rnd(4, 15), A = rnd(2, 30) * 500, P = A * fPA(i, n);
+  return { topic: 'PV', q: `What is the present worth of ${usd(A, 0)} per year for ${n} years at ${px(i)}?`,
+    opts: [usd(P), usd(A * n), usd(A * n * fPF(i, n)), usd(A * fPA(i, n - 1))], why: `P = A(P/A, ${px(i)}, ${n}) = ${nf(A)} × ${f4(fPA(i, n))} = ${usd(P)}. Excel: ${XL(`=PV(${px(i)}, ${n}, ${-A})`)}.` };
+};
+MCQ.fv = () => {
+  const i = rnd(3, 10) / 100, n = rnd(5, 25), A = rnd(2, 30) * 250, F = A * fFA(i, n);
+  return { topic: 'FV', q: `You deposit ${usd(A, 0)} at the end of each year for ${n} years at ${px(i)}. How much is in the account at year ${n}?`,
+    opts: [usd(F), usd(A * n), usd(A * fFA(i, n - 1)), usd(A * n * fFP(i, n))], why: `F = A(F/A, ${px(i)}, ${n}) = ${nf(A)} × ${f4(fFA(i, n))} = ${usd(F)}. Excel: ${XL(`=FV(${px(i)}, ${n}, ${-A})`)}.` };
+};
+MCQ.pmt = () => {
+  const i = rnd(5, 14) / 100, n = rnd(3, 15), P = rnd(10, 100) * 1000, A = P * fAP(i, n);
+  return { topic: 'PMT', q: `A machine costing ${usd(P, 0)} must be recovered over ${n} years at ${px(i)}. What is the annual capital recovery amount?`,
+    opts: [usd(A), usd(P / n), usd(P * fAF(i, n)), usd(P * i)], why: `A = P(A/P, ${px(i)}, ${n}) = ${nf(P)} × ${f4(fAP(i, n))} = ${usd(A)}. Excel: ${XL(`=PMT(${px(i)}, ${n}, ${-P})`)}.` };
+};
+MCQ.monthly = () => {
+  const r = rnd(6, 15) / 100, y = rnd(2, 8), P = rnd(10, 60) * 1000, A = -XPMT(r / 12, y * 12, P);
+  return { topic: 'PMT, monthly', q: `A ${usd(P, 0)} loan at ${px(r)} per year compounded monthly is repaid monthly over ${y} years. Monthly payment?`,
+    opts: [usd(A), usd(-XPMT(r, y, P) / 12), usd(-XPMT(r, y * 12, P)), usd(-XPMT(r / 12, y, P))], why: `${XL(`=PMT(${px(r)}/12, ${y * 12}, ${P})`)} = ${xn(-A)}: rate per month and number of months.` };
+};
+MCQ.rate = () => {
+  const i = rnd(4, 16) / 100, n = rnd(4, 15), P = rnd(2, 40) * 1000, F = r2(P * fFP(i, n), 100), ex = Math.pow(F / P, 1 / n) - 1;
+  return { topic: 'RATE', q: `${usd(P, 0)} invested today grows to ${usd(F, 0)} in ${n} years. What does ${XL(`=RATE(${n}, 0, ${-P}, ${F})`)} return?`,
+    opts: [pc(ex), pc((F / P - 1) / n), pc(Math.log(F / P) / n), pc(Math.pow(F / P, 1 / (n + 1)) - 1)], why: `i = (F/P)<sup>1/n</sup> − 1 = (${f4(F / P)})<sup>1/${n}</sup> − 1 = ${pc(ex)}.` };
+};
+MCQ.npvf = () => {
+  const n = rnd(4, 9), last = n + 2;
+  return { topic: 'NPV formula', q: `Year 0 is in B2, years 1 to ${n} in B3:B${last}, and the MARR in E1. Which formula gives the PW?`,
+    opts: [XL(`=NPV(E1, B3:B${last}) + B2`), XL(`=NPV(E1, B2:B${last})`), XL(`=NPV(E1, B3:B${last}) - B2`), XL(`=NPV(E1, B2:B${last}) + B2`)], why: 'NPV discounts its first value one period, so year 0 stays outside and is added as is.' };
+};
+MCQ.npvv = () => {
+  const i = rnd(6, 14) / 100, inv = rnd(10, 60) * 1000, cf = [-inv, r2(inv * .35, 500), r2(inv * .4, 500), r2(inv * .45, 500)], pw = PW(i, cf);
+  return { topic: 'NPV value', q: `Cash flows years 0 to 3: ${cf.map(v => nf(v)).join(', ')}. PW at ${px(i)}?`,
+    opts: [usd(pw), usd(XNPV(i, cf)), usd(cf.reduce((a, b) => a + b, 0)), usd(XNPV(i, cf.slice(1)))], why: `${XL(`=NPV(${px(i)}, ${cf.slice(1).join(', ')}) + (${cf[0]})`)} = ${usd(pw)}.` };
+};
+MCQ.irrdec = () => {
+  const irr = rnd(40, 250) / 1000, mr = rnd(6, 20) / 100, ok = irr >= mr;
+  const c = ok ? `Accept: IRR ≥ MARR, so PW at the MARR is ≥ 0` : `Reject: IRR < MARR, so PW at the MARR is < 0`;
+  const w = ok ? `Reject: IRR < MARR, so PW at the MARR is < 0` : `Accept: IRR ≥ MARR, so PW at the MARR is ≥ 0`;
+  return { topic: 'IRR decision', q: `A project's ${XL('=IRR(...)')} returns ${pc(irr, 1)}. The MARR is ${px(mr)}. Decision?`,
+    opts: [c, w, 'Accept: any positive IRR means a profit', 'No decision possible without the NPV'], why: `Compare IRR with the MARR: ${pc(irr, 1)} ${ok ? '≥' : '<'} ${px(mr)}. The PW at the MARR has the matching sign.` };
+};
+MCQ.irrrange = () => {
+  const n = rnd(4, 9), last = n + 2;
+  return { topic: 'IRR formula', q: `Year 0 is in B2 and years 1 to ${n} in B3:B${last}. Which formula returns the rate of return?`,
+    opts: [XL(`=IRR(B2:B${last})`), XL(`=IRR(B3:B${last}) + B2`), XL(`=IRR(B3:B${last})`), XL(`=NPV(B2:B${last})`)], why: 'IRR needs the full series, year 0 included, to find the rate where PW = 0.' };
+};
+MCQ.lcmn = () => {
+  const [a, b] = pick(LIFE_PAIRS.filter(x => x[0] * x[1] !== lcm(x[0], x[1]) || true)), L = lcm(a, b);
+  const d = [...new Set([a * b, Math.max(a, b), a + b, L * 2].filter(x => x !== L))].slice(0, 3);
+  while (d.length < 3) d.push(L + d.length + 1);
+  return { topic: 'LCM', q: `Machine A lasts ${a} years and machine B ${b} years. Over how many years do you compare PW using the LCM method?`,
+    opts: [L + ' years', ...d.map(x => x + ' years')], why: `LCM(${a}, ${b}) = ${L}. A repeats ${L / a} times, B ${L / b} times.` };
+};
+MCQ.costpick = () => {
+  const pa = -rnd(200, 600) * 1000 - rnd(0, 999), pb = pa + (Math.random() < .5 ? 1 : -1) * rnd(5, 80) * 1000, best = pa >= pb ? 'A' : 'B', worst = best === 'A' ? 'B' : 'A';
+  return { topic: 'Choosing a cost alternative', q: `Two cost alternatives have PW<sub>A</sub> = ${usd(pa, 0)} and PW<sub>B</sub> = ${usd(pb, 0)}. Which do you select?`,
+    opts: [`${best}: its PW is less negative`, `${worst}: its PW has the larger magnitude`, 'Neither: both PW values are negative', 'Either: PW cannot rank cost alternatives'], why: 'Cost alternatives have negative PW. The least negative PW is the lowest cost.' };
+};
+MCQ.aw = () => {
+  const i = rnd(5, 12) / 100, n = rnd(4, 10), P = rnd(100, 600) * 1000, A = P * fAP(i, n);
+  return { topic: 'Annual worth', q: `PW of a cost alternative is ${usd(-P, 0)} over ${n} years at ${px(i)}. What does ${XL(`=PMT(${px(i)}, ${n}, ${P})`)} return?`,
+    opts: [xn(-A), xn(-P / n), xn(-P * i), xn(-P * fAF(i, n))], why: `AW = PW(A/P, ${px(i)}, ${n}) = ${nf(P)} × ${f4(fAP(i, n))} = ${nf(A, 2)}, negative as a cost.` };
+};
+const MCQ_NAMES = { sign: 'Sign convention', map: 'Factor map', period: 'Rate and period', pv: 'PV', fv: 'FV', pmt: 'PMT', monthly: 'PMT, monthly', rate: 'RATE', npvf: 'NPV formula', npvv: 'NPV value', irrdec: 'IRR decision', irrrange: 'IRR formula', lcmn: 'LCM', costpick: 'Cost alternatives', aw: 'Annual worth' };
+
+/* =========================================================
+   LAB ENGINE: render, reveal steps, randomize
+   ========================================================= */
+function labShell(el) {
+  el.innerHTML = `
+  <div class="lab-left">
+    ${el.dataset.lab === 'practice' ? `<div class="ctrl"><label>Problem type <select class="ptype">${PRACTICE.map(k => `<option value="${k}">${LABS[k].name}</option>`).join('')}</select></label></div>` : ''}
+    <div class="given"></div>
+    <div class="ctrl extra"></div>
+    <div class="btns">
+      <button class="btn go" data-act="rand">New numbers <kbd>R</kbd></button>
+      <button class="btn" data-act="lect">Lecture values <kbd>L</kbd></button>
+    </div>
+    <div class="tablebox"></div>
+  </div>
+  <div class="lab-right">
+    <div class="steps-head"><h3>Solution</h3><span class="count"></span></div>
+    <ol class="steps"></ol>
+    <div class="answer"></div>
+    <div class="btns" style="margin-top:.6rem">
+      <button class="btn primary" data-act="next">Next step <kbd>N</kbd></button>
+      <button class="btn" data-act="all">All steps <kbd>A</kbd></button>
+      <button class="btn" data-act="hide">Hide steps <kbd>H</kbd></button>
+    </div>
+  </div>`;
+  el.addEventListener('click', e => {
+    const b = e.target.closest('[data-act]'); if (!b) return;
+    labAct(el, b.dataset.act);
+  });
+  el.addEventListener('change', e => {
+    const s = e.target;
+    if (s.classList.contains('ptype')) { el._st.type = s.value; el._st.p = LABS[s.value].random(); el._st.shown = 0; renderLab(el); return; }
+    if (s.dataset.key) { el._st.p[s.dataset.key] = s.value; renderLab(el); }
+  });
+}
+function labType(el) { return el.dataset.lab === 'practice' ? el._st.type : el.dataset.lab; }
+function initLab(el) {
+  labShell(el);
+  const type = el.dataset.lab === 'practice' ? 'npv' : el.dataset.lab;
+  el._st = { type, p: LABS[type].defaults(), shown: 0 };
+  if (el.dataset.lab === 'practice') { el.querySelector('.ptype').value = type; el._st.p = LABS[type].random(); }
+  renderLab(el);
+}
+function tableHTML(tb) {
+  if (tb.sheet) return `<div class="cap">${tb.cap || ''}</div>` + sheetHTML(tb.sheet);
+  if (tb.svg) return `<div class="cap">${tb.cap || ''}</div>` + tb.svg;
+  const head = tb.head.map((h, i) => `<th${i === 0 ? ' class="l"' : ''}>${h}</th>`).join('');
+  const rows = tb.rows.map(r => {
+    if (r.gap) return `<tr class="gap"><td colspan="${tb.head.length}">${r.cells[0]}</td></tr>`;
+    const cls = [r.hl ? 'hl' : '', r.tot ? 'tot' : ''].join(' ').trim();
+    return `<tr${cls ? ` class="${cls}"` : ''}>${r.cells.map((c, i) => `<td${i === 0 ? ' class="l"' : ''}${r.neg && i === 1 ? ' class="neg"' : ''}>${c}</td>`).join('')}</tr>`;
+  }).join('');
+  return `<div class="cap">${tb.cap || ''}</div><table class="ledger">${'<tr>' + head + '</tr>' + rows}</table>`;
+}
+function renderLab(el, animateIdx = -1) {
+  const st = el._st, L = LABS[labType(el)], sol = L.solve(st.p);
+  st.sol = sol;
+  el.querySelector('.given').innerHTML = `<div class="gt">Given</div>` + sol.given.map(([k, v]) => `<div class="g"><span>${k}</span><b>${v}</b></div>`).join('') + `<div class="find">Find: <b>${sol.find}</b></div>`;
+  const ex = el.querySelector('.extra');
+  ex.innerHTML = L.controls ? L.controls(st.p) : '';
+  ex.style.display = L.controls ? '' : 'none';
+  const ol = el.querySelector('ol.steps');
+  ol.innerHTML = sol.steps.map((s, i) => `<li class="${i < st.shown ? '' : 'hidden'}${i === st.shown - 1 ? ' latest' : ''}${i === animateIdx ? ' show' : ''}">${s.h}<span class="m">${s.m}</span></li>`).join('');
+  el.querySelector('.count').textContent = `Step ${st.shown} of ${sol.steps.length}`;
+  const ans = el.querySelector('.answer');
+  ans.innerHTML = `<b>Answer.</b> ${sol.answer}`;
+  ans.classList.toggle('on', st.shown >= sol.steps.length);
+  let tb = null;
+  for (let i = 0; i < Math.min(st.shown, sol.steps.length); i++) if (sol.steps[i].table) tb = sol.steps[i].table;
+  el.querySelector('.tablebox').innerHTML = tb ? tableHTML(tb) : '';
+  el.querySelector('.lab-right').classList.toggle('done', st.shown >= sol.steps.length);
+}
+function labAct(el, act) {
+  const st = el._st, n = st.sol.steps.length;
+  if (act === 'next') { if (st.shown < n) { st.shown++; renderLab(el, st.shown - 1); } }
+  else if (act === 'all') { st.shown = n; renderLab(el); }
+  else if (act === 'hide') { st.shown = 0; renderLab(el); }
+  else if (act === 'rand') { st.p = LABS[labType(el)].random(); st.shown = 0; renderLab(el); }
+  else if (act === 'lect') { st.p = LABS[labType(el)].defaults(); st.shown = 0; renderLab(el); }
+}
+
+
+/* =========================================================
+   MCQ ENGINE
+   ========================================================= */
+function initMcq(el) {
+  el._m = { types: el.dataset.mcq.split(','), right: 0, asked: 0 };
+  el.innerHTML = `<div class="mcq-main"><div class="topic"></div><div class="q"></div><div class="opts"></div></div>
+  <div class="side"><div class="fb"></div><div class="btns"><button class="btn go" data-act="newq">New question <kbd>R</kbd></button></div><div class="score"></div></div>`;
+  el.addEventListener('click', e => {
+    const b = e.target.closest('.opt'); if (b) { mcqAnswer(el, +b.dataset.k); return; }
+    if (e.target.closest('[data-act="newq"]')) mcqNew(el);
+  });
+  mcqNew(el);
+}
+function mcqNew(el) {
+  const st = el._m, t = pick(st.types);
+  let g = MCQ[t](), tries = 0;
+  while (new Set(g.opts).size < 4 && tries++ < 20) g = MCQ[t]();
+  const order = [0, 1, 2, 3].sort(() => Math.random() - .5);
+  st.cur = { g, order, done: false };
+  el.querySelector('.topic').textContent = 'Topic: ' + (MCQ_NAMES[t] || t);
+  el.querySelector('.q').innerHTML = g.q;
+  el.querySelector('.opts').innerHTML = order.map((o, k) => `<button class="opt" data-k="${k}"><span class="k">${'ABCD'[k]}</span><span>${g.opts[o]}</span></button>`).join('');
+  const fb = el.querySelector('.fb'); fb.className = 'fb'; fb.innerHTML = '';
+  mcqScore(el);
+}
+function mcqAnswer(el, k) {
+  const st = el._m, c = st.cur; if (!c || c.done) return;
+  c.done = true; st.asked++;
+  const correctK = c.order.indexOf(0), ok = k === correctK;
+  if (ok) st.right++;
+  el.querySelectorAll('.opt').forEach((b, idx) => { b.disabled = true; if (idx === correctK) b.classList.add('right'); else if (idx === k) b.classList.add('wrong'); });
+  const fb = el.querySelector('.fb');
+  fb.className = 'fb on' + (ok ? '' : ' bad');
+  fb.innerHTML = `<b class="v">${ok ? 'Correct.' : 'Not quite. The answer is ' + 'ABCD'[correctK] + '.'}</b>${c.g.why}`;
+  mcqScore(el);
+}
+function mcqScore(el) { const st = el._m; el.querySelector('.score').textContent = st.asked ? `Score on this slide: ${st.right} of ${st.asked}` : 'Pick an answer, then read the explanation.'; }
+
+document.querySelectorAll('.lab[data-lab]').forEach(initLab);
+document.querySelectorAll('.mcq[data-mcq]').forEach(initMcq);
+
+/* =========================================================
+   NAVIGATION RUNTIME
+   ========================================================= */
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+let current = 0;
+const progress = document.getElementById('progress');
+const counter = document.getElementById('counter');
+const slideNav = document.getElementById('slideNav');
+const toc = document.getElementById('toc');
+
+slides.forEach((s, i) => {
+  const d = document.createElement('div');
+  d.className = 'slide-nav-dot' + (i === 0 ? ' active' : '') + (s.dataset.secstart && i > 0 ? ' sec-start' : '');
+  d.title = (i + 1) + '. ' + s.dataset.title;
+  d.addEventListener('click', () => goTo(i));
+  slideNav.appendChild(d);
+});
+(function buildToc() {
+  const inner = toc.querySelector('.inner');
+  slides.forEach((s, i) => {
+    const a = document.createElement('a');
+    a.tabIndex = 0;
+    a.innerHTML = `<span class="n">${i + 1}</span>${s.dataset.title}`;
+    a.addEventListener('click', () => { goTo(i); toggleToc(false); });
+    a.addEventListener('keydown', e => { if (e.key === 'Enter') { goTo(i); toggleToc(false); } });
+    inner.appendChild(a);
+  });
+})();
+function toggleToc(on) { toc.classList.toggle('open', on === undefined ? !toc.classList.contains('open') : on); }
+
+function updateUI() {
+  progress.style.width = ((current + 1) / total * 100) + '%';
+  counter.textContent = `${current + 1} / ${total}`;
+  document.body.classList.toggle('on-dark', slides[current].classList.contains('dark'));
+  document.querySelectorAll('.slide-nav-dot').forEach((d, i) => d.classList.toggle('active', i === current));
+}
+function goTo(index) {
+  if (index < 0 || index >= total || index === current) return;
+  current = index;
+  slides.forEach((s, i) => s.classList.toggle('active', i === current));
+  updateUI();
+  showSpeakerNotes(current);
+  try { history.replaceState(null, '', '#' + (current + 1)); } catch (e) { }
+}
+function next() { goTo(current + 1); }
+function prev() { goTo(current - 1); }
+
+document.getElementById('btnPrev').addEventListener('click', prev);
+document.getElementById('btnNext').addEventListener('click', next);
+document.getElementById('btnToc').addEventListener('click', () => toggleToc());
+toc.addEventListener('click', e => { if (e.target === toc) toggleToc(false); });
+
+document.addEventListener('keydown', e => {
+  const tag = (e.target.tagName || '').toLowerCase();
+  if (tag === 'select' || tag === 'input' || tag === 'textarea') return;
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (toc.classList.contains('open')) { if (e.key === 'Escape') toggleToc(false); return; }
+  const k = e.key;
+  if (k === 'ArrowRight' || k === 'PageDown' || (k === ' ' && tag !== 'button')) { e.preventDefault(); next(); return; }
+  if (k === 'ArrowLeft' || k === 'PageUp') { e.preventDefault(); prev(); return; }
+  if (k === 'Home') { e.preventDefault(); goTo(0); return; }
+  if (k === 'End') { e.preventDefault(); goTo(total - 1); return; }
+  if (k === 't' || k === 'T') { toggleToc(); return; }
+  const mq = slides[current].querySelector('.mcq[data-mcq]');
+  if (mq) {
+    if (['1','2','3','4'].includes(k)) { e.preventDefault(); mcqAnswer(mq, +k - 1); return; }
+    if (k === 'a' || k === 'b' || k === 'c' || k === 'd') { e.preventDefault(); mcqAnswer(mq, 'abcd'.indexOf(k)); return; }
+    if (k === 'r' || k === 'R') { e.preventDefault(); mcqNew(mq); return; }
+    return;
+  }
+  const lab = slides[current].querySelector('.lab[data-lab]');
+  if (!lab) return;
+  const map = { n: 'next', N: 'next', Enter: 'next', a: 'all', A: 'all', h: 'hide', H: 'hide', r: 'rand', R: 'rand', l: 'lect', L: 'lect' };
+  if (map[k] && !(k === 'Enter' && tag === 'button')) { e.preventDefault(); labAct(lab, map[k]); }
+});
+
+let touchStart = 0, touchY = 0;
+document.addEventListener('touchstart', e => { touchStart = e.touches[0].clientX; touchY = e.touches[0].clientY; }, { passive: true });
+document.addEventListener('touchend', e => {
+  const dx = touchStart - e.changedTouches[0].clientX, dy = touchY - e.changedTouches[0].clientY;
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) { dx > 0 ? next() : prev(); }
+}, { passive: true });
+
+let wheelCD = false;
+document.addEventListener('wheel', e => {
+  if (e.target.closest && e.target.closest('select, .toc')) return;
+  if (wheelCD || Math.abs(e.deltaY) + Math.abs(e.deltaX) < 20) return;
+  wheelCD = true; setTimeout(() => wheelCD = false, 600);
+  if (e.deltaY > 0 || e.deltaX > 0) next(); else prev();
+}, { passive: true });
+
+/* Speaker notes in the console (presenter view via detached DevTools) */
+function showSpeakerNotes(index) {
+  const el = slides[index].querySelector('script.slide-notes');
+  try { console.clear(); } catch (e) { }
+  if (!el) return;
+  try {
+    const n = JSON.parse(el.textContent);
+    const parts = [`\n%cSlide ${index + 1}/${total}: ${n.title}\n`, `\n%c${n.script}\n`];
+    const styles = ['font-size:16px;font-weight:bold;color:#9A6512;', 'font-size:14px;color:#15233B;line-height:1.6;'];
+    (n.notes || []).forEach(t => { parts.push(`\n  %c• ${t}`); styles.push('color:#4A576C;font-size:13px;'); });
+    console.log(parts.join(''), ...styles);
+  } catch (e) { }
+}
+
+/* Start on the slide in the URL hash, if any */
+(function start() {
+  const h = parseInt((location.hash || '').slice(1), 10);
+  updateUI();
+  if (h > 1 && h <= total) goTo(h - 1); else setTimeout(() => showSpeakerNotes(0), 300);
+})();
+
+</script>
+</body>
+</html>
