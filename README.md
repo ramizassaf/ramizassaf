@@ -2,7 +2,7 @@
 
 Personal CV website of Ramiz Assaf, Data Professional and Industrial Engineer based in Nablus, Palestine.
 
-**Live site:** https://ramizassaf.github.io/cv
+**Live site:** https://ramizassaf.github.io/ramizassaf
 
 ![Preview](og.png)
 
