@@ -151,6 +151,12 @@ section.alt { background: var(--bg-2); }
 .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 28px; }
 @media (max-width: 760px) { .edu-grid { grid-template-columns: 1fr; } }
 .sub-h { margin: 0 0 8px; font-size: 1.05rem; }
+.cert-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin-top: 12px; }
+.cert { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; }
+.cert .seal { flex: 0 0 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; font-weight: 800; font-size: .8rem; background: var(--accent-soft); color: var(--accent); }
+.cert b { display: block; font-size: .95rem; line-height: 1.35; }
+.cert small, .facts.edu small a { color: var(--muted); font-size: .84rem; }
+.cert a, .facts.edu a { font-size: .82rem; font-weight: 600; text-decoration: none; }
 .facts.edu li { flex-direction: column; gap: 0; }
 .facts.edu li b { font-weight: 600; }
 .facts.edu li span { color: var(--text); }
@@ -397,15 +403,12 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
         <ul class="facts edu" id="eduList"></ul>
       </div>
       <div class="card reveal">
-        <h3 class="sub-h" data-i18n="cert_h">Certifications</h3>
-        <ul class="facts edu">
-          <li><span>Alteryx Designer Core Certified</span></li>
-          <li><span>Business Analytics Nanodegree</span></li>
-          <li><span>Data Visualization Nanodegree</span></li>
-          <li><span>Applied Machine Learning in Python</span></li>
-          <li><span>Create Video, Audio and Infographics for Online Learning</span></li>
-        </ul>
+        <h3 class="sub-h" data-i18n="cert_t">Teaching and academic quality</h3>
+        <ul class="facts edu" id="certTeach"></ul>
       </div>
+    </div>
+    <h3 class="sub-h reveal" style="margin-top:28px" data-i18n="cert_d">Data science and analytics certifications</h3>
+    <div class="cert-grid" id="certData"></div>
     </div>
   </div>
 </section>
@@ -683,7 +686,7 @@ const AR = {
   f_aff: "الجهة", f_aff_v: "جامعة النجاح الوطنية", f_edu: "التعليم", f_edu_v: "دكتوراه، جامعة البوليتكنيك في ميلانو",
   f_loc: "الموقع", f_lang: "اللغات", f_lang_v: "العربية، الإنجليزية، الإيطالية", f_mail: "البريد",
   exp_p: "أكثر من 14 عاماً في التدريس والقيادة الجامعية في فلسطين والسعودية، إضافة إلى تدريب تحليل البيانات لمنصات عالمية.",
-  edu_h: "التعليم", cert_h: "الشهادات المهنية",
+  edu_h: "التعليم", cert_t: "التدريس وجودة التعليم الأكاديمي", cert_d: "شهادات علم البيانات والتحليلات", name: "رامز عساف",
   exp_h: "الخبرات والتعليم", proj_h: "مشاريع مختارة", proj_p: "أعمال مفتوحة المصدر في الاقتصاد الهندسي والإحصاء وتحليل البيانات.",
   p1_t: "تقريب دالة التوزيع الطبيعي التراكمية خطياً", p1_d: "دراسة الدقة مقابل التعقيد لتقريب دالة التوزيع الطبيعي التراكمية بقطع خطية، مع تحسين minimax وورقة بحثية بـ LaTeX وتطبيق تفاعلي.",
   p2_t: "أداة نقطة التعادل لاختيار الموقع", p2_d: "تحليل نقطة التعادل للمواقع: يحدد البديل الأرخص عند كل حجم إنتاج وكميات التعادل. تطبيق ويب ثنائي اللغة مع Python.",
@@ -739,6 +742,7 @@ function setLang(l) {
   drawSup();
   drawExp();
   drawRes();
+  drawCerts();
 }
 document.getElementById("langBtn").onclick = () => setLang(lang === "en" ? "ar" : "en");
 
@@ -1020,6 +1024,31 @@ function drawCit() {
     el("text", { x: x + w / 2, y: Y(v) - 6, "text-anchor": "middle", style: "fill:" + css("--text") + ";font-weight:600" }, svg, "≈" + v);
     el("text", { x: x + w / 2, y: H - 8, "text-anchor": "middle" }, svg, yr);
   });
+}
+
+/* ---------- Certifications ---------- */
+// EDIT: g "teach" or "data". v: public verification link when the certificate has one.
+const CERTS = [
+  { g: "teach", t: "Academic Quality Practitioner (20 hours)", i: { en: "Education and Training Evaluation Commission, Saudi Arabia", ar: "هيئة تقويم التعليم والتدريب، السعودية" }, d: "Feb 2021" },
+  { g: "teach", t: "How to Qualify for ABET Accreditation, including Virtual Visit Training", i: { en: "Association of Arab Universities, Amman", ar: "اتحاد الجامعات العربية، عمّان" }, d: "Oct 2021" },
+  { g: "teach", t: "Instructional Moves: Making Classroom Discussions More Inclusive and Effective (10 hours)", i: { en: "Harvard Graduate School of Education, Professional Education", ar: "كلية الدراسات العليا في التربية بجامعة هارفارد" }, d: "Oct 2018" },
+  { g: "teach", t: "Course Learning Outcomes: A Practice Guide", i: { en: "Faculty Development Center, University of Business and Technology", ar: "مركز تطوير أعضاء هيئة التدريس، جامعة الأعمال والتكنولوجيا" }, d: "May 2019" },
+  { g: "teach", t: "Create Video, Audio and Infographics for Online Learning", i: { en: "Online course", ar: "دورة إلكترونية" }, d: "" },
+  { g: "data", s: "U", t: "Business Analytics Nanodegree", i: { en: "Udacity", ar: "Udacity" }, d: "Sep 2021", v: "https://confirm.udacity.com/ZDAJEZSG" },
+  { g: "data", s: "UC", t: "Fundamentals of Visualization with Tableau", i: { en: "UC Davis, via Coursera", ar: "جامعة كاليفورنيا ديفيس عبر Coursera" }, d: "Oct 2021", v: "https://coursera.org/verify/Z4R34KMWMYF9" },
+  { g: "data", s: "U", t: "Data Analysis Track, 1 Million Arab Coders", i: { en: "Udacity and the UAE 1 Million Arab Coders Initiative", ar: "Udacity ومبادرة مليون مبرمج عربي" }, d: "Jan 2021" },
+  { g: "data", s: "UB", t: "Safety in the Utility Industry", i: { en: "University at Buffalo, SUNY, via Coursera", ar: "جامعة بافالو عبر Coursera" }, d: "Jan 2020", v: "https://coursera.org/verify/52YJ4T64QE6C" },
+  { g: "data", s: "M", t: "Applied Machine Learning in Python", i: { en: "University of Michigan, via Coursera", ar: "جامعة ميشيغان عبر Coursera" }, d: "Oct 2019", v: "https://coursera.org/verify/HMGW9VQRGMWJ" },
+  { g: "data", s: "E", t: "Data Science and Machine Learning (in Arabic)", i: { en: "Edraak with Developer Circles from Facebook", ar: "إدراك بالتعاون مع Developer Circles from Facebook" }, d: "Aug 2019" },
+  { g: "data", s: "U", t: "Data Analyst Nanodegree", i: { en: "Udacity Connect", ar: "Udacity Connect" }, d: "Feb 2019" },
+  { g: "data", s: "U", t: "Data Visualization Nanodegree", i: { en: "Udacity", ar: "Udacity" }, d: "" },
+  { g: "data", s: "A", t: "Alteryx Designer Core Certified", i: { en: "Alteryx", ar: "Alteryx" }, d: "" }
+];
+function drawCerts() {
+  const L = lang === "ar" ? "ar" : "en", vf = L === "ar" ? "تحقق ↗" : "Verify ↗";
+  const meta = c => `${c.i[L]}${c.d ? ` · <span dir="ltr">${c.d}</span>` : ""}${c.v ? ` · <a href="${c.v}" target="_blank" rel="noopener">${vf}</a>` : ""}`;
+  document.getElementById("certTeach").innerHTML = CERTS.filter(c => c.g === "teach").map(c => `<li><b dir="ltr">${c.t}</b><small>${meta(c)}</small></li>`).join("");
+  document.getElementById("certData").innerHTML = CERTS.filter(c => c.g === "data").map(c => `<div class="card cert"><span class="seal">${c.s}</span><div><b dir="ltr">${c.t}</b><small>${meta(c)}</small></div></div>`).join("");
 }
 
 /* ---------- Supervision ---------- */
