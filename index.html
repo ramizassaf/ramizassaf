@@ -473,21 +473,6 @@ section.block.active { display: block; animation: panelIn .32s ease; }
 .demo-card p { color: var(--muted); margin: 0 0 14px; }
 .demo-btns { display: flex; gap: 10px; flex-wrap: wrap; }
 
-/* Owner analytics */
-.admin-dlg { border: 2px solid var(--edge); border-radius: 18px; padding: 22px; background: var(--card); color: var(--text); width: min(340px, calc(100vw - 32px)); box-shadow: var(--shadow-lg); }
-.admin-dlg::backdrop, .admin-dash::backdrop { background: rgba(10,14,18,.6); backdrop-filter: blur(3px); }
-.admin-dlg h3 { margin: 0 0 12px; font-family: "Changa", sans-serif; }
-.admin-dlg input { font-size: 1.3rem; letter-spacing: .3em; text-align: center; }
-.gate-msg { min-height: 1.3em; font-size: .85rem; color: var(--accent-2); margin: 6px 0; }
-.gate-btns { display: flex; gap: 8px; justify-content: flex-end; }
-.admin-dlg.shake { animation: shake .35s; }
-@keyframes shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
-.dash-body { padding: 20px 24px 24px; }
-.ad-kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-bottom: 18px; }
-.ad-note { background: var(--bg-2); border-radius: 12px; padding: 14px 16px; font-size: .9rem; color: var(--muted); }
-.ad-note ol { margin: 8px 0 0; padding-inline-start: 20px; }
-.ad-frame { width: 100%; height: 70vh; border: 2px solid var(--edge); border-radius: 12px; background: #fff; margin-top: 14px; }
-
 /* Services */
 .svc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
 .svc { display: flex; flex-direction: column; gap: 8px; border-inline-start: 7px solid var(--amber); }
@@ -537,7 +522,7 @@ footer { border-top: 0; }
         <div class="social-row"><a href="https://www.linkedin.com/in/ramiz-assaf-529610353" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></svg><span>LinkedIn</span></a><a href="https://scholar.google.com/citations?user=yDDnd50AAAAJ&amp;hl=en" target="_blank" rel="noopener" aria-label="Google Scholar" title="Google Scholar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 2 9.5l10 5.5 10-5.5z"/><path d="M6 11.7v4.3c0 1.7 2.7 3 6 3s6-1.3 6-3v-4.3"/></svg><span>Google Scholar</span></a><a href="https://www.youtube.com/@RamizAssaf-E" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="m10 9.5 5 2.5-5 2.5z" fill="currentColor"/></svg><span>YouTube</span></a><a href="https://github.com/ramizassaf" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4 1.3-4-2-6-2.5M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg><span>GitHub</span></a><a href="https://www.datacamp.com/courses/data-validation-in-excel" target="_blank" rel="noopener" aria-label="DataCamp course" title="DataCamp course"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h11a3 3 0 0 1 3 3v11H7a3 3 0 0 1-3-3z"/><path d="M8 9h6M8 13h4"/></svg><span>DataCamp course</span></a><a href="mailto:ramizassaf@najah.edu" target="_blank" rel="noopener" aria-label="Email" title="Email"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span>Email</span></a></div>
       </div>
       <div class="avatar-wrap">
-        <img src="photo.jpg" alt="Dr. Ramiz Assaf" width="240" height="300" id="heroPhoto">
+        <img src="photo.jpg" alt="Dr. Ramiz Assaf" width="240" height="300">
         <div class="avatar-badge">📍 <span data-i18n="loc_short">Nablus, Palestine</span></div>
       </div>
     </div>
@@ -970,19 +955,6 @@ footer { border-top: 0; }
 </section>
 
 <aside class="social" aria-label="Profiles and social media"><a href="https://www.linkedin.com/in/ramiz-assaf-529610353" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></svg><span>LinkedIn</span></a><a href="https://scholar.google.com/citations?user=yDDnd50AAAAJ&amp;hl=en" target="_blank" rel="noopener" aria-label="Google Scholar" title="Google Scholar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 2 9.5l10 5.5 10-5.5z"/><path d="M6 11.7v4.3c0 1.7 2.7 3 6 3s6-1.3 6-3v-4.3"/></svg><span>Google Scholar</span></a><a href="https://www.youtube.com/@RamizAssaf-E" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="m10 9.5 5 2.5-5 2.5z" fill="currentColor"/></svg><span>YouTube</span></a><a href="https://github.com/ramizassaf" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4 1.3-4-2-6-2.5M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg><span>GitHub</span></a><a href="https://www.datacamp.com/courses/data-validation-in-excel" target="_blank" rel="noopener" aria-label="DataCamp course" title="DataCamp course"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h11a3 3 0 0 1 3 3v11H7a3 3 0 0 1-3-3z"/><path d="M8 9h6M8 13h4"/></svg><span>DataCamp course</span></a><a href="mailto:ramizassaf@najah.edu" target="_blank" rel="noopener" aria-label="Email" title="Email"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span>Email</span></a></aside>
-
-<dialog id="adminGate" class="admin-dlg">
-  <form method="dialog" id="gateForm">
-    <h3>🔒 Owner access</h3>
-    <input type="password" id="gateCode" inputmode="numeric" autocomplete="off" maxlength="12" aria-label="Access code" placeholder="Code">
-    <div class="gate-msg" id="gateMsg"></div>
-    <div class="gate-btns"><button class="btn" value="cancel" type="button" id="gateCancel">Cancel</button><button class="btn primary" type="submit">Enter</button></div>
-  </form>
-</dialog>
-<dialog id="adminDash" class="demos-dlg admin-dash">
-  <div class="dlg-head"><div><h2>Visitor analytics</h2><p id="dashSub">Private owner view</p></div><button class="icon-btn" type="button" id="dashClose" aria-label="Close">✕</button></div>
-  <div class="dash-body" id="dashBody"></div>
-</dialog>
 
 <nav class="appnav" aria-label="Sections">
   <a href="#home" data-v="home"><span>🏠</span><b data-i18n="bn_home">Home</b></a>
@@ -1697,65 +1669,6 @@ document.getElementById("copyDemo").addEventListener("click", async e => {
   catch (err) { prompt(lang === "ar" ? "انسخ الرابط:" : "Copy this link:", b.dataset.url); }
   setTimeout(() => b.textContent = old, 1800);
 });
-
-/* ---------- Owner analytics (hidden) ---------- */
-// GoatCounter site code, such as "ramizassaf" for https://ramizassaf.goatcounter.com. Empty means no tracking.
-const GOATCOUNTER = "";
-const GATE_HASH = "90d441ee3fce238cd433ff208078e8d4351fb2969f9ed6b595e588ed7ead5d4e";
-if (GOATCOUNTER) {
-  window.goatcounter = { no_onload: true };
-  const sc = document.createElement("script");
-  sc.async = true; sc.src = "https://gc.zgo.at/count.js";
-  sc.dataset.goatcounter = `https://${GOATCOUNTER}.goatcounter.com/count`;
-  sc.onload = () => gcCount();
-  document.head.appendChild(sc);
-}
-function gcCount() {
-  if (!GOATCOUNTER || !window.goatcounter || !window.goatcounter.count) return;
-  if (sessionStorage.getItem("owner") === "1") return; // do not count the owner
-  const v = document.body.dataset.view || "home";
-  window.goatcounter.count({ path: v === "home" ? "/" : "/" + v, title: v });
-}
-addEventListener("hashchange", () => setTimeout(gcCount, 50));
-let taps = [];
-document.getElementById("heroPhoto").addEventListener("click", () => {
-  const now = Date.now(); taps = taps.filter(t => now - t < 900); taps.push(now);
-  if (taps.length >= 3) { taps = []; const g = document.getElementById("adminGate"); document.getElementById("gateCode").value = ""; document.getElementById("gateMsg").textContent = ""; g.showModal(); }
-});
-document.getElementById("gateCancel").onclick = () => document.getElementById("adminGate").close();
-async function sha256(t) { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join(""); }
-document.getElementById("gateForm").addEventListener("submit", async ev => {
-  ev.preventDefault();
-  const g = document.getElementById("adminGate"), code = document.getElementById("gateCode").value.trim();
-  if (await sha256(code) === GATE_HASH) { g.close(); try { sessionStorage.setItem("owner", "1"); } catch (e) {} openDash(); }
-  else { document.getElementById("gateMsg").textContent = "Wrong code."; g.classList.remove("shake"); void g.offsetWidth; g.classList.add("shake"); }
-});
-document.getElementById("dashClose").onclick = () => document.getElementById("adminDash").close();
-async function gcCounter(path) {
-  try { const r = await fetch(`https://${GOATCOUNTER}.goatcounter.com/counter/${encodeURIComponent(path)}.json`); if (!r.ok) return null; const j = await r.json(); return +String(j.count).replace(/[^0-9]/g, ""); }
-  catch (e) { return null; }
-}
-async function openDash() {
-  const d = document.getElementById("adminDash"), body = document.getElementById("dashBody");
-  d.showModal();
-  if (!GOATCOUNTER) {
-    body.innerHTML = `<div class="ad-note"><b>Analytics is not connected yet.</b> The page counts nothing until you link a free GoatCounter account:<ol>
-      <li>Sign up at <a href="https://www.goatcounter.com/signup" target="_blank" rel="noopener">goatcounter.com/signup</a> and pick a code, such as <code>ramizassaf</code>.</li>
-      <li>In GoatCounter, open Settings and turn on <b>Allow adding visitor counts on your website</b>. To see the full report here, also turn on public access to the dashboard.</li>
-      <li>Put the code in <code>GOATCOUNTER</code> inside <code>index.html</code>, or send it to Claude.</li></ol></div>`;
-    return;
-  }
-  body.innerHTML = `<div class="ad-kpis" id="adK"><div class="stat"><div class="num">…</div><div class="lbl">Total views</div></div></div><div class="hbars" id="adBars"></div>
-    <p class="ad-note">Countries, cities, referrers, browsers, and screen sizes are in the full report. <a href="https://${GOATCOUNTER}.goatcounter.com" target="_blank" rel="noopener">Open the full GoatCounter dashboard ↗</a></p>
-    <iframe class="ad-frame" src="https://${GOATCOUNTER}.goatcounter.com" title="GoatCounter dashboard" loading="lazy"></iframe>`;
-  const views = ["home", ...VIEWS];
-  const [total, ...per] = await Promise.all([gcCounter("TOTAL"), ...views.map(v => gcCounter(v === "home" ? "/" : "/" + v))]);
-  const rows = views.map((v, i) => [v, per[i] || 0]).sort((a, b) => b[1] - a[1]);
-  document.getElementById("adK").innerHTML = `<div class="stat"><div class="num">${total == null ? "n/a" : total.toLocaleString("en-US")}</div><div class="lbl">Total views</div></div>
-    <div class="stat"><div class="num">${rows[0] && rows[0][1] ? rows[0][0] : "n/a"}</div><div class="lbl">Most viewed section</div></div>`;
-  if (total == null) document.getElementById("adBars").innerHTML = `<p class="ad-note">Counts are blocked. In GoatCounter Settings, turn on <b>Allow adding visitor counts on your website</b>.</p>`;
-  else hbars("adBars", rows, "views");
-}
 
 /* ---------- Init ---------- */
 document.getElementById("yr").textContent = new Date().getFullYear();
