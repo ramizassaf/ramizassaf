@@ -219,11 +219,28 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: .82rem; color: var(--muted); margin-top: 8px; }
 .legend i { display: inline-block; width: 18px; height: 3px; border-radius: 2px; vertical-align: middle; margin-inline-end: 6px; }
 
+/* Research dashboard */
+.dash { margin-bottom: 30px; }
+.kpis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 16px; }
+.kpis .stat small { display: block; color: var(--muted); font-size: .78rem; margin-top: 2px; }
+.kpis .num { font-size: 1.7rem; }
+@media (max-width: 980px) { .kpis { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 560px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+.dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 860px) { .dash-grid { grid-template-columns: 1fr; } }
+.hbars { display: grid; gap: 9px; margin-top: 6px; }
+.hb { display: grid; grid-template-columns: minmax(0, 48%) 1fr 40px; gap: 10px; align-items: center; font-size: .84rem; cursor: default; border-radius: 6px; padding: 2px 4px; }
+.hb:hover { background: var(--bg-2); }
+.hb .l { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); }
+.hb .t { display: block; height: 10px; background: var(--bg-2); border-radius: 4px; overflow: hidden; }
+.hb .f { display: block; height: 100%; background: var(--s1); border-radius: 0 4px 4px 0; }
+[dir="rtl"] .hb .f { border-radius: 4px 0 0 4px; margin-inline-start: 0; }
+@media (max-width: 560px) { .hb { grid-template-columns: 1fr 40px; row-gap: 4px; } .hb .l { grid-column: 1 / -1; white-space: normal; } }
+.hb .v { text-align: end; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--text); }
+.dtip { position: fixed; z-index: 90; pointer-events: none; background: var(--text); color: var(--bg); font-size: .8rem; padding: 6px 10px; border-radius: 8px; box-shadow: var(--shadow); max-width: 280px; }
+.dtip b { display: block; }
+
 /* Research */
-.res-top { display: grid; grid-template-columns: 1fr 1.3fr; gap: 20px; margin-bottom: 20px; }
-@media (max-width: 860px) { .res-top { grid-template-columns: 1fr; } }
-.res-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.res-metrics .stat small { display: block; color: var(--muted); font-size: .78rem; margin-top: 2px; }
 .chart-card h3 { margin: 0 0 4px; font-size: 1rem; }
 .chart-card .sub { color: var(--muted); font-size: .82rem; margin: 0 0 8px; }
 .top-cited { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; margin-bottom: 26px; }
@@ -420,19 +437,25 @@ footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: .8
       <h2 data-i18n="res_h">Research</h2>
       <p data-i18n="res_p">Operations research, quality management, sustainability, and technology adoption, with a focus on industry in Palestine and the region.</p>
     </div>
-    <div class="res-top">
-      <div class="res-metrics">
+    <div class="dash" id="resDash">
+      <div class="kpis">
         <div class="stat reveal"><div class="num" data-count="1849" data-fmt="1">1,849</div><div class="lbl" data-i18n="rm1">Citations</div><small data-i18n="rm1s">1,783 since 2021</small></div>
         <div class="stat reveal"><div class="num" data-count="20">20</div><div class="lbl">h-index</div><small data-i18n="rm2s">19 since 2021</small></div>
         <div class="stat reveal"><div class="num" data-count="26">26</div><div class="lbl">i10-index</div><small data-i18n="rm3s">24 since 2021</small></div>
-        <div class="stat reveal"><div class="num" data-count="59">59</div><div class="lbl" data-i18n="rm4">Publications</div><small data-i18n="rm4s">Since 2009</small></div>
+        <div class="stat reveal"><div class="num" id="kPubs">59</div><div class="lbl" data-i18n="rm4">Publications</div><small id="kSpan"></small></div>
+        <div class="stat reveal"><div class="num" id="kFirst">19</div><div class="lbl" data-i18n="rm5">As first author</div><small id="kFirstS"></small></div>
+        <div class="stat reveal"><div class="num" id="kCo">0</div><div class="lbl" data-i18n="rm6">Co-authors</div><small data-i18n="rm6s">Named in author lists</small></div>
       </div>
-      <div class="card chart-card reveal">
-        <h3 data-i18n="cit_h">Citations per year</h3>
-        <p class="sub" data-i18n="cit_s">Approximate yearly values read from the Google Scholar chart.</p>
-        <svg class="chart" id="citChart" viewBox="0 0 560 220" role="img" aria-label="Citations per year"></svg>
+      <div class="dash-grid">
+        <div class="card chart-card reveal"><h3 data-i18n="cit_h">Citations per year</h3><p class="sub" data-i18n="cit_s">Approximate yearly values read from the Google Scholar chart.</p><svg class="chart" id="citChart" viewBox="0 0 560 220" role="img" aria-label="Citations per year"></svg></div>
+        <div class="card chart-card reveal"><h3 data-i18n="pub_h">Publications per year</h3><p class="sub" data-i18n="pub_s">Papers, conference articles, and theses with a known year.</p><svg class="chart" id="pubChart" viewBox="0 0 560 220" role="img" aria-label="Publications per year"></svg></div>
+        <div class="card chart-card reveal"><h3 data-i18n="th_h">Publications by theme</h3><p class="sub" data-i18n="th_s">A paper can belong to more than one theme.</p><div class="hbars" id="thBars"></div></div>
+        <div class="card chart-card reveal"><h3 data-i18n="tc_h">Citations by theme</h3><p class="sub" data-i18n="tc_s">Total Google Scholar citations of the papers in each theme.</p><div class="hbars" id="tcBars"></div></div>
+        <div class="card chart-card reveal"><h3 data-i18n="vn_h">Top publication venues</h3><p class="sub" data-i18n="vn_s">Journals and proceedings with 2 or more papers.</p><div class="hbars" id="vnBars"></div></div>
+        <div class="card chart-card reveal"><h3 data-i18n="ca_h">Most frequent co-authors</h3><p class="sub" data-i18n="ca_s">Joint papers. Long author lists are cut off in Scholar, so counts are a lower bound.</p><div class="hbars" id="caBars"></div></div>
       </div>
     </div>
+    <div id="dtip" class="dtip" role="tooltip" hidden></div>
     <h3 class="sub-h reveal" data-i18n="top_h">Most cited</h3>
     <div class="top-cited" id="topCited"></div>
     <div class="res-tools">
@@ -713,6 +736,10 @@ const AR = {
   g3_m1: "بناء الميزانية العمومية بالسحب والإفلات وتصنيف التدفقات النقدية", g3_m2: "سلّم الربح وتحليل النسب مقارنة بمتوسط الصناعة", g3_m3: "نقاط للصف وتتابع ومؤقت تنازلي ومؤثرات صوتية", g3_m4: "وضع سهل مع تلميحات، ومسرد عربي",
   site: "الموقع ←", sk5: "بناء المواقع بمساعدة الذكاء الاصطناعي", sk5_l: "دليل برنامج الهندسة الصناعية ↗", sk5_g: "ألعاب التعلّم ←",
   nav_res: "البحث العلمي", res_h: "البحث العلمي", res_p: "بحوث العمليات وإدارة الجودة والاستدامة وتبني التقنية، مع تركيز على الصناعة في فلسطين والمنطقة.",
+  rm5: "باحث أول", rm6: "باحث مشارك", rm6s: "مذكورون في قوائم المؤلفين",
+  pub_h: "المنشورات سنوياً", pub_s: "أوراق ومؤتمرات ورسائل معروفة السنة.", th_h: "المنشورات حسب المحور", th_s: "قد تنتمي الورقة لأكثر من محور.",
+  tc_h: "الاقتباسات حسب المحور", tc_s: "مجموع اقتباسات Google Scholar لأوراق كل محور.", vn_h: "أبرز جهات النشر", vn_s: "مجلات ومؤتمرات نُشرت فيها ورقتان أو أكثر.",
+  ca_h: "أكثر الباحثين المشاركين", ca_s: "أوراق مشتركة. قوائم المؤلفين الطويلة مختصرة في Scholar، فالأعداد حد أدنى.",
   rm1: "اقتباس", rm1s: "1,783 منذ 2021", rm2s: "19 منذ 2021", rm3s: "24 منذ 2021", rm4: "منشور", rm4s: "منذ 2009",
   cit_h: "الاقتباسات سنوياً", cit_s: "قيم تقريبية مأخوذة من رسم Google Scholar.", top_h: "الأكثر اقتباساً", res_link: "الملف الكامل على Google Scholar ↗",
   skills_h: "المهارات", sk1: "علم البيانات والتحليلات", sk2: "الإحصاء", sk3: "الهندسة الصناعية", sk4: "التدريس والقيادة",
@@ -743,11 +770,12 @@ function setLang(l) {
   drawExp();
   drawRes();
   drawCerts();
+  if (typeof drawDash === "function" && document.getElementById("pubChart")) { drawDash(); drawCit(); }
 }
 document.getElementById("langBtn").onclick = () => setLang(lang === "en" ? "ar" : "en");
 
 /* ---------- Theme ---------- */
-function setTheme(t) { document.documentElement.dataset.theme = t; store.set("theme", t); drawBE(); drawCDF(); drawCit(); }
+function setTheme(t) { document.documentElement.dataset.theme = t; store.set("theme", t); drawBE(); drawCDF(); drawCit(); drawDash(); }
 document.getElementById("themeBtn").onclick = () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
 document.documentElement.dataset.theme = store.get("theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 
@@ -1013,17 +1041,70 @@ function drawRes() {
 document.getElementById("pubSearch").addEventListener("input", drawRes);
 document.getElementById("pubMore").onclick = () => { resAll = !resAll; drawRes(); if (!resAll) document.getElementById("pubList").scrollIntoView({ block: "start" }); };
 function drawCit() {
-  const svg = document.getElementById("citChart"); svg.innerHTML = "";
-  const W = 560, H = 220, pad = { l: 40, r: 8, t: 22, b: 26 }, max = 900;
-  const bw = (W - pad.l - pad.r) / CITES.length;
-  const Y = v => H - pad.b - v / max * (H - pad.t - pad.b);
-  [0, 300, 600, 900].forEach(v => { el("line", { x1: pad.l, x2: W - pad.r, y1: Y(v), y2: Y(v), stroke: css("--grid") }, svg); el("text", { x: pad.l - 6, y: Y(v) + 4, "text-anchor": "end" }, svg, v); });
-  CITES.forEach(([yr, v], i) => {
-    const x = pad.l + i * bw + bw * 0.18, w = bw * 0.64;
-    el("rect", { x, y: Y(v), width: w, height: Y(0) - Y(v), rx: 4, fill: css(yr === 2026 ? "--accent" : "--s1"), opacity: yr === 2026 ? 1 : 0.55 }, svg);
-    el("text", { x: x + w / 2, y: Y(v) - 6, "text-anchor": "middle", style: "fill:" + css("--text") + ";font-weight:600" }, svg, "≈" + v);
-    el("text", { x: x + w / 2, y: H - 8, "text-anchor": "middle" }, svg, yr);
+  colChart("citChart", CITES.map(([y, v]) => [String(y), v]), { approx: true, unit: lang === "ar" ? "اقتباس" : "citations" });
+}
+// Shared tooltip
+const dtip = document.getElementById("dtip");
+function tipShow(ev, html) { dtip.innerHTML = html; dtip.hidden = false; tipMove(ev); }
+function tipMove(ev) { const w = dtip.offsetWidth, h = dtip.offsetHeight; let x = ev.clientX + 14, y = ev.clientY - h - 10; if (x + w > innerWidth - 8) x = ev.clientX - w - 14; if (y < 8) y = ev.clientY + 16; dtip.style.left = x + "px"; dtip.style.top = y + "px"; }
+function tipHide() { dtip.hidden = true; }
+addEventListener("scroll", tipHide, { passive: true });
+function colChart(id, rows, o = {}) {
+  const svg = document.getElementById(id); svg.innerHTML = "";
+  const W = 560, H = 220, pad = { l: 36, r: 8, t: 22, b: 26 };
+  const maxV = Math.max(...rows.map(r => r[1]), 1), ticks = niceTicks(maxV, 3);
+  const step = ticks[1] - ticks[0]; while (ticks[ticks.length - 1] < maxV) ticks.push(ticks[ticks.length - 1] + step);
+  const max = ticks[ticks.length - 1];
+  const bw = (W - pad.l - pad.r) / rows.length, Y = v => H - pad.b - v / max * (H - pad.t - pad.b);
+  ticks.forEach(v => { el("line", { x1: pad.l, x2: W - pad.r, y1: Y(v), y2: Y(v), stroke: css("--grid") }, svg); el("text", { x: pad.l - 6, y: Y(v) + 4, "text-anchor": "end" }, svg, v); });
+  const every = rows.length > 12 ? 3 : 1, peak = Math.max(...rows.map(r => r[1]));
+  rows.forEach(([lab, v], i) => {
+    const w = Math.min(bw * 0.62, 34), x = pad.l + i * bw + (bw - w) / 2;
+    if (v > 0) el("rect", { x, y: Y(v), width: w, height: Y(0) - Y(v), rx: 4, fill: css("--s1"), opacity: i === rows.length - 1 || v === peak ? 1 : 0.6 }, svg);
+    if (v === peak || i === rows.length - 1) el("text", { x: x + w / 2, y: Y(v) - 6, "text-anchor": "middle", style: "fill:" + css("--text") + ";font-weight:600" }, svg, (o.approx ? "≈" : "") + v);
+    if (i % every === 0 || i === rows.length - 1) el("text", { x: x + w / 2, y: H - 8, "text-anchor": "middle" }, svg, lab);
+    const hit = el("rect", { x: pad.l + i * bw, y: pad.t, width: bw, height: H - pad.t - pad.b, fill: "transparent" }, svg);
+    hit.addEventListener("mouseenter", e => tipShow(e, `<b>${lab}</b>${o.approx ? "≈" : ""}${v} ${o.unit}`));
+    hit.addEventListener("mousemove", tipMove); hit.addEventListener("mouseleave", tipHide);
   });
+}
+function hbars(id, rows, unit, total) {
+  const max = Math.max(...rows.map(r => r[1]), 1);
+  const box = document.getElementById(id);
+  box.innerHTML = rows.map(([l, v]) => `<div class="hb" data-l="${escH(l)}" data-v="${v}"><span class="l" dir="auto">${escH(l)}</span><span class="t"><span class="f" style="width:${v / max * 100}%"></span></span><span class="v">${v.toLocaleString("en-US")}</span></div>`).join("");
+  box.querySelectorAll(".hb").forEach(r => {
+    r.addEventListener("mouseenter", e => tipShow(e, `<b>${r.dataset.l}</b>${(+r.dataset.v).toLocaleString("en-US")} ${unit}${total ? ` · ${Math.round(r.dataset.v / total * 100)}%` : ""}`));
+    r.addEventListener("mousemove", tipMove); r.addEventListener("mouseleave", tipHide);
+  });
+}
+const VENUE_ALIAS = [[/^Information Sciences Letter/i, "Information Sciences Letters"], [/^Appl\. Math/i, "Applied Mathematics & Information Sciences"], [/^International Journal of Scientific & Technology Research/i, "Int. Journal of Scientific & Technology Research"]];
+const AUTHOR_ALIAS = { "MB Hassen": "M Ben Hassen", "L Jum’a": "L Jum'a", "AMAM Al-Sartawi": "A Al-Sartawi", "AMA Musleh Al-Sartawi": "A Al-Sartawi", "MA Kanan": "M Kanan", "F Mabroukeh": "F Mabrouke" };
+function drawDash() {
+  const L = lang === "ar", pubsU = L ? "منشور" : "publications", citU = L ? "اقتباس" : "citations", papU = L ? "ورقة مشتركة" : "joint papers";
+  // KPIs
+  const years = PUBS.map(p => p.y).filter(Boolean), first = PUBS.filter(p => p.first).length;
+  document.getElementById("kPubs").textContent = PUBS.length;
+  document.getElementById("kSpan").innerHTML = `<span dir="ltr">${Math.min(...years)} – ${Math.max(...years)}</span>`;
+  document.getElementById("kFirst").textContent = first;
+  document.getElementById("kFirstS").textContent = Math.round(first / PUBS.length * 100) + (L ? "% من المنشورات" : "% of publications");
+  const co = {};
+  PUBS.forEach(p => new Set(p.a.split(", ").map(a => a.trim()).filter(a => a && a !== "..." && a !== "R Assaf").map(a => AUTHOR_ALIAS[a] || a)).forEach(a => co[a] = (co[a] || 0) + 1));
+  document.getElementById("kCo").textContent = Object.keys(co).length + "+";
+  // Publications per year
+  const y0 = Math.min(...years), y1 = Math.max(...years), py = [];
+  for (let y = y0; y <= y1; y++) py.push([String(y), PUBS.filter(p => p.y === y).length]);
+  colChart("pubChart", py, { unit: pubsU });
+  // Themes
+  const keys = Object.keys(RTHEMES);
+  hbars("thBars", keys.map(k => [RTHEMES[k][L ? "ar" : "en"], PUBS.filter(p => p.th.includes(k)).length]).sort((a, b) => b[1] - a[1]), pubsU, PUBS.length);
+  const totC = PUBS.reduce((s, p) => s + p.c, 0);
+  hbars("tcBars", keys.map(k => [RTHEMES[k][L ? "ar" : "en"], PUBS.filter(p => p.th.includes(k)).reduce((s, p) => s + p.c, 0)]).sort((a, b) => b[1] - a[1]), citU);
+  // Venues
+  const vn = {};
+  PUBS.forEach(p => { if (!p.v) return; let v = p.v.replace(/,?\s+\d.*$/, "").replace(/\s*\(.*$/, "").trim(); VENUE_ALIAS.forEach(([re, n]) => { if (re.test(v)) v = n; }); vn[v] = (vn[v] || 0) + 1; });
+  hbars("vnBars", Object.entries(vn).filter(e => e[1] >= 2).sort((a, b) => b[1] - a[1]).slice(0, 8), pubsU);
+  // Co-authors
+  hbars("caBars", Object.entries(co).sort((a, b) => b[1] - a[1]).slice(0, 8), papU);
 }
 
 /* ---------- Certifications ---------- */
@@ -1138,6 +1219,7 @@ addEventListener("beforeprint", () => {
 setLang(store.get("lang") === "ar" ? "ar" : "en");
 drawCDF();
 drawCit();
+drawDash();
 tick();
 </script>
 </body>
