@@ -312,6 +312,21 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 /* Skills */
 .skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
 .skill-grid h3 { margin: 0 0 12px; font-size: 1rem; }
+.dc { margin-top: 20px; }
+.dc-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; }
+.dc-head h3 { margin: 0; font-size: 1.1rem; }
+.dc-head p { margin: 2px 0 0; color: var(--muted); font-size: .88rem; }
+.dc-stats { display: flex; gap: 10px; }
+.dc-stats div { padding: 6px 14px; border-radius: 12px; background: var(--accent-soft); color: var(--accent); font-size: .8rem; font-weight: 600; text-align: center; }
+.dc-stats b { display: block; font-size: 1.25rem; line-height: 1.1; }
+.dc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.dc-g { border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; background: var(--bg-2); }
+.dc-g h4 { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin: 0 0 8px; font-size: .92rem; }
+.dc-g h4 span { flex: 0 0 auto; min-width: 24px; padding: 1px 8px; border-radius: 999px; background: var(--amber); color: #132A3E; font-size: .75rem; text-align: center; }
+.dc-g ul { margin: 0; padding: 0; list-style: none; }
+.dc-g li { position: relative; padding-inline-start: 18px; font-size: .84rem; line-height: 1.45; color: var(--muted); margin: 3px 0; }
+.dc-g li::before { content: "✓"; position: absolute; inset-inline-start: 0; color: #1F9D55; font-weight: 700; }
+.dc-g li em { font-style: normal; color: var(--accent); font-weight: 600; }
 
 /* Contact */
 .contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 24px; }
@@ -946,11 +961,18 @@ footer { border-top: 0; }
       <h2 data-i18n="skills_h">Skills</h2>
     </div>
     <div class="skill-grid">
-      <div class="card reveal"><h3 data-i18n="sk1">Data science and analytics</h3><div class="tags"><span class="tag">Python</span><span class="tag">SQL</span><span class="tag">Excel</span><span class="tag">Tableau</span><span class="tag">Alteryx</span><span class="tag">pandas</span><span class="tag">R</span><span class="tag">Machine learning</span></div></div>
+      <div class="card reveal"><h3 data-i18n="sk1">Data science and analytics</h3><div class="tags"><span class="tag">Python</span><span class="tag">SQL</span><span class="tag">Excel</span><span class="tag">Tableau</span><span class="tag">Alteryx</span><span class="tag">Power BI</span><span class="tag">DAX</span><span class="tag">KNIME</span><span class="tag">Snowflake</span><span class="tag">Databricks</span><span class="tag">pandas</span><span class="tag">R</span><span class="tag">Machine learning</span></div></div>
       <div class="card reveal"><h3 data-i18n="sk2">Statistics</h3><div class="tags"><span class="tag">Hypothesis testing</span><span class="tag">A/B testing</span><span class="tag">Regression</span><span class="tag">Multi-criteria decision making</span></div></div>
       <div class="card reveal"><h3 data-i18n="sk3">Industrial engineering</h3><div class="tags"><span class="tag">Engineering economics</span><span class="tag">Engineering management</span><span class="tag">Optimisation</span><span class="tag">Simulation</span><span class="tag">Quality assurance</span></div></div>
       <div class="card reveal"><h3 data-i18n="sk4">Teaching and leadership</h3><div class="tags"><span class="tag">Curriculum development</span><span class="tag">Training and development</span><span class="tag">Program coordination</span><span class="tag">NCAAA accreditation</span><span class="tag">Mentoring</span><span class="tag">Online course production</span></div></div>
       <div class="card reveal"><h3 data-i18n="sk5">AI-assisted web building</h3><div class="tags"><span class="tag">Vibe coding with Claude</span><span class="tag">HTML / CSS / JavaScript</span><span class="tag">Interactive learning apps</span><span class="tag">GitHub Pages</span><span class="tag">Netlify</span></div><div class="proj-links"><a href="https://ie-program-guide-nnu-2026.netlify.app/" target="_blank" rel="noopener" data-i18n="sk5_l">IE Program Guide ↗</a><a href="#games" data-i18n="sk5_g">Learning games →</a></div></div>
+    </div>
+    <div class="card dc reveal">
+      <div class="dc-head">
+        <div><h3 data-i18n="dc_h">Continuous learning on DataCamp</h3><p data-i18n="dc_p">30 completed courses, grouped by tool.</p></div>
+        <div class="dc-stats" id="dcStats"></div>
+      </div>
+      <div class="dc-grid" id="dcData"></div>
     </div>
   </div>
 </section>
@@ -1042,7 +1064,7 @@ const AR = {
   g2_m1: "10 مستويات بتوجيه متدرّج من خطوات محلولة إلى دون توجيه", g2_m2: "نجوم ونقاط خبرة وتتابع، بأرقام جديدة في كل محاولة", g2_m3: "تغذية راجعة تحدد الخطأ بدقة", g2_m4: "مسرد عربي وآلة حاسبة مدمجة وورقة قوانين",
   g3_c: "ماجستير الإدارة الهندسية", g3_d: "خمس ألعاب صفية في الاقتصاد الهندسي والقوائم المالية، لكل منها شركة تُولَّد عشوائياً.",
   g3_m1: "بناء الميزانية العمومية بالسحب والإفلات وتصنيف التدفقات النقدية", g3_m2: "سلّم الربح وتحليل النسب مقارنة بمتوسط الصناعة", g3_m3: "نقاط للصف وتتابع ومؤقت تنازلي ومؤثرات صوتية", g3_m4: "وضع سهل مع تلميحات، ومسرد عربي",
-  site: "الموقع ←", sk5: "بناء المواقع بمساعدة الذكاء الاصطناعي", sk5_l: "دليل برنامج الهندسة الصناعية ↗", sk5_g: "ألعاب التعلّم ←",
+  site: "الموقع ←", sk5: "بناء المواقع بمساعدة الذكاء الاصطناعي", sk5_l: "دليل برنامج الهندسة الصناعية ↗", sk5_g: "ألعاب التعلّم ←", dc_h: "التعلّم المستمر على DataCamp", dc_p: "30 مساقًا مكتملًا، مصنّفة حسب الأداة.",
   nav_res: "البحث العلمي", res_h: "البحث العلمي", res_p: "بحوث العمليات وإدارة الجودة والاستدامة وتبني التقنية، مع تركيز على الصناعة في فلسطين والمنطقة.",
   rm5: "باحث أول", rm6: "باحث مشارك", rm6s: "مذكورون في قوائم المؤلفين",
   pub_h: "المنشورات سنوياً", pub_s: "أوراق ومؤتمرات ورسائل معروفة السنة.", th_h: "المنشورات حسب المحور", th_s: "قد تنتمي الورقة لأكثر من محور.",
@@ -1104,6 +1126,7 @@ function setLang(l) {
   drawRes();
   drawCerts();
   drawCourses();
+  drawDC();
   if (typeof drawDash === "function" && document.getElementById("pubChart")) { drawDash(); drawCit(); }
 }
 document.getElementById("langBtn").onclick = () => setLang(lang === "en" ? "ar" : "en");
@@ -1493,6 +1516,26 @@ function drawCerts() {
   document.getElementById("certData").innerHTML = CERTS.filter(c => c.g === "data").map(c => `<div class="card cert"><span class="seal">${c.s}</span><div><b dir="ltr">${c.t}</b><small>${meta(c)}</small></div></div>`).join("");
 }
 
+/* ---------- DataCamp courses ---------- */
+// EDIT: completed DataCamp courses, grouped by tool. mine: true marks the course I authored.
+const DC = [
+  { en: "Power BI", ar: "Power BI", items: ["Introduction to Power BI", "Data Preparation in Power BI", "Data Visualization in Power BI", "Data Modeling in Power BI", "Introduction to DAX in Power BI", "DAX Functions in Power BI", "Case Study: Analyzing Customer Churn in Power BI"] },
+  { en: "Excel", ar: "Excel", items: ["Introduction to Excel", "Data Analysis in Excel", { t: "Data Validation in Excel", mine: true }, "Microsoft Copilot in Excel", "Case Study: Analyzing Customer Churn in Excel"] },
+  { en: "Python", ar: "Python", items: ["Intermediate Python", "Data Manipulation with pandas", "Joining Data with pandas", "Monte Carlo Simulations in Python"] },
+  { en: "Alteryx", ar: "Alteryx", items: ["Introduction to Alteryx", "Data Manipulation in Alteryx", "Data Transformation in Alteryx", "Case Study: Analyzing Sales Data in Alteryx"] },
+  { en: "KNIME", ar: "KNIME", items: ["Introduction to KNIME", "Data Transformation in KNIME"] },
+  { en: "Cloud data platforms", ar: "منصات البيانات السحابية", items: ["Introduction to Snowflake", "Introduction to Databricks", "Containerization and Virtualization Concepts"] },
+  { en: "Generative AI", ar: "الذكاء الاصطناعي التوليدي", items: ["Understanding ChatGPT", "Understanding Prompt Engineering", "Monetizing Artificial Intelligence"] },
+  { en: "Data foundations", ar: "أساسيات البيانات", items: ["Introduction to Data Literacy", "Data Management Concepts"] }
+];
+const dcTotal = DC.reduce((n, g) => n + g.items.length, 0);
+function drawDC() {
+  const ar = lang === "ar", mine = ar ? "مساقي المنشور" : "my published course";
+  document.getElementById("dcStats").innerHTML = `<div><b>${dcTotal}</b>${ar ? "مساقًا" : "courses"}</div><div><b>${DC.length}</b>${ar ? "مجالات" : "areas"}</div>`;
+  document.getElementById("dcData").innerHTML = DC.map(g => `<div class="dc-g"><h4>${ar ? g.ar : g.en}<span>${g.items.length}</span></h4><ul dir="ltr">${g.items.map(c => typeof c === "string" ? `<li>${c}</li>` : `<li>${c.t} <em><bdi>(${mine})</bdi></em></li>`).join("")}</ul></div>`).join("");
+}
+drawDC();
+
 /* ---------- Supervision ---------- */
 // EDIT: one entry per thesis. role: "main" (supervisor) or "co" (co-supervisor). year: null when unknown.
 const THEMES = {
@@ -1609,7 +1652,7 @@ function cvMarkdown() {
     "## Summary", "",
     "Assistant Professor of Industrial Engineering at An-Najah National University and Coordinator of the Master of Engineering Management program, with 14+ years of university teaching and academic leadership in Palestine and Saudi Arabia. PhD in Mechanical Engineering (Politecnico di Milano). Data science trainer who has trained 800+ professionals across the MENA region with a 94% satisfaction score. Researcher with " + PUBS.length + " publications, 1,849 citations, and an h-index of 20 in operations research, quality management, sustainability, and technology adoption.", "",
     "## Core Skills", "",
-    "- Data analytics: Python, SQL, Excel, Tableau, Alteryx, pandas, R, machine learning",
+    "- Data analytics: Python, SQL, Excel, Power BI, DAX, Tableau, Alteryx, KNIME, Snowflake, Databricks, pandas, R, machine learning",
     "- Statistics: hypothesis testing, A/B testing, regression, structural equation modelling, multi-criteria decision making",
     "- Industrial engineering: engineering economics, engineering management, optimisation, simulation, lean, quality assurance",
     "- Academic leadership: curriculum development, program coordination, NCAAA accreditation, ABET preparation, mentoring",
@@ -1628,6 +1671,8 @@ function cvMarkdown() {
   L.push("", "## Languages", "", "- Arabic (Native), English (Full professional), Italian (Limited working)");
   L.push("", "## Certifications", "");
   CERTS.forEach(c => L.push(`- ${c.t}, ${c.i.en}${c.d ? " (" + c.d + ")" : ""}`));
+  L.push("", `### DataCamp Courses Completed (${dcTotal})`, "");
+  DC.forEach(g => L.push(`- ${g.en}: ${g.items.map(c => c.t || c).join(", ")}`));
   L.push("", "## Research", "", `- Google Scholar: 1,849 citations, h-index 20, i10-index 26, ${PUBS.length} publications`, "", "### Selected Publications", "");
   const sel = [...PUBS].sort((a, b) => b.c - a.c).slice(0, 8);
   sel.forEach(x => L.push(`- ${x.a.replace(", ...", " et al.")} (${x.y || "n.d."}). ${x.t}. ${x.v}.`));

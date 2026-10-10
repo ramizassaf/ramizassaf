@@ -15,6 +15,7 @@ Personal CV website of Ramiz Assaf, Data Professional and Industrial Engineer ba
 - **Services.** Training, online teaching, consulting, research collaboration, and more, each with a request button that fills the contact form.
 - **Interactive teaching.** Dynamic HTML lecture slides (`slides/`) and three learning games (`games/`).
 - **Social sidebar.** LinkedIn, Google Scholar, YouTube, GitHub, DataCamp, and email.
+- **DataCamp learning.** 30 completed courses in the Skills section, grouped by tool.
 - **Research dashboard, thesis supervision, certificates, and course reviews.**
 - **Live demos.** A break-even calculator and a normal CDF approximation, in a pop-up window.
 - **English and Arabic, light and dark.** Theme matches the IE Program Guide site.
