@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CV</title>
+<meta name="description" content="Personal CV website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Changa:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!--
+  CV Website Template by Ramiz Assaf (https://ramizassaf.github.io/ramizassaf/). MIT license.
+  You do not need to edit this file. All content comes from cv-data.xlsx.
+  Instructions: open cv-data.xlsx, sheet "How to deploy".
+-->
+<style>
+:root {
+  --accent: #1E5A8C; --amber: #FFB020;
+  --bg: #F3F6F8; --bg-2: #EAF0F4; --card: #FFFFFF; --text: #132A3E; --muted: #3E5A72; --line: #C9D6E1;
+  --edge: #132A3E; --nav-bg: #1C3448; --grid: rgba(30,90,140,.075); --grid-strong: rgba(30,90,140,.14);
+  --accent-soft: color-mix(in srgb, var(--accent) 12%, #fff);
+  --shadow: 0 6px 24px rgba(19,42,62,.10); --shadow-lg: 0 18px 50px rgba(19,42,62,.16);
+}
+:root[data-theme="dark"] {
+  --bg: #0D1B28; --bg-2: #132637; --card: #15293B; --text: #E6EEF5; --muted: #9FB3C6; --line: #2A4157;
+  --edge: #4A6A88; --nav-bg: #0A1520; --grid: rgba(125,184,232,.06); --grid-strong: rgba(125,184,232,.11);
+  --accent-soft: color-mix(in srgb, var(--accent) 22%, #15293B);
+  --shadow: 0 6px 24px rgba(0,0,0,.35); --shadow-lg: 0 18px 50px rgba(0,0,0,.45);
+}
+:root[data-theme="dark"] .card a:not(.btn), :root[data-theme="dark"] .md-link, :root[data-theme="dark"] .kicker, :root[data-theme="dark"] .cnt, :root[data-theme="dark"] .tile .ta, :root[data-theme="dark"] .pub .c, :root[data-theme="dark"] footer a { color: color-mix(in srgb, var(--accent) 45%, #fff); }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; color: var(--text); font-family: "IBM Plex Sans", system-ui, sans-serif; line-height: 1.6; padding-bottom: 40px;
+  background-color: var(--bg);
+  background-image: linear-gradient(var(--grid-strong) 1px, transparent 1px), linear-gradient(90deg, var(--grid-strong) 1px, transparent 1px),
+                    linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px; background-attachment: fixed;
+}
+h1, h2, h3, h4, .num, .tt { font-family: "Changa", "IBM Plex Sans", sans-serif; line-height: 1.2; }
+a { color: var(--accent); }
+.container { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+.kicker { font-family: "IBM Plex Mono", monospace; font-size: .8rem; color: var(--accent); }
+.card { background: var(--card); border: 2px solid var(--edge); border-radius: 14px; box-shadow: var(--shadow); padding: 22px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 12px; border: 2px solid var(--edge); background: var(--card); color: var(--text); font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; }
+.btn.primary { background: var(--amber); color: #132A3E; border-color: #132A3E; }
+.btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+.tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag { font-size: .8rem; padding: 3px 10px; border-radius: 999px; background: var(--bg-2); color: var(--muted); border: 1px solid var(--line); }
+
+/* Top bar */
+.top { position: sticky; top: 12px; z-index: 60; }
+.top .container { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.logo { display: inline-flex; align-items: center; gap: 10px; background: var(--nav-bg); color: #fff; padding: 8px 18px 8px 8px; border-radius: 999px; box-shadow: var(--shadow-lg); text-decoration: none; min-width: 0; }
+.logo i { flex: 0 0 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--amber); color: #132A3E; font-style: normal; font-weight: 800; font-size: .85rem; }
+.logo b { display: block; font-family: "Changa", sans-serif; font-size: 1rem; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.logo small { display: block; font-size: .7rem; opacity: .75; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 52vw; }
+.icon-btn { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; border: 2px solid var(--edge); background: var(--card); color: var(--text); cursor: pointer; font-size: 1rem; box-shadow: var(--shadow); }
+
+/* Hero */
+.hero { padding: 40px 0 24px; }
+.hero-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 32px; align-items: center; }
+@media (max-width: 820px) { .hero-grid { grid-template-columns: 1fr; } .hero-photo-wrap { order: -1; max-width: 220px; } }
+.hero h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); margin: 6px 0 0; letter-spacing: -.01em; }
+.hl { background: linear-gradient(transparent 62%, var(--amber) 62%, var(--amber) 92%, transparent 92%); padding: 0 .08em; }
+:root[data-theme="dark"] .hl { color: #fff; background: linear-gradient(transparent 62%, color-mix(in srgb, var(--amber) 55%, transparent) 62%, color-mix(in srgb, var(--amber) 55%, transparent) 92%, transparent 92%); }
+.headline { margin: 10px 0 6px; font-family: "Changa", sans-serif; font-weight: 600; font-size: clamp(1.15rem, 2.4vw, 1.5rem); }
+.roles { color: var(--muted); margin: 0 0 6px; }
+.cta { margin: 10px 0 0; font-weight: 500; }
+.hero-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+.md-link { display: block; margin-top: 8px; background: none; border: 0; padding: 0; color: var(--accent); font: inherit; font-size: .85rem; text-decoration: underline; cursor: pointer; }
+.hero-photo { width: 100%; aspect-ratio: 1; border-radius: 24px; border: 2px solid var(--edge); box-shadow: var(--shadow-lg); object-fit: cover; background: var(--bg-2); display: grid; place-items: center; font-family: "Changa", sans-serif; font-size: 4rem; color: var(--accent); }
+.socials { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+.socials a { padding: 6px 12px; border-radius: 999px; border: 2px solid var(--edge); background: var(--card); color: var(--text); text-decoration: none; font-size: .82rem; font-weight: 600; }
+.socials a:hover { background: var(--amber); color: #132A3E; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-top: 26px; }
+.stat { background: var(--card); border: 2px solid var(--edge); border-inline-start: 7px solid var(--amber); border-radius: 14px; padding: 14px 16px; box-shadow: var(--shadow); }
+.stat .num { font-size: 1.9rem; font-weight: 800; }
+.stat .lbl { font-weight: 600; }
+.stat small { display: block; color: var(--muted); font-size: .8rem; }
+
+/* Tiles */
+.tiles { padding: 10px 0 30px; }
+.tiles h2 { margin: 0 0 14px; font-size: 1.6rem; }
+.tile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+.tile { position: relative; display: flex; flex-direction: column; gap: 4px; padding: 20px; min-height: 140px; background: var(--card); color: var(--text); text-decoration: none; border: 2px solid var(--edge); border-inline-start: 7px solid var(--amber); border-radius: 16px; box-shadow: var(--shadow); transition: transform .18s, box-shadow .18s; }
+.tile:hover, .tile:focus-visible { transform: translateY(-4px); box-shadow: var(--shadow-lg); outline: none; }
+.tile .ti { font-size: 1.8rem; }
+.tile .tt { font-size: 1.2rem; font-weight: 700; margin-top: 4px; }
+.tile .ts { color: var(--muted); font-size: .88rem; }
+.tile .ta { position: absolute; top: 16px; right: 18px; font-weight: 700; color: var(--accent); }
+
+/* Views */
+body:not([data-view="home"]) .hero, body:not([data-view="home"]) .tiles { display: none; }
+section.block { display: none; padding: 24px 0 40px; }
+section.block.active { display: block; animation: panelIn .3s ease; }
+@keyframes panelIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { section.block.active { animation: none; } .tile, .btn { transition: none; } }
+.back { display: inline-flex; gap: 6px; margin-bottom: 14px; padding: 7px 14px; border-radius: 999px; background: var(--card); border: 2px solid var(--edge); color: var(--text); text-decoration: none; font-weight: 700; font-size: .88rem; box-shadow: var(--shadow); }
+.back:hover { background: var(--amber); color: #132A3E; }
+.sec-head h2 { font-size: clamp(1.8rem, 4vw, 2.5rem); margin: 4px 0 18px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.about p { max-width: 70ch; }
+
+/* Experience */
+.org { margin-bottom: 16px; }
+.org h3 { margin: 0; font-size: 1.2rem; }
+.org .where { color: var(--muted); font-size: .9rem; }
+.role { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line); }
+.role:first-of-type { border-top: 0; padding-top: 0; }
+.role-h { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-weight: 600; }
+.when { font-family: "IBM Plex Mono", monospace; font-size: .8rem; color: var(--muted); }
+.role ul { margin: 6px 0 0; padding-left: 20px; color: var(--muted); }
+
+/* Lists and groups */
+.grp { margin-bottom: 22px; }
+.grp h3 { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; font-size: 1.1rem; }
+.cnt { font-family: "IBM Plex Mono", monospace; font-size: .74rem; font-weight: 500; color: var(--accent); background: var(--accent-soft); border-radius: 999px; padding: 2px 10px; }
+.item h4 { margin: 0 0 4px; font-size: 1.03rem; }
+.item p { margin: 0; color: var(--muted); font-size: .9rem; }
+.item a.more { display: inline-block; margin-top: 8px; font-size: .85rem; font-weight: 700; text-decoration: none; }
+.item { border-inline-start: 7px solid var(--amber); }
+.certs { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 8px 20px; }
+.certs li { position: relative; padding-left: 22px; }
+.certs li::before { content: "✓"; position: absolute; left: 0; color: #1F9D55; font-weight: 700; }
+.certs small { display: block; color: var(--muted); font-size: .82rem; }
+
+/* Research */
+.bars { display: flex; align-items: flex-end; gap: 6px; height: 140px; padding-top: 18px; }
+.bars div { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 4px; min-width: 0; }
+.bars i { display: block; width: 100%; max-width: 34px; background: var(--accent); border-radius: 5px 5px 0 0; }
+.bars b { font-size: .72rem; }
+.bars span { font-family: "IBM Plex Mono", monospace; font-size: .66rem; color: var(--muted); }
+.pub { display: grid; grid-template-columns: 56px 1fr; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
+.pub .yr { font-family: "IBM Plex Mono", monospace; color: var(--muted); font-size: .85rem; }
+.pub b { display: block; line-height: 1.35; }
+.pub small { color: var(--muted); }
+.pub .c { font-weight: 700; color: var(--accent); }
+
+/* Messages */
+.msg { max-width: 640px; margin: 80px auto; text-align: center; }
+.msg h1 { font-size: 1.8rem; }
+.msg p { color: var(--muted); }
+.msg code { background: var(--bg-2); padding: 2px 6px; border-radius: 6px; }
+
+footer { padding: 24px 0; text-align: center; color: var(--muted); font-size: .8rem; }
+footer .credit { display: block; margin-top: 6px; font-size: .72rem; opacity: .8; }
+footer a { color: inherit; }
+</style>
+</head>
+<body data-view="home">
+
+<div class="top"><div class="container">
+  <a class="logo" href="#home"><i id="logoIc">CV</i><span><b id="logoName"></b><small id="logoSub"></small></span></a>
+  <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+</div></div>
+
+<main id="app">
+  <div class="msg" id="loading"><p>Loading…</p></div>
+</main>
+
+<footer>
+  <div class="container">© <span id="yr"></span> <span id="footName"></span>
+    <span class="credit">Built with the free <a href="https://ramizassaf.github.io/ramizassaf/" target="_blank" rel="noopener">CV website template by Ramiz Assaf</a></span>
+  </div>
+</footer>
+
+<script src="vendor/xlsx.mini.min.js"></script>
+<script>
+"use strict";
+const DATA_FILE = "cv-data.xlsx";
+const $ = s => document.querySelector(s);
+const esc = v => String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const safeUrl = u => { u = String(u || "").trim(); return /^(https?:|mailto:)/i.test(u) ? u : (/^[\w.-]+\.(html?|pdf|png|jpe?g)$/i.test(u) ? u : ""); };
+const lines = v => String(v || "").split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+const list = v => String(v || "").split(",").map(s => s.trim()).filter(Boolean);
+const ext = (u, label) => { const h = safeUrl(u); return h ? `<a class="more" href="${esc(h)}" target="_blank" rel="noopener">${label}</a>` : ""; };
+
+/* ---------- Theme ---------- */
+const store = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
+const setTheme = t => { document.documentElement.dataset.theme = t; store.set("theme", t); };
+setTheme(store.get("theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+$("#themeBtn").onclick = () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+$("#yr").textContent = new Date().getFullYear();
+
+/* ---------- Read the workbook ---------- */
+function rows(wb, name, cols) {
+  const ws = wb.Sheets[name]; if (!ws) return [];
+  return XLSX.utils.sheet_to_json(ws, { defval: "", raw: true })
+    .map(r => { const o = {}; cols.forEach(c => { const v = r[c]; o[c] = typeof v === "string" ? v.trim() : v; }); return o; })
+    .filter(o => cols.some(c => o[c] !== "" && o[c] != null));
+}
+function parse(wb) {
+  const P = {};
+  rows(wb, "Profile", ["Field", "Value"]).forEach(r => { if (r.Field) P[String(r.Field).trim().toLowerCase()] = r.Value == null ? "" : String(r.Value).trim(); });
+  return {
+    P,
+    stats: rows(wb, "Highlights", ["Number", "Label", "Detail"]).slice(0, 4),
+    sections: rows(wb, "Sections", ["Section", "Show", "Title", "Icon", "Subtitle"]),
+    exp: rows(wb, "Experience", ["Organization", "Location", "Start", "End", "Role", "Highlights"]),
+    edu: rows(wb, "Education", ["Degree", "Institution", "Start", "End", "Details"]),
+    skills: rows(wb, "Skills", ["Group", "Skills"]),
+    courses: rows(wb, "Courses", ["Group", "Course", "Description", "Link"]),
+    certs: rows(wb, "Certifications", ["Group", "Title", "Issuer", "Date", "Link"]),
+    pubs: rows(wb, "Publications", ["Year", "Title", "Authors", "Venue", "Citations", "Link"]),
+    theses: rows(wb, "Supervision", ["Year", "Thesis title", "Student", "Role"]),
+    projects: rows(wb, "Projects", ["Title", "Description", "Tags", "Link"]),
+    services: rows(wb, "Services", ["Icon", "Service", "Description"])
+  };
+}
+const groupBy = (arr, k) => { const m = new Map(); arr.forEach(x => { const g = x[k] || "Other"; if (!m.has(g)) m.set(g, []); m.get(g).push(x); }); return [...m]; };
+const hIndex = cs => { const s = cs.map(Number).filter(n => n > 0).sort((a, b) => b - a); let h = 0; while (h < s.length && s[h] >= h + 1) h++; return h; };
+const span = (a, b) => [a, b].filter(Boolean).join(" – ");
+
+/* ---------- Sections ---------- */
+const DEFAULT_SECTIONS = [
+  ["about", "About", "👋", "Who I am"], ["experience", "Experience", "💼", "Career and roles"], ["education", "Education", "🎓", "Degrees"],
+  ["skills", "Skills", "🛠", "Tools and methods"], ["courses", "Courses I teach", "📚", "Teaching portfolio"], ["certifications", "Certificates", "📜", "Training and credentials"],
+  ["research", "Research", "📊", "Publications and impact"], ["supervision", "Supervision", "🧑‍🎓", "Theses supervised"], ["projects", "Projects", "🧩", "Things I built"],
+  ["services", "Services", "🤝", "How I help"], ["contact", "Contact", "✉️", "Get in touch"]
+];
+const LINKS = [["linkedin", "LinkedIn"], ["scholar", "Google Scholar"], ["orcid", "ORCID"], ["researchgate", "ResearchGate"], ["github", "GitHub"], ["youtube", "YouTube"], ["website", "Website"]];
+
+function body(key, D) {
+  const P = D.P;
+  switch (key) {
+    case "about": {
+      const paras = String(P.about || "").split(/\n\s*\n/).map(s => s.trim()).filter(Boolean);
+      return paras.length ? `<div class="card about">${paras.map(p => `<p>${esc(p).replace(/\n/g, "<br>")}</p>`).join("")}</div>` : "";
+    }
+    case "experience":
+      return groupBy(D.exp, "Organization").map(([org, rs]) => `<div class="card org"><h3>${esc(org)}</h3><div class="where">${esc(rs[0].Location)}</div>${rs.map(r => `<div class="role"><div class="role-h"><span>${esc(r.Role)}</span><span class="when">${esc(span(r.Start, r.End))}</span></div>${lines(r.Highlights).length ? `<ul>${lines(r.Highlights).map(h => `<li>${esc(h)}</li>`).join("")}</ul>` : ""}</div>`).join("")}</div>`).join("");
+    case "education":
+      return D.edu.length ? `<div class="grid">${D.edu.map(e => `<div class="card item"><span class="when">${esc(span(e.Start, e.End))}</span><h4>${esc(e.Degree)}</h4><p>${esc(e.Institution)}</p>${e.Details ? `<p>${esc(e.Details)}</p>` : ""}</div>`).join("")}</div>` : "";
+    case "skills":
+      return D.skills.length ? `<div class="grid">${D.skills.map(s => `<div class="card"><h3 style="margin:0 0 12px;font-size:1.05rem">${esc(s.Group)}</h3><div class="tags">${list(s.Skills).map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div></div>`).join("")}</div>` : "";
+    case "courses":
+      return groupBy(D.courses, "Group").map(([g, cs]) => `<div class="grp"><h3>${esc(g)}<span class="cnt">${cs.length}</span></h3><div class="grid">${cs.map(c => `<div class="card item"><h4>${esc(c.Course)}</h4>${c.Description ? `<p>${esc(c.Description)}</p>` : ""}${ext(c.Link, "Open ↗")}</div>`).join("")}</div></div>`).join("");
+    case "certifications":
+      return groupBy(D.certs, "Group").map(([g, cs]) => `<div class="card grp"><h3>${esc(g)}<span class="cnt">${cs.length}</span></h3><ul class="certs">${cs.map(c => `<li>${esc(c.Title)}<small>${esc([c.Issuer, c.Date].filter(Boolean).join(" · "))}${safeUrl(c.Link) ? ` · <a href="${esc(safeUrl(c.Link))}" target="_blank" rel="noopener">Verify ↗</a>` : ""}</small></li>`).join("")}</ul></div>`).join("");
+    case "research": {
+      if (!D.pubs.length) return "";
+      const cites = D.pubs.map(p => Number(p.Citations) || 0), total = cites.reduce((a, b) => a + b, 0);
+      const ys = D.pubs.map(p => parseInt(p.Year)).filter(Boolean), byY = {};
+      ys.forEach(y => byY[y] = (byY[y] || 0) + 1);
+      const y0 = Math.min(...ys), y1 = Math.max(...ys), mx = Math.max(...Object.values(byY), 1), yrs = [];
+      if (ys.length) for (let y = y0; y <= y1; y++) yrs.push(y);
+      const links = [["scholar", "Google Scholar"], ["orcid", "ORCID"], ["researchgate", "ResearchGate"]].filter(([k]) => safeUrl(P[k]));
+      const sorted = [...D.pubs].sort((a, b) => (parseInt(b.Year) || 0) - (parseInt(a.Year) || 0));
+      return `<div class="stats" style="margin-top:0">
+        <div class="stat"><div class="num">${D.pubs.length}</div><div class="lbl">Publications</div>${ys.length ? `<small>${y0} – ${y1}</small>` : ""}</div>
+        ${total ? `<div class="stat"><div class="num">${total.toLocaleString("en-US")}</div><div class="lbl">Citations</div><small>Sum of the Citations column</small></div><div class="stat"><div class="num">${hIndex(cites)}</div><div class="lbl">h-index</div><small>Computed from this list</small></div>` : ""}
+      </div>
+      ${yrs.length > 1 ? `<div class="card" style="margin-top:16px"><h3 style="margin:0">Publications per year</h3><div class="bars">${yrs.map(y => `<div>${byY[y] ? `<b>${byY[y]}</b>` : ""}<i style="height:${(byY[y] || 0) / mx * 100}%"></i><span>${String(y).slice(2)}</span></div>`).join("")}</div></div>` : ""}
+      ${links.length ? `<div class="socials">${links.map(([k, n]) => `<a href="${esc(safeUrl(P[k]))}" target="_blank" rel="noopener">${n} ↗</a>`).join("")}</div>` : ""}
+      <div class="card" style="margin-top:16px">${sorted.map(p => `<div class="pub"><span class="yr">${esc(p.Year)}</span><div><b>${safeUrl(p.Link) ? `<a href="${esc(safeUrl(p.Link))}" target="_blank" rel="noopener">${esc(p.Title)}</a>` : esc(p.Title)}</b><small>${esc(p.Authors)}${p.Venue ? ". " + esc(p.Venue) : ""}${Number(p.Citations) ? ` · <span class="c">${Number(p.Citations)} citations</span>` : ""}</small></div></div>`).join("")}</div>`;
+    }
+    case "supervision":
+      return D.theses.length ? `<div class="stats" style="margin-top:0"><div class="stat"><div class="num">${D.theses.length}</div><div class="lbl">Theses supervised</div><small>${D.theses.filter(t => /co/i.test(t.Role)).length} as co-supervisor</small></div></div><div class="card" style="margin-top:16px">${D.theses.map(t => `<div class="pub"><span class="yr">${esc(t.Year)}</span><div><b>${esc(t["Thesis title"])}</b><small>${esc(t.Student)}${t.Role ? " · " + esc(t.Role) : ""}</small></div></div>`).join("")}</div>` : "";
+    case "projects":
+      return D.projects.length ? `<div class="grid">${D.projects.map(p => `<div class="card item"><h4>${esc(p.Title)}</h4><p>${esc(p.Description)}</p><div class="tags" style="margin-top:10px">${list(p.Tags).map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>${ext(p.Link, "Open ↗")}</div>`).join("")}</div>` : "";
+    case "services":
+      return D.services.length ? `<div class="grid">${D.services.map(s => `<div class="card item"><div style="font-size:1.7rem">${esc(s.Icon)}</div><h4>${esc(s.Service)}</h4><p>${esc(s.Description)}</p>${P.email ? `<a class="btn primary" style="margin-top:12px" href="mailto:${esc(P.email)}?subject=${encodeURIComponent("Request: " + s.Service)}">Request this service</a>` : ""}</div>`).join("")}</div>` : "";
+    case "contact": {
+      const items = [];
+      if (P.email) items.push(`<a href="mailto:${esc(P.email)}">✉ ${esc(P.email)}</a>`);
+      if (P.phone) items.push(`<a href="tel:${esc(P.phone.replace(/[^\d+]/g, ""))}">☎ ${esc(P.phone)}</a>`);
+      LINKS.forEach(([k, n]) => { const u = safeUrl(P[k]); if (u) items.push(`<a href="${esc(u)}" target="_blank" rel="noopener">↗ ${n}</a>`); });
+      return items.length ? `<div class="card"><div class="socials" style="margin-top:0">${items.join("")}</div></div>` : "";
+    }
+  }
+  return "";
+}
+
+/* ---------- Render ---------- */
+let D;
+function render(wb) {
+  D = parse(wb);
+  const P = D.P, name = P.name || "Your Name";
+  const initials = name.replace(/^(dr|prof|eng)\.?\s+/i, "").split(/\s+/).map(w => w[0]).slice(0, 2).join("").toUpperCase();
+  document.title = `${name}${P.headline ? " | " + P.headline : ""}`;
+  document.querySelector('meta[name="description"]').content = P.cv_summary || P.headline || "";
+  const root = document.documentElement.style;
+  if (/^#[0-9a-f]{3,8}$/i.test(P.accent_color || "")) root.setProperty("--accent", P.accent_color);
+  if (/^#[0-9a-f]{3,8}$/i.test(P.highlight_color || "")) root.setProperty("--amber", P.highlight_color);
+  $("#logoIc").textContent = initials || "CV";
+  $("#logoName").textContent = name; $("#logoSub").textContent = P.headline || ""; $("#footName").textContent = name;
+
+  const secRows = D.sections.length ? D.sections.map(s => [String(s.Section).toLowerCase().trim(), s.Title, s.Icon, s.Subtitle, !/^no$/i.test(String(s.Show).trim())]) : DEFAULT_SECTIONS.map(s => [...s, true]);
+  const secs = secRows.filter(s => s[4]).map(([k, t, ic, sub]) => ({ k, t: t || k, ic: ic || "•", sub: sub || "", html: body(k, D) })).filter(s => s.html);
+
+  const socials = LINKS.filter(([k]) => safeUrl(P[k])).map(([k, n]) => `<a href="${esc(safeUrl(P[k]))}" target="_blank" rel="noopener">${n}</a>`).join("");
+  const photo = P.photo ? `<img class="hero-photo" src="${esc(P.photo)}" alt="${esc(name)}">` : `<div class="hero-photo">${esc(initials)}</div>`;
+  const parts = name.split(" "), last = parts.pop();
+  $("#app").innerHTML = `
+  <header class="hero"><div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="kicker">${esc(P.location || "")}</div>
+        <h1>${esc(parts.join(" "))} <span class="hl">${esc(last)}</span></h1>
+        ${P.headline ? `<p class="headline">${esc(P.headline)}</p>` : ""}
+        ${lines(P.roles).length ? `<p class="roles">${lines(P.roles).map(esc).join("<br>")}</p>` : ""}
+        ${P.cta ? `<p class="cta">${esc(P.cta)}</p>` : ""}
+        <div class="hero-btns">
+          <button class="btn primary" type="button" id="cvBtn">Download CV (PDF)</button>
+          ${P.email ? `<a class="btn" href="mailto:${esc(P.email)}">Email me</a>` : ""}
+        </div>
+        <button class="md-link" type="button" id="cvMd">or download the Markdown version (.md)</button>
+        ${socials ? `<div class="socials">${socials}</div>` : ""}
+      </div>
+      <div class="hero-photo-wrap">${photo}</div>
+    </div>
+    ${D.stats.length ? `<div class="stats">${D.stats.map(s => `<div class="stat"><div class="num">${esc(s.Number)}</div><div class="lbl">${esc(s.Label)}</div>${s.Detail ? `<small>${esc(s.Detail)}</small>` : ""}</div>`).join("")}</div>` : ""}
+  </div></header>
+  <div class="tiles"><div class="container"><h2>Explore</h2><div class="tile-grid">
+    ${secs.map(s => `<a class="tile" href="#${esc(s.k)}"><span class="ti">${esc(s.ic)}</span><span class="tt">${esc(s.t)}</span><span class="ts">${esc(s.sub)}</span><span class="ta">→</span></a>`).join("")}
+  </div></div></div>
+  ${secs.map(s => `<section class="block" id="s-${esc(s.k)}"><div class="container"><a class="back" href="#home">← Home</a><div class="sec-head"><div class="kicker">${esc(s.k)}</div><h2>${esc(s.t)}</h2></div>${s.html}</div></section>`).join("")}`;
+
+  const img = $("img.hero-photo");
+  if (img) img.onerror = () => { const d = document.createElement("div"); d.className = "hero-photo"; d.textContent = initials; img.replaceWith(d); };
+  $("#cvBtn").onclick = downloadPdf;
+  $("#cvMd").onclick = () => saveBlob(new Blob([cvMarkdown()], { type: "text/markdown" }), fileBase() + ".md");
+  route();
+}
+function route() {
+  const id = location.hash.slice(1), el = id && document.getElementById("s-" + id);
+  const on = el && el.classList.contains("block") ? id : "home";
+  document.body.dataset.view = on;
+  document.querySelectorAll("section.block").forEach(s => s.classList.toggle("active", s.id === "s-" + on));
+  scrollTo(0, 0);
+}
+addEventListener("hashchange", route);
+
+/* ---------- CV as Markdown and PDF ---------- */
+const fileBase = () => (D.P.name || "CV").replace(/[^\w]+/g, "_").replace(/^_|_$/g, "") + "_CV";
+function cvMarkdown() {
+  const P = D.P, L = [`# ${P.name || ""}`, ""];
+  if (P.headline) L.push(P.headline, "");
+  if (lines(P.roles).length) L.push(lines(P.roles).join(" | "), "");
+  L.push([P.location, P.email, P.phone].filter(Boolean).join(" | "), "");
+  LINKS.forEach(([k, n]) => { if (safeUrl(P[k])) L.push(`${n}: ${P[k]}`, ""); });
+  if (P.cv_summary) L.push("## Summary", "", P.cv_summary, "");
+  if (D.skills.length) { L.push("## Core Skills", ""); D.skills.forEach(s => L.push(`- ${s.Group}: ${list(s.Skills).join(", ")}`)); L.push(""); }
+  if (D.exp.length) {
+    L.push("## Professional Experience", "");
+    groupBy(D.exp, "Organization").forEach(([org, rs]) => {
+      L.push(`### ${org}${rs[0].Location ? ", " + rs[0].Location : ""}`, "");
+      rs.forEach(r => { L.push(`- ${r.Role} (${span(r.Start, r.End)})`); lines(r.Highlights).forEach(h => L.push(`- ${h}`)); });
+      L.push("");
+    });
+  }
+  if (D.courses.length) { L.push("## Courses Taught", ""); groupBy(D.courses, "Group").forEach(([g, cs]) => L.push(`- ${g}: ${cs.map(c => c.Course).join(", ")}`)); L.push(""); }
+  if (D.edu.length) { L.push("## Education", ""); D.edu.forEach(e => L.push(`- ${e.Degree}, ${e.Institution}${e.Start || e.End ? " (" + span(e.Start, e.End) + ")" : ""}${e.Details ? ". " + e.Details : ""}`)); L.push(""); }
+  if (D.certs.length) { L.push("## Certifications", ""); D.certs.forEach(c => L.push(`- ${c.Title}${c.Issuer ? ", " + c.Issuer : ""}${c.Date ? " (" + c.Date + ")" : ""}`)); L.push(""); }
+  if (D.pubs.length) { L.push("## Publications", ""); [...D.pubs].sort((a, b) => (parseInt(b.Year) || 0) - (parseInt(a.Year) || 0)).forEach(p => L.push(`- ${p.Authors} (${p.Year || "n.d."}). ${p.Title}.${p.Venue ? " " + p.Venue + "." : ""}`)); L.push(""); }
+  if (D.theses.length) { L.push("## Thesis Supervision", ""); D.theses.forEach(t => L.push(`- ${t["Thesis title"]}${t.Student ? ", " + t.Student : ""}${t.Year ? " (" + t.Year + ")" : ""}`)); L.push(""); }
+  if (D.projects.length) { L.push("## Projects", ""); D.projects.forEach(p => L.push(`- ${p.Title}: ${p.Description}`)); L.push(""); }
+  return L.join("\n");
+}
+function saveBlob(blob, name) {
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+function loadJsPDF() {
+  if (window.jspdf) return Promise.resolve();
+  return new Promise((res, rej) => { const s = document.createElement("script"); s.src = "vendor/jspdf.umd.min.js"; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
+}
+function mdToPdf(md) {
+  const { jsPDF } = window.jspdf, doc = new jsPDF({ unit: "pt", format: "a4" });
+  const W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight(), M = 50, CW = W - 2 * M;
+  const hex = h => { h = (h || "#1E5A8C").replace("#", ""); if (h.length === 3) h = h.replace(/./g, c => c + c); return [0, 2, 4].map(i => parseInt(h.substr(i, 2), 16) || 0); };
+  const AC = /^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(D.P.accent_color || "") ? hex(D.P.accent_color) : [30, 90, 140];
+  const ascii = t => t.replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/[–—]/g, "-").replace(/…/g, "...").replace(/·/g, "|").replace(/[^\x00-\xFF]/g, "");
+  let y = M, afterH3 = false, head = true;
+  const need = h => { if (y + h > H - M) { doc.addPage(); y = M; } };
+  const write = (t, size, style, o = {}) => {
+    doc.setFont("helvetica", style); doc.setFontSize(size); doc.setTextColor(...(o.color || [20, 30, 45]));
+    const x = M + (o.indent || 0), ls = doc.splitTextToSize(ascii(t), CW - (o.indent || 0)), lh = size * 1.32;
+    ls.forEach((ln, k) => { need(lh); if (o.bullet && k === 0) doc.text("•", x - 10, y); doc.text(ln, x, y); y += lh; });
+  };
+  md.split("\n").forEach(raw => {
+    const ln = raw.trimEnd();
+    if (!ln) { y += head ? 1 : 4; return; }
+    if (ln.startsWith("# ")) { write(ln.slice(2), 22, "bold"); y += 2; return; }
+    if (ln.startsWith("## ")) { head = false; y += 8; need(30); write(ln.slice(3).toUpperCase(), 11.5, "bold", { color: AC }); doc.setDrawColor(...AC); doc.setLineWidth(0.8); doc.line(M, y - 9, W - M, y - 9); y += 4; return; }
+    if (ln.startsWith("### ")) { y += 3; need(34); write(ln.slice(4), 10.5, "bold"); afterH3 = true; return; }
+    if (ln.startsWith("- ")) { write(ln.slice(2), 9.6, "normal", { indent: 14, bullet: true }); afterH3 = false; return; }
+    if (afterH3) { write(ln, 9.2, "italic", { color: [90, 105, 120] }); afterH3 = false; return; }
+    write(ln, 9.8, "normal", { color: head ? [60, 75, 90] : [20, 30, 45] });
+  });
+  const n = doc.getNumberOfPages(), who = ascii(D.P.name || "");
+  for (let i = 1; i <= n; i++) { doc.setPage(i); doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(140, 150, 160); doc.text(`${who} | CV | Page ${i} of ${n}`, W - M, H - 24, { align: "right" }); }
+  doc.setProperties({ title: `${who} - CV`, author: who, subject: "Curriculum Vitae" });
+  return doc;
+}
+async function downloadPdf(e) {
+  const b = e.currentTarget, old = b.textContent; b.disabled = true; b.textContent = "Preparing PDF…";
+  try { await loadJsPDF(); mdToPdf(cvMarkdown()).save(fileBase() + ".pdf"); }
+  catch (err) { saveBlob(new Blob([cvMarkdown()], { type: "text/markdown" }), fileBase() + ".md"); }
+  finally { b.disabled = false; b.textContent = old; }
+}
+
+/* ---------- Start ---------- */
+function showPicker(reason) {
+  $("#app").innerHTML = `<div class="msg card"><h1>Open your Excel file</h1>
+    <p>${esc(reason)}</p>
+    <p>Choose <code>${DATA_FILE}</code> to preview your website. Once published online (see the <b>How to deploy</b> sheet in the Excel file), the site loads the file by itself.</p>
+    <label class="btn primary">Choose Excel file<input type="file" id="pick" accept=".xlsx,.xls" hidden></label></div>`;
+  $("#pick").onchange = async ev => { const f = ev.target.files[0]; if (f) start(await f.arrayBuffer()); };
+}
+function start(buf) {
+  try { render(XLSX.read(buf, { type: "array" })); }
+  catch (err) { showPicker("The file could not be read: " + err.message); }
+}
+if (!window.XLSX) showPicker("The vendor folder is missing. Keep it next to index.html.");
+else if (location.protocol === "file:") showPicker("Browsers block a page from reading files on your disk.");
+else fetch(DATA_FILE, { cache: "no-cache" })
+  .then(r => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
+  .then(start)
+  .catch(() => showPicker(`${DATA_FILE} was not found next to index.html.`));
+</script>
+</body>
+</html>

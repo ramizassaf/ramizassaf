@@ -514,6 +514,8 @@ section.block.active { display: block; animation: panelIn .32s ease; }
 .svc-note { font-family: "IBM Plex Mono", monospace; font-size: .78rem; color: var(--accent); background: var(--accent-soft); border-radius: 8px; padding: 6px 10px; }
 .svc .btn { justify-content: center; margin-top: 6px; }
 footer { border-top: 0; }
+.tpl-note { margin: 8px 0 0; font-size: .72rem; color: var(--muted); opacity: .8; }
+.tpl-note a { color: inherit; }
 </style>
 </head>
 <body>
@@ -1023,7 +1025,8 @@ footer { border-top: 0; }
 </nav>
 
 <footer>
-  <div class="container">© <span id="yr"></span> Ramiz Assaf · <span data-i18n="foot">Built with HTML, CSS, and JavaScript. Hosted on GitHub Pages.</span></div>
+  <div class="container">© <span id="yr"></span> Ramiz Assaf · <span data-i18n="foot">Built with HTML, CSS, and JavaScript. Hosted on GitHub Pages.</span>
+    <p class="tpl-note" data-i18n="foot_tpl">Want a site like this? Use the free template: fill in one Excel file, publish on GitHub Pages. <a href="template/cv-website-template.zip" download>Download template (.zip)</a> · <a href="template/" target="_blank" rel="noopener">See demo</a></p></div>
 </footer>
 
 <script>
@@ -1106,7 +1109,7 @@ const AR = {
   skills_h: "المهارات", sk1: "علم البيانات والتحليلات", sk2: "الإحصاء", sk3: "الهندسة الصناعية", sk4: "التدريس والقيادة",
   contact_h: "لنعمل معاً", contact_p: "أرسل رسالة بخصوص التدريب أو البحث أو الإشراف على الرسائل أو التعاون.",
   c_name: "الاسم", c_email: "البريد الإلكتروني", c_msg: "الرسالة", c_send: "إرسال",
-  foot: "مبني بـ HTML و CSS و JavaScript. مستضاف على GitHub Pages."
+  foot: "مبني بـ HTML و CSS و JavaScript. مستضاف على GitHub Pages.", foot_tpl: "هل تريد موقعاً مثل هذا؟ استخدم القالب المجاني: املأ ملف Excel واحداً وانشره على GitHub Pages. <a href=\"template/cv-website-template.zip\" download>تنزيل القالب (.zip)</a> · <a href=\"template/\" target=\"_blank\" rel=\"noopener\">عرض تجريبي</a>"
 };
 const ROLES = {
   en: ["an Assistant Professor of Industrial Engineering.", "a Data Science Trainer.", "an Engineering Management Program Coordinator.", "an Associate Editor."],
