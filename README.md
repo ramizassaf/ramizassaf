@@ -14,7 +14,7 @@ Personal CV website of Ramiz Assaf, Data Professional and Industrial Engineer ba
 - **Slides about me.** One click generates a 14-slide HTML deck from the same data. Arrow keys to move, F for full screen, Save to keep a copy.
 - **Services.** Training, online teaching, consulting, research collaboration, and more, each with a request button that fills the contact form.
 - **Interactive teaching.** Dynamic HTML lecture slides (`slides/`) and three learning games (`games/`).
-- **Social sidebar.** LinkedIn, Google Scholar, YouTube, GitHub, DataCamp, and email.
+- **Social sidebar.** LinkedIn, Google Scholar, ORCID, YouTube, GitHub, DataCamp, and email.
 - **DataCamp learning.** 30 completed courses in the Skills section, grouped by tool.
 - **Research dashboard, thesis supervision, certificates, and course reviews.**
 - **Live demos.** A break-even calculator and a normal CDF approximation, in a pop-up window.
