@@ -585,7 +585,7 @@ footer { border-top: 0; }
       <a class="tile reveal" href="#services"><span class="ti">🤝</span><span class="tt" data-i18n="t_svc">Services</span><span class="ts" data-i18n="t_svc_s">Training, consulting, collaboration</span><span class="ta">→</span></a>
       <a class="tile reveal" href="#projects"><span class="ti">🧩</span><span class="tt" data-i18n="t_proj">Projects</span><span class="ts" data-i18n="t_proj_s">Open-source tools and web apps</span><span class="ta">→</span></a>
       <a class="tile reveal" href="#games"><span class="ti">🎮</span><span class="tt" data-i18n="t_games">Interactive teaching</span><span class="ts" data-i18n="t_games_s">Dynamic HTML slides and 3 learning games</span><span class="ta">→</span></a>
-      <a class="tile reveal" href="#book"><span class="ti">📖</span><span class="tt" data-i18n="t_book">Open textbook</span><span class="ts" data-i18n="t_book_s">Industrial Engineering Basics, free to read</span><span class="ta">→</span></a>
+      <a class="tile reveal" href="#book"><span class="ti">📖</span><span class="tt" data-i18n="t_book">Open books</span><span class="ts" data-i18n="t_book_s">Two Arabic books, free to read</span><span class="ta">→</span></a>
       <a class="tile reveal" href="#skills"><span class="ti">🛠</span><span class="tt" data-i18n="t_skills">Skills</span><span class="ts" data-i18n="t_skills_s">Data, engineering, teaching</span><span class="ta">→</span></a>
       <a class="tile reveal" href="#contact"><span class="ti">✉️</span><span class="tt" data-i18n="t_contact">Contact</span><span class="ts" data-i18n="t_contact_s">Email, LinkedIn, Scholar</span><span class="ta">→</span></a>
       <button class="tile reveal" type="button" data-demo=""><span class="ti">▶️</span><span class="tt" data-i18n="t_demo">Live demos</span><span class="ts" data-i18n="t_demo_s">Break-even and CDF tools</span><span class="ta">→</span></button>
@@ -824,9 +824,9 @@ footer { border-top: 0; }
   <div class="container">
     <a class="back" href="#home" data-i18n="back">← Home</a>
     <div class="sec-head reveal">
-      <div class="kicker">open textbook</div>
-      <h2 data-i18n="bk_h">Open textbook</h2>
-      <p data-i18n="bk_p">An Arabic university textbook, free to read and download.</p>
+      <div class="kicker">open books</div>
+      <h2 data-i18n="bk_h">Open books</h2>
+      <p data-i18n="bk_p">Two Arabic books, free to read and download.</p>
     </div>
     <article class="card dslide reveal">
       <div class="ds-text">
@@ -860,6 +860,36 @@ footer { border-top: 0; }
         <div class="cmp on"><span data-i18n="tb_pa">Project</span><b data-i18n="tb_pb">Final applied project</b></div>
       </div>
     </article>
+
+    <article class="card dslide reveal">
+      <div class="ds-text">
+        <div class="ds-tag" data-i18n="g3_tag">2027 · free PDF, open data</div>
+        <h3 lang="ar" dir="rtl">لعبة الهندسة الصناعية في ثلاث قضايا</h3>
+        <p class="bk-en" data-i18n="g3_en">English title: The Game of Industrial Engineering in Three Cases</p>
+        <p data-i18n="g3_d">Three case studies told as a story. An industrial engineer works through raw plant records in Nablus, Riyadh and Sohar. Every number in the book comes from published data and code that readers can rerun.</p>
+        <ul class="mech">
+          <li data-i18n="g3_m1">3 cases: sterilizer reliability, bottle-cap quality, and flow in a steel-pipe plant</li>
+          <li data-i18n="g3_m2">21 data files and Python scripts, published on GitHub and Kaggle</li>
+          <li data-i18n="g3_m3">A concept map per case, appendices of key tables, and an Arabic-English glossary</li>
+          <li data-i18n="g3_m4">124 pages in A5 PDF, plus a web version</li>
+        </ul>
+        <div class="demo-btns">
+          <a class="btn primary" href="https://ramizassaf.github.io/ie-three-cases/book/" target="_blank" rel="noopener" data-i18n="tb_read">Read online ↗</a>
+          <a class="btn" href="https://ramizassaf.github.io/ie-three-cases/" target="_blank" rel="noopener" data-i18n="g3_page">Book page ↗</a>
+          <a class="btn" href="https://ramizassaf.github.io/ie-three-cases/book/Game_of_Industrial_Engineering_Three_Cases_Ramiz_Assaf.pdf" target="_blank" rel="noopener" data-i18n="tb_pdf">Download PDF ↗</a>
+          <a class="btn" href="https://www.kaggle.com/datasets/ramizassaf/industrial-engineering-three-cases" target="_blank" rel="noopener" data-i18n="g3_kg">Data on Kaggle ↗</a>
+          <a class="btn" href="https://github.com/ramizassaf/ie-three-cases" target="_blank" rel="noopener" data-i18n="tb_repo">GitHub ↗</a>
+        </div>
+      </div>
+      <div class="ds-why">
+        <h4 data-i18n="g3_wh">The three cases</h4>
+        <div class="cmp"><span>1</span><b data-i18n="g3_c1">Nablus: the sterilizer that was not sick</b></div>
+        <div class="cmp"><span>2</span><b data-i18n="g3_c2">Riyadh: the cap that would not open</b></div>
+        <div class="cmp"><span>3</span><b data-i18n="g3_c3">Sohar: the kettle that never sleeps</b></div>
+        <div class="cmp on"><span data-i18n="g3_pa">Data</span><b data-i18n="g3_pb">21 open files, CC BY 4.0</b></div>
+      </div>
+    </article>
+
 
   </div>
 </section>
@@ -1129,13 +1159,18 @@ const AR = {
   t_about: "نبذة عني", t_about_s: "الملف الشخصي والأدوار واللغات", t_exp: "الخبرات", t_exp_s: "أكثر من 14 عاماً في الجامعات والتدريب",
   t_res: "البحث العلمي", t_res_s: "1,849 اقتباس · h-index 20", t_sup: "الإشراف على الرسائل", t_sup_s: "16 رسالة بإشرافي · أكثر من 20 لجنة مناقشة",
   t_svc: "الخدمات", t_svc_s: "تدريب واستشارات وتعاون بحثي", t_proj: "المشاريع", t_proj_s: "أدوات وتطبيقات مفتوحة المصدر",
-  t_book: "كتاب جامعي مفتوح", t_book_s: "أساسيات الهندسة الصناعية، مجاني للقراءة",
-  bk_h: "كتاب جامعي مفتوح", bk_p: "كتاب جامعي عربي مجاني للقراءة والتحميل.",
+  t_book: "كتب مفتوحة", t_book_s: "كتابان عربيان، مجانيان للقراءة",
+  bk_h: "كتب مفتوحة", bk_p: "كتابان عربيان، مجانيان للقراءة والتحميل.",
   tb_tag: "نُشر 2026 · مجاني للقراءة والتحميل", tb_en: "English title: Industrial Engineering Basics",
   tb_d: "كتاب جامعي عربي مفتوح في أساسيات الهندسة الصناعية. اقرأه في المتصفح أو حمّل نسخة PDF.",
   tb_m1: "9 فصول، من التفكير بالنظم إلى الاقتصاد الهندسي والاستدامة", tb_m2: "مشروع تطبيقي ختامي، وحلول 32 مسألة حسابية", tb_m3: "ملحق للمعادلات والرموز، ومسرد عربي إنجليزي", tb_m4: "155 صفحة بمقاس A5 بصيغة PDF، ونسخة للقراءة على الويب",
   tb_read: "اقرأ على الويب ↗", tb_pdf: "حمّل PDF ↗", tb_repo: "GitHub ↗", tb_wh: "المحتويات",
   tb_c1: "مدخل إلى الهندسة الصناعية وفهم النظم", tb_c2: "العوامل البشرية والسلامة المهنية", tb_c3: "القياس والبيانات", tb_c4: "العمليات والإنتاجية", tb_c5: "الجودة وضبط العمليات", tb_c6: "المخزون وسلاسل التوريد", tb_c7: "بحوث العمليات واتخاذ القرار", tb_c8: "التحليل الاقتصادي الهندسي", tb_c9: "التحسين والاستدامة واستمرارية العمل", tb_pa: "المشروع", tb_pb: "المشروع التطبيقي الختامي",
+  g3_tag: "2027 · PDF مجاني وبيانات مفتوحة", g3_en: "English title: The Game of Industrial Engineering in Three Cases",
+  g3_d: "ثلاث قضايا في قالب قصصي. مهندس صناعي يعمل على سجلات خام في نابلس والرياض وصحار. وكل رقم في الكتاب يخرج من بيانات وبرامج منشورة يعيد القارئ تشغيلها بنفسه.",
+  g3_m1: "3 قضايا: موثوقية أجهزة التعقيم، وجودة أغطية العبوات، والتدفق في مصنع أنابيب", g3_m2: "21 ملف بيانات وبرامج Python، منشورة على GitHub وKaggle", g3_m3: "خريطة لكل قضية، وملاحق للجداول، ومسرد عربي إنجليزي", g3_m4: "124 صفحة بمقاس A5 بصيغة PDF، ونسخة للقراءة على الويب",
+  g3_page: "صفحة الكتاب ↗", g3_kg: "البيانات على Kaggle ↗", g3_wh: "القضايا الثلاث",
+  g3_c1: "نابلس: المعقم الذي لم يكن مريضاً", g3_c2: "الرياض: الغطاء الذي لا يُفتح", g3_c3: "صحار: الحوض الذي لا ينام", g3_pa: "البيانات", g3_pb: "21 ملفاً مفتوحاً، CC BY 4.0",
   t_games: "التدريس التفاعلي", t_games_s: "شرائح HTML تفاعلية و3 ألعاب تعلّم", t_skills: "المهارات", t_skills_s: "البيانات والهندسة والتدريس",
   t_contact: "تواصل", t_contact_s: "البريد وLinkedIn وScholar", t_demo: "عروض حية", t_demo_s: "أدوات نقطة التعادل والتوزيع الطبيعي",
   bn_home: "الرئيسية", bn_about: "نبذة", bn_res: "البحث", bn_svc: "الخدمات", bn_proj: "المشاريع", bn_contact: "تواصل",
