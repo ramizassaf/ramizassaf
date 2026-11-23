@@ -22,7 +22,6 @@ Personal CV website of Ramiz Assaf, Data Professional and Industrial Engineer ba
 - **No build step.** One HTML file, no frameworks.
 - **Search indexing.** Canonical link, schema.org Person data, and `sitemap.xml` (submit it in Google Search Console).
 - **Open textbook.** Industrial Engineering Basics, an open Arabic textbook: read online, download the PDF, or open the repository.
-- **Free template for others.** `template/` holds a version of this site that reads all content from `cv-data.xlsx`. The first sheet explains how to publish it. The footer links to the zip download.
 
 ## Files
 
