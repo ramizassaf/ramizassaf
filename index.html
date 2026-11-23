@@ -586,7 +586,7 @@ footer { border-top: 0; }
       <a class="tile reveal" href="#services"><span class="ti">🤝</span><span class="tt" data-i18n="t_svc">Services</span><span class="ts" data-i18n="t_svc_s">Training, consulting, collaboration</span><span class="ta">→</span></a>
       <a class="tile reveal" href="#projects"><span class="ti">🧩</span><span class="tt" data-i18n="t_proj">Projects</span><span class="ts" data-i18n="t_proj_s">Open-source tools and web apps</span><span class="ta">→</span></a>
       <a class="tile reveal" href="#games"><span class="ti">🎮</span><span class="tt" data-i18n="t_games">Interactive teaching</span><span class="ts" data-i18n="t_games_s">Dynamic HTML slides and 3 learning games</span><span class="ta">→</span></a>
-      <a class="tile reveal" href="#book"><span class="ti">📖</span><span class="tt" data-i18n="t_book">New book</span><span class="ts" data-i18n="t_book_s">An interactive book, in progress</span><span class="ta">→</span></a>
+      <a class="tile reveal" href="#book"><span class="ti">📖</span><span class="tt" data-i18n="t_book">Books</span><span class="ts" data-i18n="t_book_s">An open textbook and a book in progress</span><span class="ta">→</span></a>
       <a class="tile reveal" href="#skills"><span class="ti">🛠</span><span class="tt" data-i18n="t_skills">Skills</span><span class="ts" data-i18n="t_skills_s">Data, engineering, teaching</span><span class="ta">→</span></a>
       <a class="tile reveal" href="#contact"><span class="ti">✉️</span><span class="tt" data-i18n="t_contact">Contact</span><span class="ts" data-i18n="t_contact_s">Email, LinkedIn, Scholar</span><span class="ta">→</span></a>
       <button class="tile reveal" type="button" data-demo=""><span class="ti">▶️</span><span class="tt" data-i18n="t_demo">Live demos</span><span class="ts" data-i18n="t_demo_s">Break-even and CDF tools</span><span class="ta">→</span></button>
@@ -825,10 +825,44 @@ footer { border-top: 0; }
   <div class="container">
     <a class="back" href="#home" data-i18n="back">← Home</a>
     <div class="sec-head reveal">
-      <div class="kicker">new book</div>
-      <h2 data-i18n="bk_h">New book: an interactive novel of industrial engineering</h2>
-      <p data-i18n="bk_p">You read a story, study the raw data, and choose what to do next. Written in Arabic.</p>
+      <div class="kicker">books</div>
+      <h2 data-i18n="bk_h">Books</h2>
+      <p data-i18n="bk_p">An open Arabic textbook, and an interactive book in progress.</p>
     </div>
+    <h3 class="sub-h reveal" data-i18n="tb_h">Published: open textbook</h3>
+    <article class="card dslide reveal">
+      <div class="ds-text">
+        <div class="ds-tag" data-i18n="tb_tag">Published 2026 · free to read and download</div>
+        <h3 lang="ar" dir="rtl">أساسيات الهندسة الصناعية</h3>
+        <p class="bk-en" data-i18n="tb_en">English title: Industrial Engineering Basics</p>
+        <p data-i18n="tb_d">An open Arabic university textbook on the fundamentals of industrial engineering. Read it in the browser or download the PDF.</p>
+        <ul class="mech">
+          <li data-i18n="tb_m1">9 chapters, from systems thinking to engineering economics and sustainability</li>
+          <li data-i18n="tb_m2">A final applied project, and solutions to 32 calculation problems</li>
+          <li data-i18n="tb_m3">An equations and symbols appendix, and an Arabic-English glossary</li>
+          <li data-i18n="tb_m4">155 pages in A5 PDF, plus a web version</li>
+        </ul>
+        <div class="demo-btns">
+          <a class="btn primary" href="https://ramizassaf.github.io/industrial-engineering-basics/" target="_blank" rel="noopener" data-i18n="tb_read">Read online ↗</a>
+          <a class="btn" href="https://ramizassaf.github.io/industrial-engineering-basics/Industrial_Engineering_Basics_Ramiz_Assaf.pdf" target="_blank" rel="noopener" data-i18n="tb_pdf">Download PDF ↗</a>
+          <a class="btn" href="https://github.com/ramizassaf/industrial-engineering-basics" target="_blank" rel="noopener" data-i18n="tb_repo">GitHub ↗</a>
+        </div>
+      </div>
+      <div class="ds-why">
+        <h4 data-i18n="tb_wh">Contents</h4>
+        <div class="cmp"><span>1</span><b data-i18n="tb_c1">Introduction to industrial engineering and systems</b></div>
+        <div class="cmp"><span>2</span><b data-i18n="tb_c2">Human factors and occupational safety</b></div>
+        <div class="cmp"><span>3</span><b data-i18n="tb_c3">Measurement and data</b></div>
+        <div class="cmp"><span>4</span><b data-i18n="tb_c4">Operations and productivity</b></div>
+        <div class="cmp"><span>5</span><b data-i18n="tb_c5">Quality and process control</b></div>
+        <div class="cmp"><span>6</span><b data-i18n="tb_c6">Inventory and supply chains</b></div>
+        <div class="cmp"><span>7</span><b data-i18n="tb_c7">Operations research and decision making</b></div>
+        <div class="cmp"><span>8</span><b data-i18n="tb_c8">Engineering economic analysis</b></div>
+        <div class="cmp"><span>9</span><b data-i18n="tb_c9">Improvement, sustainability, and business continuity</b></div>
+        <div class="cmp on"><span data-i18n="tb_pa">Project</span><b data-i18n="tb_pb">Final applied project</b></div>
+      </div>
+    </article>
+    <h3 class="sub-h reveal" style="margin-top:28px" data-i18n="bk_sub">In progress: interactive book. You read a story, study the raw data, and choose what Samer does. Written in Arabic.</h3>
     <article class="card dslide reveal">
       <div class="ds-text">
         <div class="ds-tag" data-i18n="bk_tag">In progress · Case 1 in draft</div>
@@ -1124,8 +1158,13 @@ const AR = {
   t_about: "نبذة عني", t_about_s: "الملف الشخصي والأدوار واللغات", t_exp: "الخبرات", t_exp_s: "أكثر من 14 عاماً في الجامعات والتدريب",
   t_res: "البحث العلمي", t_res_s: "1,849 اقتباس · h-index 20", t_sup: "الإشراف على الرسائل", t_sup_s: "16 رسالة بإشرافي · أكثر من 20 لجنة مناقشة",
   t_svc: "الخدمات", t_svc_s: "تدريب واستشارات وتعاون بحثي", t_proj: "المشاريع", t_proj_s: "أدوات وتطبيقات مفتوحة المصدر",
-  t_book: "كتاب جديد", t_book_s: "كتاب تفاعلي قيد الكتابة",
-  bk_h: "كتاب جديد: رواية تفاعلية في الهندسة الصناعية", bk_p: "تقرأ قصة، وتدرس البيانات الخام، ثم تختار ما يفعله بطل القصة. الكتاب بالعربية.",
+  t_book: "كتب", t_book_s: "كتاب جامعي مفتوح وكتاب قيد الكتابة",
+  bk_h: "كتب", bk_p: "كتاب جامعي عربي مفتوح، وكتاب تفاعلي قيد الكتابة.", bk_sub: "قيد الكتابة: كتاب تفاعلي. تقرأ قصة، وتدرس البيانات الخام، ثم تختار ما يفعله بطل القصة.",
+  tb_h: "منشور: كتاب جامعي مفتوح", tb_tag: "نُشر 2026 · مجاني للقراءة والتحميل", tb_en: "English title: Industrial Engineering Basics",
+  tb_d: "كتاب جامعي عربي مفتوح في أساسيات الهندسة الصناعية. اقرأه في المتصفح أو حمّل نسخة PDF.",
+  tb_m1: "9 فصول، من التفكير بالنظم إلى الاقتصاد الهندسي والاستدامة", tb_m2: "مشروع تطبيقي ختامي، وحلول 32 مسألة حسابية", tb_m3: "ملحق للمعادلات والرموز، ومسرد عربي إنجليزي", tb_m4: "155 صفحة بمقاس A5 بصيغة PDF، ونسخة للقراءة على الويب",
+  tb_read: "اقرأ على الويب ↗", tb_pdf: "حمّل PDF ↗", tb_repo: "GitHub ↗", tb_wh: "المحتويات",
+  tb_c1: "مدخل إلى الهندسة الصناعية وفهم النظم", tb_c2: "العوامل البشرية والسلامة المهنية", tb_c3: "القياس والبيانات", tb_c4: "العمليات والإنتاجية", tb_c5: "الجودة وضبط العمليات", tb_c6: "المخزون وسلاسل التوريد", tb_c7: "بحوث العمليات واتخاذ القرار", tb_c8: "التحليل الاقتصادي الهندسي", tb_c9: "التحسين والاستدامة واستمرارية العمل", tb_pa: "المشروع", tb_pb: "المشروع التطبيقي الختامي",
   bk_tag: "قيد الكتابة · القضية الأولى مسودة", bk_en: "Working English title: The Game of Industrial Engineering",
   bk_d: "سامر مهندس صناعة شاب يعمل في نابلس والرياض وصحار. في كل قضية رقم لا يطابق التفسير الشائع. تقرأ السجلات الخام، وتختبر كل فكرة، وتقرر ما يفعله سامر. تقودك قراراتك إلى إحدى عدة نهايات. مرشد اسمه يوسف يسأل ولا يعطي الجواب. يتبع الأسلوب كتاب The Goal: القصة أولاً ثم المنهج.",
   bk_m1: "4 قضايا: جهاز تعقيم في مستشفى، وخط تعبئة، وسلسلة إمداد، وخط ألواح", bk_m2: "المخطط: نحو 8 نقاط قرار و6 نهايات في كل قضية",

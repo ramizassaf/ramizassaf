@@ -20,7 +20,7 @@ Personal CV website of Ramiz Assaf, Data Professional and Industrial Engineer ba
 - **Live demos.** A break-even calculator and a normal CDF approximation, in a pop-up window.
 - **English and Arabic, light and dark.** Theme matches the IE Program Guide site.
 - **No build step.** One HTML file, no frameworks.
-- **New book.** A section about "لعبة الهندسة الصناعية", an interactive Arabic book in progress: premise, plan, and status of each case.
+- **Books.** An open Arabic textbook (Industrial Engineering Basics, read online or PDF) and an interactive book in progress, with the status of each case.
 - **Free template for others.** `template/` holds a version of this site that reads all content from `cv-data.xlsx`. The first sheet explains how to publish it. The footer links to the zip download.
 
 ## Files
